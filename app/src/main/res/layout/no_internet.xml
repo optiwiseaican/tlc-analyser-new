@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/poppins_bold"
+        android:gravity="center"
+        android:text="INTERNET NOT CONNECT"
+        android:textColor="#B4D1E3"
+        android:textSize="24dp"
+        android:textStyle="normal" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/poppins_bold"
+        android:gravity="center"
+        android:text="CONNECT YOUR DEVICE WITH PROPER INTERNET CONNECTION"
+        android:textColor="#D7D7D7"
+        android:textSize="20dp"
+        android:textStyle="normal" />
+
+    <!--    <com.airbnb.lottie.LottieAnimationView-->
+    <!--        android:id="@+id/animationView"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:lottie_url="https://assets5.lottiefiles.com/packages/lf20_GoeyCV7pi2.json"-->
+    <!--        app:lottie_autoPlay="true"-->
+    <!--        app:lottie_loop="true"/>-->
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/no_internet"
+        app:tint="#B4D1E3" />
+    <Button
+        android:id="@+id/tryAgain"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/button_bc"
+        android:fontFamily="@font/lato"
+        android:text="Try Again"
+        android:textAllCaps="false"
+        android:textSize="17dp" />
+
+</LinearLayout>

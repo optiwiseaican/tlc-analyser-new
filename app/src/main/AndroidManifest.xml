@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.aican.tlcanalyzer">
+
+    <uses-feature android:name="android.hardware.camera.any" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name=".application.ApplicationClass"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@drawable/logo"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.TLCAnalyzer"
+        tools:targetApi="31">
+        <activity
+            android:name=".trash.PeakDetection"
+            android:exported="false" />
+        <activity
+            android:name=".EditRectangleContour"
+            android:exported="false" />
+        <activity
+            android:name=".EditPixelBaseline"
+            android:exported="false" />
+        <activity
+            android:name=".demoActivities.DragBaselineActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PeakDetectionManually"
+            android:exported="false" />
+        <activity
+            android:name=".AddFilters"
+            android:exported="false" />
+        <activity
+            android:name=".settingActivities.SplitSettings"
+            android:exported="false"
+            android:label="@string/title_activity_split_settings" />
+        <activity
+            android:name=".PeakDetectionAutomatic"
+            android:exported="false" />
+        <activity
+            android:name=".DrawRectangleCont"
+            android:exported="false" />
+        <activity
+            android:name=".NewImageAnalysis"
+            android:exported="false" />
+        <activity
+            android:name=".HrVsAreaPerGraph"
+            android:exported="false" />
+        <activity
+            android:name=".AnalyseMultipleIntensity"
+            android:exported="false" />
+        <activity
+            android:name=".AllAuditTrailExports"
+            android:exported="false" />
+        <activity
+            android:name=".AuditTrailAct"
+            android:exported="false" />
+        <activity
+            android:name=".EditUserDatabase"
+            android:exported="false" />
+        <activity
+            android:name=".CapturedImagePreview"
+            android:exported="false" />
+        <activity
+            android:name=".AllUsersMade"
+            android:exported="false" />
+        <activity
+            android:name=".CroppingTemp"
+            android:exported="false" />
+        <activity
+            android:name=".NewAutoSplitImage"
+            android:exported="false" />
+        <activity
+            android:name=".CroppedImages"
+            android:exported="false" />
+        <activity
+            android:name=".AutoSplitImage"
+            android:exported="false" />
+        <activity
+            android:name=".AddUsers"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".AdminLogin"
+            android:exported="false" />
+        <activity
+            android:name=".UserManagement"
+            android:exported="false" />
+        <activity
+            android:name=".AllSpitAnalysis"
+            android:exported="false" />
+        <activity
+            android:name=".CircleShapeSelect"
+            android:exported="false" />
+        <activity
+            android:name=".DrawContourManually"
+            android:exported="false" />
+        <activity
+            android:name=".PlotMultiIntGraph"
+            android:exported="false" />
+        <activity
+            android:name=".SelectImagesSplit"
+            android:exported="false" />
+        <activity
+            android:name=".PlotMultipleIntensity"
+            android:exported="false" />
+        <activity
+            android:name=".SignUpActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AllExportedFiles"
+            android:exported="false" />
+        <activity
+            android:name=".PDFActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ReportGenerate"
+            android:exported="false" />
+        <activity
+            android:name=".cropper.CropImageActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@style/Base.Theme.AppCompat" />
+        <activity
+            android:name=".CameraActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VolumeGraph"
+            android:exported="false" />
+        <activity
+            android:name=".PixelGraph"
+            android:exported="false" />
+        <activity
+            android:name=".RegionOfInterest"
+            android:exported="false" />
+        <activity
+            android:name=".PlotTable"
+            android:exported="false" />
+        <activity
+            android:name=".SplitImage"
+            android:exported="false" />
+        <activity
+            android:name=".ProjectView"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".GetStarted"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+    </application>
+
+</manifest>

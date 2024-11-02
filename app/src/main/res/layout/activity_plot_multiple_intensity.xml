@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".PlotMultipleIntensity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="@dimen/drwr_dim_ham"
+            android:layout_height="@dimen/drwr_dim_ham"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:id="@+id/projectName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/lato_bold"
+            android:gravity="center_vertical"
+            android:text="Project 1"
+            android:textColor="@color/blueColor"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/checkAnalysis"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/button_bc"
+            android:drawableLeft="@drawable/files"
+            android:drawableTint="@color/white"
+            android:fontFamily="@font/lato"
+            android:text="Generate Report"
+            android:textAllCaps="false"
+            android:textSize="12dp" />
+
+
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/custom_multi_split" />
+
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/intensityChartPlot1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/intensity_graph_height"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/grapg_gradient_background" />
+
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/volumeChart"
+                android:layout_width="match_parent"
+                android:layout_height="500dp" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/intensityChart"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/intensity_graph_height"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/grapg_gradient_background" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/contourListRecView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@color/white"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="4"
+                tools:listitem="@layout/custom_contour_for_int_graph" />
+
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/hrVsAreaPer"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/button_bc"
+            android:drawableLeft="@drawable/checkana"
+            android:fontFamily="@font/lato"
+            android:text="Time vs % Area"
+            android:textAllCaps="false"
+            android:textSize="12dp"
+            android:visibility="visible" />
+
+
+        <Button
+            android:id="@+id/analyseInt"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/button_bc"
+            android:drawableLeft="@drawable/checkana"
+            android:fontFamily="@font/lato"
+            android:text="Analyse Intensity Graph"
+            android:textAllCaps="false"
+            android:textSize="12dp"
+            android:visibility="visible" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

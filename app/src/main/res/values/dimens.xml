@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="drwr_dim_ham">40dp</dimen>
+    <dimen name="cntr_text_size">10dp</dimen>
+    <dimen name="pad">10pt</dimen>
+    <dimen name="pad2">15dp</dimen>
+    <dimen name="your_line_width">2dp</dimen>
+    <dimen name="table_item_size">10sp</dimen>
+    <dimen name="all_user_txt_size">16sp</dimen>
+    <dimen name="focus_indicator_size">48dp</dimen>
+    <dimen name="accInfo">12dp</dimen>
+    <dimen name="intensity_graph_height">300dp</dimen>
+    <dimen name="font_size_small">10sp</dimen>
+    <dimen name="font_size_medium">12sp</dimen>
+    <dimen name="border_width">3dp</dimen>
+    <dimen name="guideline_width">1px</dimen>
+
+    <dimen name="corner_width">5dp</dimen>
+
+</resources>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:orientation="horizontal">
+
+    <TableLayout
+        android:id="@+id/tableLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:stretchColumns="1,2,3,4,5">
+
+        <TableRow tools:ignore="UselessParent">
+
+            <TextView
+                android:id="@+id/user_role"
+                android:layout_column="1"
+                android:padding="10dp"
+                android:text="Element 1"
+                android:textColor="#79797B"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/user_name"
+                android:layout_column="1"
+                android:padding="10dp"
+                android:text="Element 2"
+                android:textColor="#79797B"
+
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/dateCreated"
+                android:layout_column="1"
+                android:padding="10dp"
+                android:text="Element 3"
+
+                android:textColor="#79797B"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/expiry_date"
+                android:layout_column="1"
+                android:padding="10dp"
+                android:text="Element 1"
+
+                android:textColor="#79797B"
+                android:textSize="14dp" />
+
+
+        </TableRow>
+
+    </TableLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:visibility="gone">
+
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="2.5dp"
+            android:src="@drawable/edit_btn" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_margin="2.5dp"
+            android:src="@drawable/delete_btn" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

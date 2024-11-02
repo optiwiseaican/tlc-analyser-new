@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:orientation="vertical"
+    app:cardCornerRadius="10dp">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="30dp"
+                android:fontFamily="@font/lato_bold"
+                android:gravity="center"
+                android:text="@string/account_info"
+                android:textColor="@color/aican_blue"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="15dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/userName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="0dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:gravity="start"
+                    android:padding="6dp"
+                    android:text="Username : "
+                    android:textColor="@color/accInfo"
+                    android:textSize="@dimen/accInfo" />
+
+                <TextView
+                    android:id="@+id/emailId"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="0dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:gravity="start"
+                    android:padding="6dp"
+                    android:text="Email : "
+                    android:textColor="@color/accInfo"
+                    android:textSize="@dimen/accInfo" />
+
+                <TextView
+                    android:id="@+id/Uid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="0dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:gravity="start"
+                    android:padding="6dp"
+                    android:text="UID : "
+                    android:textColor="@color/accInfo"
+                    android:textSize="@dimen/accInfo" />
+
+                <TextView
+                    android:id="@+id/projectMade"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="0dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:gravity="start"
+                    android:padding="6dp"
+                    android:text="Project Made  : "
+                    android:textColor="@color/accInfo"
+                    android:textSize="@dimen/accInfo" />
+
+                <TextView
+                    android:id="@+id/planExpiryDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="0dp"
+                    android:fontFamily="@font/lato_bold"
+                    android:gravity="start"
+                    android:padding="6dp"
+                    android:text="Plan Expiry Date : "
+                    android:textColor="@color/accInfo"
+                    android:textSize="@dimen/accInfo" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.cardview.widget.CardView>

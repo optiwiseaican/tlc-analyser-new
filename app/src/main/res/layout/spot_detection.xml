@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/spotDetectionLay"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/lato_bold"
+        android:text="Spot Detection"
+        android:textColor="@color/aican_blue"
+        android:textSize="21dp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/thresholdValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:drawableRight="@drawable/edit"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/lato"
+                android:gravity="center"
+                android:text="Threshold : 100"
+                android:textColor="@color/semiSemiBlack"
+                android:textSize="18dp" />
+
+            <ImageButton
+                android:id="@+id/decrement_thres"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/arrow_down" />
+
+            <ImageButton
+                android:id="@+id/increment_thres"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/arrow_up" />
+
+            <Button
+                android:id="@+id/thresArrayBtn"
+                android:layout_width="70dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="10dp"
+                android:text="100"
+                android:textSize="11dp" />
+
+        </LinearLayout>
+
+
+        <SeekBar
+            android:id="@+id/setThreshold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="10dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/noOfSpots"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:drawableRight="@drawable/edit"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/lato"
+                android:gravity="center"
+                android:text="No of Spots : 1"
+                android:textColor="@color/semiSemiBlack"
+                android:textSize="18dp" />
+
+
+            <ImageButton
+                android:id="@+id/decrement_spots"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/arrow_down" />
+
+            <ImageButton
+                android:id="@+id/increment_spots"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/arrow_up" />
+
+        </LinearLayout>
+
+
+        <SeekBar
+            android:id="@+id/noOfCounts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="10dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/spotContours"
+            android:layout_width="190dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="2"
+            android:background="@drawable/button_bc"
+            android:fontFamily="@font/lato"
+            android:text="Generate Spots"
+            android:textAllCaps="false"
+            android:textSize="15dp" />
+
+        <Button
+            android:id="@+id/drawSpot"
+            android:layout_width="140dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/button_bc"
+            android:fontFamily="@font/lato"
+            android:text="Add Spot"
+            android:textAllCaps="false"
+            android:textSize="15dp" />
+    </LinearLayout>
+
+
+</LinearLayout>

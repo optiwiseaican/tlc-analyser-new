@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "99720050047",
+    "project_id": "tlc-analyzer",
+    "storage_bucket": "tlc-analyzer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:99720050047:android:61ca3e1643160b94afd64a",
+        "android_client_info": {
+          "package_name": "com.aican.tlcanalyzer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDnIdaXzB7evyBR36U6izBebnA8vBWGrY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

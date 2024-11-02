@@ -1,0 +1,84 @@
+<resources>
+    <string name="app_name">TLC Analyzer</string>
+
+    <string name="headline1">Let\'s get you started!</string>
+    <string name="headline2">Welcome, user!</string>
+    <string name="body1">Already have an account? Login</string>
+    <string name="or">OR</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="body2">Don’t have an account? Register</string>
+    <string name="sampleTxt2">Connect your device now!</string>
+    <string name="user_name">User Name</string>
+    <string name="user_id">User ID</string>
+    <string name="user_role">User Role</string>
+    <string name="modeStandard">Standard</string>
+    <string name="modeDual">Dual</string>
+
+    <string name="crop_image_activity_title"></string>
+    <string name="crop_image_menu_rotate_left">Rotate counter clockwise</string>
+    <string name="crop_image_menu_rotate_right">Rotate</string>
+    <string name="crop_image_menu_crop">Crop</string>
+    <string name="crop_image_menu_flip">Flip</string>
+    <string name="crop_image_menu_flip_horizontally">Flip horizontally</string>
+    <string name="crop_image_menu_flip_vertically">Flip vertically</string>
+
+    <string name="pick_image_intent_chooser_title">Select source</string>
+
+    <string name="crop_image_activity_no_permissions">Cancelling, required permissions are not granted</string>
+
+    <!--    intent keys-->
+    <string name="isStartedForResultKey">ExpectsResult</string>
+    <string name="sampleIndexKey">SampleIndex</string>
+    <string name="modeKey">Mode</string>
+
+    <!--    when sample index is not required-->
+    <string name="concentrationKey">Concentration</string>
+    <string name="rfArrayKey">RfArray</string>
+    <string name="pixelsArrayKey">pixelsArrayKey</string>
+
+    <!--    when sample index is required-->
+    <string name="concentration1Key">Concentration1</string>
+    <string name="rfArray1Key">RfArray1</string>
+    <string name="concentration2Key">Concentration2</string>
+    <string name="rfArray2Key">RfArray2</string>
+    <string name="project_description">Project Description - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt urna ac erat fermentum dignis id aliquet erat, a volutpat tellus. Inte ultricies ex.</string>
+    <string name="folderLocation">All PDF Files</string>
+    <string name="folderLocation2">Users Activity Files</string>
+    <string name="nav_open">Nav Open</string>
+    <string name="nav_close">Nav Close</string>
+    <string name="serviceToken">99720050047-hga86pnpqieg4173j4fsckjfhc6mppnn.apps.googleusercontent.com</string>
+    <string name="verification">Verification</string>
+    <string name="authenticate">Authenticate</string>
+    <string name="home"><u>Home</u></string>
+    <string name="tip_just_tap_on_image_from_where_you_want_to_crop">Tip : Just tap on image to add split lines.</string>
+    <string name="edit_user_details">Edit user details</string>
+    <string name="hr_notes">Note : Please select all the rm\'s and final\'s and mark hours, before ploting this graph</string>
+    <string name="more"><u>More</u></string>
+    <string name="account_info"><u>Account Info</u></string>
+    <string name="title_activity_split_settings">SplitSettings</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="if_you_changes">Note: If you changed this value, then you must be plot the intensity graph again, otherwise it will give you the incorrect values and graph</string>
+    <string name="show_image"><u>Show Image</u></string>
+    <string name="hide_image"><u>Hide Image</u></string>
+
+
+</resources>
