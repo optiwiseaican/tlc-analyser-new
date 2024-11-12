@@ -110,9 +110,12 @@ public class CroppingTemp extends AppCompatActivity {
 
                 String tempFileName = "TEMP" + getIntent().getStringExtra("projectImage");
 
+                String originalFileName = "ORG_" + getIntent().getStringExtra("projectImage");
+
                 Bitmap mainImageBitmap = bitmap;
 
                 saveImageViewToFile(mainImageBitmap, tempFileName, this);
+                saveImageViewToFile(CapturedImagePreview.Companion.getOriginalBitmap(), originalFileName, this);
 
                 loadedBitmap = bitmap;
                 imageView.setImageBitmap(loadedBitmap);
@@ -136,10 +139,12 @@ public class CroppingTemp extends AppCompatActivity {
                 saveImageViewToFile(bitmap, getIntent().getStringExtra("projectImage") + "_" + sizeOfMainImageList, this);
 
                 String tempFileName = "TEMP" + getIntent().getStringExtra("projectImage") + "_" + sizeOfMainImageList;
+                String originalFileName = "ORG_" + getIntent().getStringExtra("projectImage") + "_" + sizeOfMainImageList;
 
                 Bitmap mainImageBitmap = bitmap;
 
                 saveImageViewToFile(mainImageBitmap, tempFileName, this);
+                saveImageViewToFile(CapturedImagePreview.Companion.getOriginalBitmap(), originalFileName, this);
 
                 loadedBitmap = bitmap;
                 imageView.setImageBitmap(loadedBitmap);

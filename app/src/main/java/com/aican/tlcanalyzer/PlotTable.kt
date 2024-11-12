@@ -63,7 +63,7 @@ class PlotTable : AppCompatActivity() {
                 contourDataArrayList.get(i).getId(),
                 contourDataArrayList.get(i).getRf(),
                 (1 / Source.contourDataArrayList[i].rf.toFloat()).toString(),
-                contourDataArrayList.get(i).getArea(),
+                Source.formatToTwoDecimalPlaces(contourDataArrayList.get(i).getArea()),
                 String.format(
                     "%.2f", ((contourDataArrayList[i].area.toFloat() / totalArea) * 100)
                 ) + " %",

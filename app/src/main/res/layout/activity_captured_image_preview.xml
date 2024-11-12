@@ -69,14 +69,14 @@
         android:layout_weight="1" />
 
     <LinearLayout
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -105,8 +105,36 @@
         android:visibility="gone" />
 
     <LinearLayout
+        android:id="@+id/reEditButtons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/reEditSaveBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/button_bc"
+            android:drawableLeft="@drawable/baseline_save_24"
+            android:drawablePadding="20dp"
+            android:drawableTint="@color/white"
+            android:text="Save"
+            android:textSize="14dp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mainButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="16dp"
         android:gravity="center"
         android:orientation="horizontal">

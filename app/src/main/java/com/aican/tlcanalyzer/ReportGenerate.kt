@@ -461,7 +461,7 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
                         table.addCell(contourData.id)
                         table.addCell(contourData.rf)
                         table.addCell(String.format("%.2f", contourData.cv.toDouble()))
-                        table.addCell(contoursAreaArrayList.get(i).area.toString())
+                        table.addCell(Source.formatToTwoDecimalPlaces(contoursAreaArrayList.get(i).area.toString()))
                         table.addCell(
                             String.format(
                                 "%.2f",
@@ -660,7 +660,7 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
                         table.addCell(contourData.id)
                         table.addCell(contourData.rf)
                         table.addCell(String.format("%.2f", contourData.cv.toDouble()))
-                        table.addCell(contoursAreaArrayList.get(i).area.toString())
+                        table.addCell(Source.formatToTwoDecimalPlaces(contoursAreaArrayList.get(i).area.toString()))
                         table.addCell(
                             String.format(
                                 "%.2f",
@@ -825,7 +825,7 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
                 Source.contourDataArrayListROI[i].id,
                 Source.contourDataArrayListROI[i].rf,
                 (1 / Source.contourDataArrayListROI[i].rf.toFloat()).toString(),
-                Source.contourDataArrayListROI[i].area,
+                Source.formatToTwoDecimalPlaces(Source.contourDataArrayListROI[i].area),
                 Source.contourDataArrayListROI[i].volume
             )
         }
@@ -871,7 +871,7 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
                     Source.contourDataArrayList[i].id,
                     Source.contourDataArrayList[i].rf,
                     (1 / Source.contourDataArrayList[i].rf.toFloat()).toString(),
-                    contoursAreaArrayList[i].area.toString() + "",
+                    Source.formatToTwoDecimalPlaces(contoursAreaArrayList[i].area.toString() + ""),
                     String.format(
                         "%.2f", contoursAreaArrayList.get(i).area.toFloat() / totalArea * 100
                     ) + " %",
@@ -1101,7 +1101,6 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
                 .toFloat() / Source.SCALING_FACTOR_INT_GRAPH // Adjust the scaling factor as needed
 
 
-
 //            information.add(
 //                Entry(
 //                    Source.PARTS_INTENSITY - rFvsAreaArrayList1!![i].rf.toString().toFloat(),
@@ -1109,7 +1108,6 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
 //                    scaledYValue
 //                )
 //            )
-
 
 
             information.add(

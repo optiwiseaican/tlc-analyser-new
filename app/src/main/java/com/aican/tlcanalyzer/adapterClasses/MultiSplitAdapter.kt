@@ -29,7 +29,6 @@ class MultiSplitAdapter(
 
         holder.splitName.text = data.name
 
-
         holder.checkBox.isChecked = data.isSelected
 
         holder.checkBox.setOnClickListener {

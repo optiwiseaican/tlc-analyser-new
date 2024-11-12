@@ -108,6 +108,10 @@ class ProjectView : AppCompatActivity(), refreshProjectArrayList, AuthDialog.Aut
         binding.recyclerView.visibility = View.VISIBLE
         binding.floatingActionBtn.visibility = View.VISIBLE
 
+        binding.recyclerView.setPadding(0, 0, 0, 150); // Adjust the padding value as needed
+        binding.recyclerView.setClipToPadding(false);
+
+
 
 
         userDatabase.logUserAction(
@@ -154,9 +158,7 @@ class ProjectView : AppCompatActivity(), refreshProjectArrayList, AuthDialog.Aut
                 // Your code for accessing external storage goes here
 
             }
-        }
-
-        else {
+        } else {
 
             if (ContextCompat.checkSelfPermission(
                     this,

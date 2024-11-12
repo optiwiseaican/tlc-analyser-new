@@ -30,6 +30,7 @@ class CapturedImagePreview : AppCompatActivity() {
 
     companion object {
         var splitBitmap: Bitmap? = null
+        var originalBitmap: Bitmap? = null
     }
 
     lateinit var binding: ActivityCapturedImagePreviewBinding
@@ -37,6 +38,7 @@ class CapturedImagePreview : AppCompatActivity() {
     lateinit var databaseHelper: DatabaseHelper
     lateinit var userDatabaseHelper: UsersDatabase
     lateinit var saturationSeekBar: SeekBar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -76,6 +78,7 @@ class CapturedImagePreview : AppCompatActivity() {
 
             binding.splitBtn.setOnClickListener {
 
+                originalBitmap = binding.ivCrop.bitmap
                 splitBitmap = binding.ivCrop.crop()
 
                 splitBitmap = cropBitmapByPercentage(splitBitmap!!, 5f)
@@ -117,6 +120,7 @@ class CapturedImagePreview : AppCompatActivity() {
 
             binding.btnSave.setOnClickListener {
                 val outFile: File = File(dir, intent.getStringExtra("projectImage").toString())
+                var originalImageBit = binding.ivCrop.bitmap
                 var sBit = binding.ivCrop.crop()
                 sBit = cropBitmapByPercentage(sBit!!, 5f)
 
@@ -124,7 +128,14 @@ class CapturedImagePreview : AppCompatActivity() {
 
                 if (!outFile.exists()) {
 
+                    //original image
+                    saveImageViewToFile(
+                        originalImageBit, "ORG_" +
+                                intent.getStringExtra("projectImage").toString()
+                    )
+
                     saveImageViewToFile(sBit, intent.getStringExtra("projectImage").toString())
+
 
                     uriPath = Uri.fromFile(outFile)
 

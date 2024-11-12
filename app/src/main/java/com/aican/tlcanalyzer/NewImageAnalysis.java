@@ -286,6 +286,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         plotTableID = getIntent().getStringExtra("plotTableID");
         hr = getIntent().getStringExtra("hour");
 
+        binding.cropAgain.setVisibility(View.GONE);
 
         if (getIntent().getStringExtra("w").toString().equals("existing")) {
             AuthDialog.projectType = "Normal";
@@ -306,10 +307,19 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
         String type = "";
         type = getIntent().getStringExtra("type").toString();
+
+
+        String mType = "";
+        mType = getIntent().getStringExtra("mtype").toString();
 //        Source.checkInternet(this);
 
 
         if (type.equals("multi") || type.equals("mainImg")) {
+
+            if (mType.equals("mainImg")) {
+                binding.cropAgain.setVisibility(View.VISIBLE);
+            }
+
             binding.anaL.addDone.setVisibility(View.VISIBLE);
 
             String finalType = type;
@@ -765,8 +775,10 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         });
 
         binding.splitSettings.setVisibility(View.GONE);
+
         if (work.equals(works[0]) || work.equals(works[1])) {
             binding.splitSettings.setVisibility(View.VISIBLE);
+            binding.cropAgain.setVisibility(View.VISIBLE);
 
             String INTENSITY_PART_KEY = "INTENSITY_PART_KEY_" + id;
 
@@ -796,6 +808,19 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                     Intent i = new Intent(NewImageAnalysis.this, SplitSettings.class);
                     i.putExtra("id", getIntent().getStringExtra("id"));
                     i.putExtra("projectName", getIntent().getStringExtra("projectName"));
+                    startActivity(i);
+                }
+            });
+            binding.cropAgain.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(NewImageAnalysis.this, ReAutoCropActivity.class);
+                    i.putExtra("id", getIntent().getStringExtra("id"));
+                    i.putExtra("prevType", "re");
+                    i.putExtra("projectName", getIntent().getStringExtra("projectName"));
+                    i.putExtra("img_path", getIntent().getStringExtra("img_path").toString());
+                    i.putExtra("projectImage", getIntent().getStringExtra("projectImage").toString());
+
                     startActivity(i);
                 }
             });
@@ -2727,7 +2752,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
     private void settingDataFromDatabase() {
 
 
-        if (volumeArrayList == null || volumeArrayList.size() == 0) {
+        if (volumeArrayList == null || volumeArrayList.isEmpty()) {
             volumeArrayList = new ArrayList<>();
 
             Cursor cursor = databaseHelper.getDataFromTable(volumePlotTableID);

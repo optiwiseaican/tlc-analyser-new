@@ -214,6 +214,16 @@ public class Source {
         return signals;
     }
 
+    // tlc issues:
+    //auto crop doesnt work in white background
+    //manually crop page, save button is very close to selection area, gets pressed by mistake a lot
+    //hour selection dropdown on project home image is very small to click, increase dimensions
+    //split image line addition page, image stretches out, need to fix
+    //bug: final master report showed 2/3 images only
+    //area column in analysis table has 5-10 decimals, limit all decimals to 2 places throughout app
+    //add project button overlaps with project settings when page is filled with project tiles
+    //main crop of project image should have re-edit option
+
     public static int[] detectPeaks2(double[] y, int lag, double threshold, double influence) {
         int[] signals = new int[y.length];
         double[] filteredY = new double[lag];

@@ -31,6 +31,9 @@
         android:theme="@style/Theme.TLCAnalyzer"
         tools:targetApi="31">
         <activity
+            android:name=".ReAutoCropActivity"
+            android:exported="false" />
+        <activity
             android:name=".trash.PeakDetection"
             android:exported="false" />
         <activity

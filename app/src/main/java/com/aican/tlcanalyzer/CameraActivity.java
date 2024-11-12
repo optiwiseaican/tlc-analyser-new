@@ -240,7 +240,6 @@ public class CameraActivity extends AppCompatActivity {
     }
 
 
-
     private void setSaturation(float progress) {
         float saturationValue = (float) progress / 100f;
 //        float saturationValue = (float) (progress + 50) / 50.0f; // Adjust the factor as needed
@@ -405,6 +404,7 @@ public class CameraActivity extends AppCompatActivity {
                     intwnt.putExtra("img_path", String.valueOf(resultUri));
                     intwnt.putExtra("p", "pixel");
                     intwnt.putExtra("w", "new");
+                    intwnt.putExtra("prevType", "main");
                     intwnt.putExtra("type", "new");
                     intwnt.putExtra("projectName", getIntent().getStringExtra("projectName"));
                     intwnt.putExtra("projectDescription", getIntent().getStringExtra("projectDescription"));
@@ -433,6 +433,7 @@ public class CameraActivity extends AppCompatActivity {
                 } else {
                     Intent intwnt = new Intent(CameraActivity.this, CapturedImagePreview.class);
                     intwnt.putExtra("img_path", String.valueOf(resultUri));
+                    intwnt.putExtra("prevType", "main");
                     intwnt.putExtra("p", "pixel");
                     intwnt.putExtra("w", "new");
                     intwnt.putExtra("type", "new");
@@ -491,6 +492,7 @@ public class CameraActivity extends AppCompatActivity {
 
                                 Intent intwnt = new Intent(CameraActivity.this, CapturedImagePreview.class);
                                 intwnt.putExtra("img_path", String.valueOf(picUri));
+                                intwnt.putExtra("prevType", "main");
                                 intwnt.putExtra("p", "pixel");
                                 intwnt.putExtra("w", "new");
                                 intwnt.putExtra("type", "new");
@@ -694,8 +696,6 @@ public class CameraActivity extends AppCompatActivity {
     }
 
 
-
-
     private void startCameraM() {
         final ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
         cameraProviderFuture.addListener(new Runnable() {
@@ -756,6 +756,7 @@ public class CameraActivity extends AppCompatActivity {
 
                                 Intent intwnt = new Intent(CameraActivity.this, CapturedImagePreview.class);
                                 intwnt.putExtra("img_path", String.valueOf(savedUri));
+                                intwnt.putExtra("prevType", "main");
                                 intwnt.putExtra("p", "pixel");
                                 intwnt.putExtra("w", "new");
                                 intwnt.putExtra("type", "new");
@@ -789,6 +790,7 @@ public class CameraActivity extends AppCompatActivity {
                         } else {
                             Intent intwnt = new Intent(CameraActivity.this, CapturedImagePreview.class);
                             intwnt.putExtra("img_path", String.valueOf(savedUri));
+                            intwnt.putExtra("prevType", "main");
                             intwnt.putExtra("p", "pixel");
                             intwnt.putExtra("w", "new");
                             intwnt.putExtra("type", "new");

@@ -190,8 +190,11 @@ class SplitAdapter(
             }
         }
 
-        val adapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, hours)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        val adapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, hours)
+        val adapter = ArrayAdapter(context, R.layout.spinner_item_large, hours)
+
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        adapter.setDropDownViewResource(R.layout.spinner_item_large)
 
         // Create a PopupWindow
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
