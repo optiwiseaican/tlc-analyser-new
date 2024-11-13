@@ -383,6 +383,12 @@ public class LegacyTableView extends WebView {
         }
         return tableData;
     }
+    public   void clearContent() {
+        TABLE_CONTENT_STRINGS = "";   // Clear content data
+        TABLE_TITLE_STRINGS = "";     // Clear title data
+        tableContent.clear();         // Clear table content list
+        this.loadDataWithBaseURL(null, "", "text/html", "UTF-8", null); // Clear WebView content
+    }
 
     public void setTitle(String[] tableColumnTitle) {
         for (int i = 0; i < tableColumnTitle.length; i++) {

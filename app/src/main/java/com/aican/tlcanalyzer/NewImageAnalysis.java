@@ -309,14 +309,14 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         type = getIntent().getStringExtra("type").toString();
 
 
-        String mType = "";
-        mType = getIntent().getStringExtra("mtype").toString();
-//        Source.checkInternet(this);
-
 
         if (type.equals("multi") || type.equals("mainImg")) {
 
-            if (mType.equals("mainImg")) {
+
+            String mType = "";
+            mType = getIntent().getStringExtra("mtype");
+//        Source.checkInternet(this);
+            if (mType != null && mType.equals("mainImg")) {
                 binding.cropAgain.setVisibility(View.VISIBLE);
             }
 
@@ -811,24 +811,25 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                     startActivity(i);
                 }
             });
-            binding.cropAgain.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent i = new Intent(NewImageAnalysis.this, ReAutoCropActivity.class);
-                    i.putExtra("id", getIntent().getStringExtra("id"));
-                    i.putExtra("prevType", "re");
-                    i.putExtra("projectName", getIntent().getStringExtra("projectName"));
-                    i.putExtra("img_path", getIntent().getStringExtra("img_path").toString());
-                    i.putExtra("projectImage", getIntent().getStringExtra("projectImage").toString());
-
-                    startActivity(i);
-                }
-            });
 
         }
 
         //
 
+        binding.cropAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(NewImageAnalysis.this, ReAutoCropActivity.class);
+                i.putExtra("id", getIntent().getStringExtra("id"));
+                i.putExtra("prevType", "re");
+                i.putExtra("projectName", getIntent().getStringExtra("projectName"));
+                i.putExtra("type",  getIntent().getStringExtra("type").toString());
+                i.putExtra("img_path", getIntent().getStringExtra("img_path").toString());
+                i.putExtra("projectImage", getIntent().getStringExtra("projectImage").toString());
+
+                startActivity(i);
+            }
+        });
 
         if (work.equals(works[0])) {
             try {

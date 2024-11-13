@@ -78,17 +78,17 @@
             android:layout_marginStart="30dp"
             android:layout_marginEnd="50dp"
             android:text="User Activity Files"
-            android:visibility="gone"
             android:textColor="@color/blueColor"
             android:textSize="24dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/dateA"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="30dp"
             android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             android:gravity="start"
             android:text="2023"
             android:textColor="@color/black"
@@ -203,10 +203,32 @@
 
     </LinearLayout>
 
-    <com.aican.tlcanalyzer.customClasses.LegacyTableView
-        android:id="@+id/legacy_table_view"
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1">
+
+        <TableLayout
+            android:id="@+id/table"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:stretchColumns="*" />
+    </ScrollView>
+
+    <Button
+        android:id="@+id/loadMoreButton"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="center_horizontal"
+        android:text="Load More"
+        android:textAllCaps="false"
+        android:textSize="10dp"
+        android:visibility="gone" />
 
 
     <androidx.recyclerview.widget.RecyclerView

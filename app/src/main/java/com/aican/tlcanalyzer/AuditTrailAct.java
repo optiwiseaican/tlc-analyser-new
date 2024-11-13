@@ -11,8 +11,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -67,7 +71,11 @@ public class AuditTrailAct extends AppCompatActivity implements OnPDFSelectListe
     int STORAGE_PERMISSION_REQUEST_CODE = 1;
     String startDateString, endDateString, startTimeString, endTimeString, arNumString, batchNumString, compoundName;
 
-    LegacyTableView legacyTableView;
+
+    private static final int BATCH_SIZE = 20;
+    private int currentBatchIndex = 0;
+    private TableLayout tableLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +84,7 @@ public class AuditTrailAct extends AppCompatActivity implements OnPDFSelectListe
         setContentView(binding.getRoot());
 
         getSupportActionBar().hide();
+        tableLayout = findViewById(R.id.table);
 
         binding.back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +93,6 @@ public class AuditTrailAct extends AppCompatActivity implements OnPDFSelectListe
             }
         });
 
-        legacyTableView = findViewById(R.id.legacy_table_view);
 
         usersDatabase = new UsersDatabase(this);
 
@@ -207,6 +215,7 @@ public class AuditTrailAct extends AppCompatActivity implements OnPDFSelectListe
                 datePicker.show(getSupportFragmentManager(), "date");
 
                 datePicker.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>) selection -> {
+
                     Long startDate = selection.first;
                     Long endDate = selection.second;
                     startDateString = android.text.format.DateFormat.format("yyyy-MM-dd", new Date(startDate)).toString();
@@ -214,9 +223,13 @@ public class AuditTrailAct extends AppCompatActivity implements OnPDFSelectListe
                     String date1 = "Start: " + startDateString + " End: " + endDateString;
                     Toast.makeText(AuditTrailAct.this, date1.toString(), Toast.LENGTH_SHORT).show();
 
-                    binding.dateRangeText.setText(date1);
+                    tableLayout.removeAllViews();  // Clear existing views if any
 
-                    plotTable();
+                    binding.dateRangeText.setText(date1);
+                    currentBatchIndex = 0;  // Reset batch index
+                    loadBatch(currentBatchIndex);
+
+//                    plotTable();
 
                 });
 
@@ -280,64 +293,123 @@ public class AuditTrailAct extends AppCompatActivity implements OnPDFSelectListe
             }
         });
 
-        plotTable();
+        binding.loadMoreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentBatchIndex++;
+                loadBatch(currentBatchIndex);
+            }
+        });
+
+        initializeTable();
+
+
+        loadBatch(currentBatchIndex);
 
     }
 
+    // Create the table header
+    private void initializeTable() {
+        tableLayout.removeAllViews();  // Clear existing views if any
+        createTableRow("ID", "Date", "Time", "Name", "Role", "Activities", "Project Name", "Project Type", -1);
+    }
 
-    private void plotTable() {
-        LegacyTableView.insertLegacyTitle("ID", "date", "time", "name", "role", "activities", "projectName", "projectType");
-
+    // Load batch data and populate table rows
+    private void loadBatch(int batchIndex) {
+        int offset = batchIndex * BATCH_SIZE;
+        String query = "SELECT * FROM UserLogDetails LIMIT " + BATCH_SIZE + " OFFSET " + offset;
         SQLiteDatabase db = usersDatabase.getWritableDatabase();
-        Cursor calibCSV = db.rawQuery("SELECT * FROM UserLogDetails", null);
+        Cursor calibCSV;
+
         if (startDateString != null && endDateString != null) {
-            calibCSV = db.rawQuery("SELECT * FROM UserLogDetails WHERE (DATE(date) BETWEEN '" + startDateString + "' AND '" + endDateString + "')", null);
+            calibCSV = db.rawQuery("SELECT * FROM UserLogDetails WHERE (DATE(date) BETWEEN '" +
+                    startDateString + "' AND '" + endDateString + "') LIMIT " + BATCH_SIZE + " OFFSET " + offset, null);
         } else {
-            calibCSV = db.rawQuery("SELECT * FROM UserLogDetails", null);
+            calibCSV = db.rawQuery(query, null);
         }
 
-        int i = 1;
-        while (calibCSV.moveToNext()) {
-            String date = calibCSV.getString(calibCSV.getColumnIndex("date"));
-            String time = calibCSV.getString(calibCSV.getColumnIndex("time"));
-            String name = calibCSV.getString(calibCSV.getColumnIndex("name"));
-            String role = calibCSV.getString(calibCSV.getColumnIndex("role"));
-            String activities = calibCSV.getString(calibCSV.getColumnIndex("activities"));
-            String projectName = calibCSV.getString(calibCSV.getColumnIndex("projectName"));
-            String projectID = calibCSV.getString(calibCSV.getColumnIndex("projectID"));
-            String projectType = calibCSV.getString(calibCSV.getColumnIndex("projectType"));
+        if (calibCSV.getCount() > 0) {
+            int i = offset + 1;
+            while (calibCSV.moveToNext()) {
+                String id = String.valueOf(i);
+                String date = calibCSV.getString(calibCSV.getColumnIndex("date"));
+                String time = calibCSV.getString(calibCSV.getColumnIndex("time"));
+                String name = calibCSV.getString(calibCSV.getColumnIndex("name"));
+                String role = calibCSV.getString(calibCSV.getColumnIndex("role"));
+                String activities = calibCSV.getString(calibCSV.getColumnIndex("activities"));
+                String projectName = calibCSV.getString(calibCSV.getColumnIndex("projectName"));
+                String projectType = calibCSV.getString(calibCSV.getColumnIndex("projectType"));
 
-            LegacyTableView.insertLegacyContent(
-                    i + "", date + "", time + "", name + "", role + "", activities + "", projectName + "", projectType + ""
+                createTableRow(id, date, time, name, role, activities, projectName, projectType, i);
+                i++;
+            }
+            calibCSV.close();
 
-            );
-            i++;
+            // Show or hide "Load More" button based on remaining data
+            if (calibCSV.getCount() < BATCH_SIZE) {
+                binding.loadMoreButton.setVisibility(View.GONE); // No more data
+            } else {
+                binding.loadMoreButton.setVisibility(View.VISIBLE); // Data is still available
+            }
+        } else {
+            binding.loadMoreButton.setVisibility(View.GONE); // Hide button if no data
         }
-
-        legacyTableView.setTheme(LegacyTableView.CUSTOM);
-        legacyTableView.setContent(LegacyTableView.readLegacyContent());
-        legacyTableView.setTitle(LegacyTableView.readLegacyTitle());
-//        legacyTableView.setBottomShadowVisible(true);
-        legacyTableView.setHighlight(LegacyTableView.ODD);
-        legacyTableView.setBottomShadowVisible(false);
-        legacyTableView.setFooterTextAlignment(LegacyTableView.CENTER);
-        legacyTableView.setTableFooterTextSize(5);
-        legacyTableView.setTableFooterTextColor("#f0f0ff");
-        legacyTableView.setTitleTextAlignment(LegacyTableView.CENTER);
-        legacyTableView.setContentTextAlignment(LegacyTableView.CENTER);
-        legacyTableView.setTablePadding(20);
-        legacyTableView.setBackgroundOddColor("#F0F0FF");
-        legacyTableView.setHeaderBackgroundLinearGradientBOTTOM("#F0F0FF");
-        legacyTableView.setHeaderBackgroundLinearGradientTOP("#F0F0FF");
-        legacyTableView.setBorderSolidColor("#f0f0ff");
-        legacyTableView.setTitleTextColor("#212121");
-        legacyTableView.setTitleFont(LegacyTableView.BOLD);
-        legacyTableView.setZoomEnabled(false);
-        legacyTableView.setShowZoomControls(false);
-
-        legacyTableView.setContentTextColor("#000000");
-        legacyTableView.build();
     }
+
+    private void createTableRow(String ID, String date, String time, String name, String role, String activities,
+                                String projectName, String projectType, int index) {
+        TableRow tableRow = new TableRow(this);
+        TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT);
+        tableRow.setLayoutParams(lp);
+
+        // Create TextViews for each column
+        TextView textViewID = createTextView(ID);
+        TextView textViewDate = createTextView(date);
+        TextView textViewTime = createTextView(time);
+        TextView textViewName = createTextView(name);
+        TextView textViewRole = createTextView(role);
+        TextView textViewActivities = createTextView(activities);
+        TextView textViewProjectName = createTextView(projectName);
+        TextView textViewProjectType = createTextView(projectType);
+
+        // Add TextViews to the TableRow
+        tableRow.addView(textViewID);
+        tableRow.addView(textViewDate);
+        tableRow.addView(textViewTime);
+        tableRow.addView(textViewName);
+        tableRow.addView(textViewRole);
+        tableRow.addView(textViewActivities);
+        tableRow.addView(textViewProjectName);
+        tableRow.addView(textViewProjectType);
+
+        // Set background for header row if index is -1
+        if (index == -1) {
+            textViewID.setBackgroundResource(R.drawable.cell_shape_blue);
+            textViewDate.setBackgroundResource(R.drawable.cell_shape_blue);
+            textViewTime.setBackgroundResource(R.drawable.cell_shape_blue);
+            textViewName.setBackgroundResource(R.drawable.cell_shape_blue);
+            textViewRole.setBackgroundResource(R.drawable.cell_shape_blue);
+            textViewActivities.setBackgroundResource(R.drawable.cell_shape_blue);
+            textViewProjectName.setBackgroundResource(R.drawable.cell_shape_blue);
+            textViewProjectType.setBackgroundResource(R.drawable.cell_shape_blue);
+        }
+
+        // Add the row to the table layout
+        tableLayout.addView(tableRow);
+    }
+
+    private TextView createTextView(String text) {
+        TextView textView = new TextView(this);
+        textView.setLayoutParams(new TableRow.LayoutParams(
+                TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+        textView.setText(text);
+        textView.setPadding(5, 15, 5, 15);
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextColor(getResources().getColor(R.color.black));
+        textView.setBackgroundResource(R.drawable.cell_shape_grey);
+        return textView;
+    }
+
 
 
     private void handleGeneratedPDF(Uri generatedFile) {

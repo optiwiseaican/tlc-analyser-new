@@ -28,7 +28,7 @@ class ReAutoCropActivity : AppCompatActivity() {
     lateinit var databaseHelper: DatabaseHelper
     lateinit var userDatabaseHelper: UsersDatabase
     var imageName: String? = null
-
+    var type = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityReAutoCropBinding.inflate(layoutInflater)
@@ -37,7 +37,7 @@ class ReAutoCropActivity : AppCompatActivity() {
         databaseHelper = DatabaseHelper(this@ReAutoCropActivity)
         userDatabaseHelper = UsersDatabase(this@ReAutoCropActivity)
 
-
+        type = getIntent().getStringExtra("type").toString()
         id = intent.getStringExtra("id").toString()
         projectImage = intent.getStringExtra("projectImage").toString()
 
@@ -47,8 +47,12 @@ class ReAutoCropActivity : AppCompatActivity() {
             resources.getString(R.string.app_name) + id
         )
 
-        imageName = "ORG_" + id?.replace("ID", "IMGAICAN").toString() + ".jpg"
+        if (type != "multi") {
+            imageName = "ORG_" + id?.replace("ID", "IMGAICAN").toString() + ".jpg"
+        } else {
+            imageName = "ORG_" + projectImage?.replace("ID", "IMGAICAN").toString()
 
+        }
         val outFile: File = File(dir, imageName)
 
 
