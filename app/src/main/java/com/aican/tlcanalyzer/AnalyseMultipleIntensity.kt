@@ -257,6 +257,7 @@ class AnalyseMultipleIntensity : AppCompatActivity(), OnClicksListeners {
                         "%.0f",
                         contourDataArray.get(s).getRfBottom().toFloat() * Source.PARTS_INTENSITY
                     ).toInt()).toFloat()
+
                     val mRF = (String.format(
                         "%.0f",
                         contourDataArray.get(s).getRf().toFloat() * Source.PARTS_INTENSITY
@@ -356,7 +357,7 @@ class AnalyseMultipleIntensity : AppCompatActivity(), OnClicksListeners {
 
     }
 
-    fun getRandomColor(): Int {
+    private fun getRandomColor(): Int {
         val random = Random()
         return Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256))
     }

@@ -303,7 +303,7 @@ class CapturedImagePreview : AppCompatActivity() {
         val colorMatrix = ColorMatrix()
         colorMatrix.setSaturation(saturationValue)
         val filter = ColorMatrixColorFilter(colorMatrix)
-        binding.ivCrop.setColorFilter(filter)
+        binding.ivCrop.colorFilter = filter
     }
 
     fun cropBitmapByPercentage(originalBitmap: Bitmap, percentage: Float): Bitmap {
@@ -317,7 +317,7 @@ class CapturedImagePreview : AppCompatActivity() {
     }
 
 
-    fun saveImageViewToFile(originalBitmapImage: Bitmap, fileName: String?): String? {
+    private fun saveImageViewToFile(originalBitmapImage: Bitmap, fileName: String?): String? {
 
 //        if (originalBitmapImage.getWidth() != originalBitmapImage.getHeight()) {
 //            originalBitmapImage = convertToSquareWithTransparentBackground(originalBitmapImage);

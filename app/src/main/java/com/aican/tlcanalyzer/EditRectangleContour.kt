@@ -257,6 +257,7 @@ class EditRectangleContour : AppCompatActivity() {
                     plotTableName, spotId,
                     rfValue4.toString(), rfValueTop.toString(), rfValueBottom.toString()
                 )
+
                 Toast.makeText(
                     this@EditRectangleContour,
                     "Saving new rectangle spot",

@@ -1,0 +1,6 @@
+org.opencv.test.openCV-androidTest-0 /Users/vanand/Desktop/tlc-analyser-new/openCV/build/generated/res/resValues/androidTest/debug
+org.opencv.test.openCV-androidTest-1 /Users/vanand/Desktop/tlc-analyser-new/openCV/build/generated/res/rs/androidTest/debug
+org.opencv.test.openCV-mergeDebugAndroidTestResources-2 /Users/vanand/Desktop/tlc-analyser-new/openCV/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/merged.dir
+org.opencv.test.openCV-mergeDebugAndroidTestResources-3 /Users/vanand/Desktop/tlc-analyser-new/openCV/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/stripped.dir
+org.opencv.test.openCV-merged_res-4 /Users/vanand/Desktop/tlc-analyser-new/openCV/build/intermediates/merged_res/debugAndroidTest
+org.opencv.test.openCV-packaged_res-5 /Users/vanand/Desktop/tlc-analyser-new/openCV/build/intermediates/packaged_res/debug

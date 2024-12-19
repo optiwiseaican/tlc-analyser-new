@@ -129,16 +129,9 @@ class PdfAdapter(
     }
 
     inner class PdfViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var fileName: TextView
-        var delete: ImageView
-        var openPDF: ImageView
-        var shareThis: ImageView
-
-        init {
-            fileName = itemView.findViewById(R.id.fileName)
-            delete = itemView.findViewById(R.id.delete)
-            openPDF = itemView.findViewById(R.id.openPDF)
-            shareThis = itemView.findViewById(R.id.shareThis)
-        }
+        var fileName: TextView = itemView.findViewById(R.id.fileName)
+        var delete: ImageView = itemView.findViewById(R.id.delete)
+        var openPDF: ImageView = itemView.findViewById(R.id.openPDF)
+        var shareThis: ImageView = itemView.findViewById(R.id.shareThis)
     }
 }

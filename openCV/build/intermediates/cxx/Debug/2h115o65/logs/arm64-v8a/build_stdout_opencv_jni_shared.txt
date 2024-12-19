@@ -1,2 +1,2 @@
-ninja: Entering directory `D:\SSD Data Backup\Desktop\TLC App Extrapolate\TLC-Analyzer\openCV\.cxx\Debug\2h115o65\arm64-v8a'
+ninja: Entering directory `/Users/vanand/Desktop/tlc-analyser-new/openCV/.cxx/Debug/2h115o65/arm64-v8a'
 ninja: no work to do.

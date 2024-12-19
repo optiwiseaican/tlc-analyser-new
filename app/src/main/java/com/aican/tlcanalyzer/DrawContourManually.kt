@@ -1,5 +1,6 @@
 package com.aican.tlcanalyzer
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ContextWrapper
 import android.content.Intent
@@ -137,6 +138,7 @@ class DrawContourManually : AppCompatActivity() {
 
     }
 
+    @SuppressLint("DefaultLocale")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -283,7 +285,6 @@ class DrawContourManually : AppCompatActivity() {
             drawnShapesStack.pop() // Remove the last drawn shape from the stack
 
             k--
-
             if (k > -1) {
                 Source.contourDataArrayList.removeLast()
                 Source.rFvsAreaArrayList.removeLast()

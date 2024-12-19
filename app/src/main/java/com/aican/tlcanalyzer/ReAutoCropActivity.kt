@@ -3,17 +3,13 @@ package com.aican.tlcanalyzer
 import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.provider.MediaStore
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.aican.tlcanalyzer.database.DatabaseHelper
 import com.aican.tlcanalyzer.database.UsersDatabase
 import com.aican.tlcanalyzer.databinding.ActivityReAutoCropBinding
-import com.aican.tlcanalyzer.utils.SharedPrefData
-import com.aican.tlcanalyzer.utils.Subscription
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -24,15 +20,18 @@ class ReAutoCropActivity : AppCompatActivity() {
     lateinit var binding: ActivityReAutoCropBinding
     var id: String? = null
     var projectImage: String? = null
+    var projectName: String? = null
 
     lateinit var databaseHelper: DatabaseHelper
     lateinit var userDatabaseHelper: UsersDatabase
+    var newImageName: String? = null
     var imageName: String? = null
     var type = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityReAutoCropBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
 
         databaseHelper = DatabaseHelper(this@ReAutoCropActivity)
         userDatabaseHelper = UsersDatabase(this@ReAutoCropActivity)
@@ -40,21 +39,29 @@ class ReAutoCropActivity : AppCompatActivity() {
         type = getIntent().getStringExtra("type").toString()
         id = intent.getStringExtra("id").toString()
         projectImage = intent.getStringExtra("projectImage").toString()
+        projectName = intent.getStringExtra("projectName").toString()
+        imageName = intent.getStringExtra("imageName").toString()
 
+//        binding.projectName.text = imageName.toString()
 
         val dir = File(
             ContextWrapper(this).externalMediaDirs[0],
             resources.getString(R.string.app_name) + id
         )
 
-        if (type != "multi") {
-            imageName = "ORG_" + id?.replace("ID", "IMGAICAN").toString() + ".jpg"
+
+        if (type == "multi") {
+            newImageName = "ORG_" + projectImage?.replace("ID", "IMGAICAN").toString()
+
+        } else if (type == "parts") {
+            newImageName = id?.replace("ID", "IMGAICAN").toString() + ".jpg"
+
         } else {
-            imageName = "ORG_" + projectImage?.replace("ID", "IMGAICAN").toString()
+            newImageName = "ORG_" + id?.replace("ID", "IMGAICAN").toString() + ".jpg"
 
         }
-        val outFile: File = File(dir, imageName)
 
+        val outFile: File = File(dir, newImageName)
 
         println("Image Full Path: " + outFile.path + "    -----   " + outFile.absolutePath)
 

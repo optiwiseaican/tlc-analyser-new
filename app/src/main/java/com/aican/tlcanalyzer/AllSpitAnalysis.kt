@@ -397,7 +397,11 @@ class AllSpitAnalysis : AppCompatActivity() {
     }
 
 
-    fun saveImageViewToFile(originalBitmapImage: Bitmap, fileName: String?, id: String): String? {
+    private fun saveImageViewToFile(
+        originalBitmapImage: Bitmap,
+        fileName: String?,
+        id: String
+    ): String? {
         var outStream: FileOutputStream? = null
 
         // Write to SD Card

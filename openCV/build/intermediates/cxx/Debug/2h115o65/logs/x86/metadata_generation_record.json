@@ -2,7 +2,7 @@
   {
     "level_": 0,
     "message_": "Start JSON generation. Platform version: 21 min SDK version: x86",
-    "file_": "D:\\SSD Data Backup\\Desktop\\TLC App Extrapolate\\TLC-Analyzer\\openCV\\libcxx_helper\\CMakeLists.txt",
+    "file_": "/Users/vanand/Desktop/tlc-analyser-new/openCV/libcxx_helper/CMakeLists.txt",
     "tag_": "debug|x86",
     "diagnosticCode_": 0,
     "memoizedIsInitialized": 1,
@@ -11,12 +11,12 @@
       "fieldsDescending": {}
     },
     "memoizedSize": -1,
-    "memoizedHashCode": 949729949
+    "memoizedHashCode": -1142843421
   },
   {
     "level_": 0,
-    "message_": "JSON \u0027D:\\SSD Data Backup\\Desktop\\TLC App Extrapolate\\TLC-Analyzer\\openCV\\.cxx\\Debug\\2h115o65\\x86\\android_gradle_build.json\u0027 was up-to-date",
-    "file_": "D:\\SSD Data Backup\\Desktop\\TLC App Extrapolate\\TLC-Analyzer\\openCV\\libcxx_helper\\CMakeLists.txt",
+    "message_": "JSON \u0027/Users/vanand/Desktop/tlc-analyser-new/openCV/.cxx/Debug/2h115o65/x86/android_gradle_build.json\u0027 was up-to-date",
+    "file_": "/Users/vanand/Desktop/tlc-analyser-new/openCV/libcxx_helper/CMakeLists.txt",
     "tag_": "debug|x86",
     "diagnosticCode_": 0,
     "memoizedIsInitialized": 1,
@@ -25,12 +25,12 @@
       "fieldsDescending": {}
     },
     "memoizedSize": -1,
-    "memoizedHashCode": 2046282571
+    "memoizedHashCode": 1590271164
   },
   {
     "level_": 0,
     "message_": "JSON generation completed without problems",
-    "file_": "D:\\SSD Data Backup\\Desktop\\TLC App Extrapolate\\TLC-Analyzer\\openCV\\libcxx_helper\\CMakeLists.txt",
+    "file_": "/Users/vanand/Desktop/tlc-analyser-new/openCV/libcxx_helper/CMakeLists.txt",
     "tag_": "debug|x86",
     "diagnosticCode_": 0,
     "memoizedIsInitialized": 1,
@@ -39,6 +39,6 @@
       "fieldsDescending": {}
     },
     "memoizedSize": -1,
-    "memoizedHashCode": 741619114
+    "memoizedHashCode": -1350954256
   }
 ]

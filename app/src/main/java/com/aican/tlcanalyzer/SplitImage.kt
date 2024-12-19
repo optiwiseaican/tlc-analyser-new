@@ -130,7 +130,7 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
 //        Source.checkInternet(this@SplitImage)
 
         if (work.equals(works[1])) {
-            var dir = File(
+            val dir = File(
                 ContextWrapper(this).externalMediaDirs[0], getString(R.string.app_name) + id
             )
 
@@ -168,7 +168,6 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
 
                     CropImage.activity(Uri.fromFile(outFile))
                         .setGuidelines(CropImageView.Guidelines.ON)
-
                         .start(this@SplitImage)
 
                 }

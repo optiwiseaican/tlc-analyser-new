@@ -318,6 +318,46 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 //        Source.checkInternet(this);
             if (mType != null && mType.equals("mainImg")) {
                 binding.cropAgain.setVisibility(View.VISIBLE);
+
+                binding.cropAgain.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(NewImageAnalysis.this, ReAutoCropActivity.class);
+                        i.putExtra("id", getIntent().getStringExtra("id"));
+                        i.putExtra("prevType", "re");
+                        i.putExtra("projectName", getIntent().getStringExtra("projectName"));
+                        i.putExtra("type",  getIntent().getStringExtra("type").toString());
+                        i.putExtra("img_path", getIntent().getStringExtra("img_path").toString());
+                        i.putExtra("projectImage", getIntent().getStringExtra("projectImage").toString());
+
+                        startActivity(i);
+                    }
+                });
+            }
+
+            if (mType != null && mType.equals("parts")){
+                binding.cropAgain.setVisibility(View.VISIBLE);
+
+                binding.cropAgain.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+
+                        Intent i = new Intent(NewImageAnalysis.this, ReAutoCropActivity.class);
+                        i.putExtra("id", getIntent().getStringExtra("id"));
+                        i.putExtra("prevType", "re");
+                        i.putExtra("projectName", getIntent().getStringExtra("projectName"));
+                        i.putExtra("type",  "parts");
+                        i.putExtra("img_path", getIntent().getStringExtra("img_path").toString());
+                        i.putExtra("projectImage", getIntent().getStringExtra("projectImage").toString());
+                        i.putExtra("imageName", getIntent().getStringExtra("imageName"));
+
+
+                        startActivity(i);
+                    }
+                });
+
             }
 
             binding.anaL.addDone.setVisibility(View.VISIBLE);
@@ -780,6 +820,21 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
             binding.splitSettings.setVisibility(View.VISIBLE);
             binding.cropAgain.setVisibility(View.VISIBLE);
 
+            binding.cropAgain.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i = new Intent(NewImageAnalysis.this, ReAutoCropActivity.class);
+                    i.putExtra("id", getIntent().getStringExtra("id"));
+                    i.putExtra("prevType", "re");
+                    i.putExtra("projectName", getIntent().getStringExtra("projectName"));
+                    i.putExtra("type",  getIntent().getStringExtra("type").toString());
+                    i.putExtra("img_path", getIntent().getStringExtra("img_path").toString());
+                    i.putExtra("projectImage", getIntent().getStringExtra("projectImage").toString());
+
+                    startActivity(i);
+                }
+            });
+
             String INTENSITY_PART_KEY = "INTENSITY_PART_KEY_" + id;
 
             if (SharedPrefData.getSavedData(
@@ -816,20 +871,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
         //
 
-        binding.cropAgain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(NewImageAnalysis.this, ReAutoCropActivity.class);
-                i.putExtra("id", getIntent().getStringExtra("id"));
-                i.putExtra("prevType", "re");
-                i.putExtra("projectName", getIntent().getStringExtra("projectName"));
-                i.putExtra("type",  getIntent().getStringExtra("type").toString());
-                i.putExtra("img_path", getIntent().getStringExtra("img_path").toString());
-                i.putExtra("projectImage", getIntent().getStringExtra("projectImage").toString());
 
-                startActivity(i);
-            }
-        });
 
         if (work.equals(works[0])) {
             try {

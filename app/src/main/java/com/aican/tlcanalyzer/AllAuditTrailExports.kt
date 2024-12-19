@@ -210,7 +210,7 @@ class AllAuditTrailExports : AppCompatActivity(), OnPDFSelectListener {
         val intent = Intent(this@AllAuditTrailExports, PDFActivity::class.java)
         intent.putExtra("path", file!!.absolutePath)
         intent.putExtra("flag", "n")
-        intent.putExtra("fileName", fileName);
+        intent.putExtra("fileName", fileName)
         startActivity(intent)
     }
 

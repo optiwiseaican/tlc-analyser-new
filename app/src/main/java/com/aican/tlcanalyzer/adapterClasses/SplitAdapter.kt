@@ -116,32 +116,28 @@ class SplitAdapter(
 
 
 
-        holder.itemView.setOnLongClickListener(object : View.OnLongClickListener {
-            override fun onLongClick(v: View?): Boolean {
-
-                val alertDialogBuilder = AlertDialog.Builder(context)
-                alertDialogBuilder.setMessage("Are you sure you want to delete this project? - ${data.imageName}")
-                alertDialogBuilder.setPositiveButton("Yes") { dialog, which ->
-                    // Handle deletion logic here
-                    databaseHelper.deleteSplitImg(tableName, data.id)
-                    arrayList.removeAt(posId)
-                    notifyItemRemoved(posId)
-                }
-                alertDialogBuilder.setNegativeButton("No") { dialog, which ->
-                    dialog.dismiss()
-                }
-                alertDialogBuilder.setOnCancelListener { dialog ->
-                    dialog.dismiss()
-                }
-
-                val alertDialog = alertDialogBuilder.create()
-                alertDialog.show()
-
-
-                return true
+        holder.itemView.setOnLongClickListener {
+            val alertDialogBuilder = AlertDialog.Builder(context)
+            alertDialogBuilder.setMessage("Are you sure you want to delete this project? - ${data.imageName}")
+            alertDialogBuilder.setPositiveButton("Yes") { dialog, which ->
+                // Handle deletion logic here
+                databaseHelper.deleteSplitImg(tableName, data.id)
+                arrayList.removeAt(posId)
+                notifyItemRemoved(posId)
+            }
+            alertDialogBuilder.setNegativeButton("No") { dialog, which ->
+                dialog.dismiss()
+            }
+            alertDialogBuilder.setOnCancelListener { dialog ->
+                dialog.dismiss()
             }
 
-        })
+            val alertDialog = alertDialogBuilder.create()
+            alertDialog.show()
+
+
+            true
+        }
 
 
         holder.itemView.setOnClickListener {
@@ -154,6 +150,7 @@ class SplitAdapter(
             val intent = Intent(context, NewImageAnalysis::class.java)
             intent.putExtra("positionOf", position.toString())
             intent.putExtra("w", "split")
+            intent.putExtra("mtype", "parts")
             intent.putExtra("hour", hour)
             intent.putExtra("img_path", outFile.path)
             intent.putExtra("projectName", projectName)

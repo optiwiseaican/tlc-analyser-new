@@ -266,8 +266,8 @@ class OffProjectAdapter(
 
 
                     refreshProjectArrayList.refreshProjects()
-
                     alertDialog.dismiss()
+
                 }
 
             }
@@ -277,6 +277,7 @@ class OffProjectAdapter(
     }
 
     fun editThis(data: ProjectOfflineData) {
+
         val dialogView = mInflater.inflate(R.layout.name_description, null)
         val builder = androidx.appcompat.app.AlertDialog.Builder(context)
             .setView(dialogView)
