@@ -28,6 +28,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.text.DecimalFormat
 import java.util.Collections
+import kotlin.math.sqrt
 
 class AllSpitAnalysis : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -287,7 +288,7 @@ class AllSpitAnalysis : AppCompatActivity() {
 
                 // Calculate the distance traveled by the center point
                 val contourDistance =
-                    Math.sqrt(Math.pow(centerPoint.x, 2.0) + Math.pow(centerPoint.y, 2.0))
+                    sqrt(Math.pow(centerPoint.x, 2.0) + Math.pow(centerPoint.y, 2.0))
 
                 // Calculate the distance traveled by the solvent front (assuming a linear gradient)
                 val solventFrontDistance: Double =

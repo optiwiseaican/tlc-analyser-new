@@ -328,8 +328,8 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
         val pdfDocument = PdfDocument(writer)
         val document = Document(pdfDocument)
 
-        var company_name = "N/A"
-        var user_name = "N/A"
+        val company_name = "N/A"
+        val user_name = "N/A"
 
 
         try {
@@ -724,7 +724,7 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
                     )
                 )
                 //intensity plot
-                val chartBitmap1 = chart1!!.chartBitmap
+                val chartBitmap1 = chart1.chartBitmap
 
 //            Bitmap scaledBitmap1 = Bitmap.createScaledBitmap(chartBitmap1, chartBitmap1.getWidth() / 2, chartBitmap1.getHeight() / 2, false);
                 val stream1 = ByteArrayOutputStream()
@@ -759,9 +759,9 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
 //                            .setFont(StandardFonts.TIMES_BOLD)
                     )
                 )
-                val chartBitmap2 = barChart!!.chartBitmap
+                val chartBitmap2 = barChart.chartBitmap
 
-//            Bitmap scaledBitmap = Bitmap.createScaledBitmap(chartBitmap, chartBitmap.getWidth() / 2, chartBitmap.getHeight() / 2, false);
+//              Bitmap scaledBitmap = Bitmap.createScaledBitmap(chartBitmap, chartBitmap.getWidth() / 2, chartBitmap.getHeight() / 2, false);
                 val stream2 = ByteArrayOutputStream()
                 chartBitmap2.compress(Bitmap.CompressFormat.JPEG, 100, stream2)
                 val byteArray2 = stream2.toByteArray()

@@ -53,7 +53,11 @@ class HrVsAreaPerGraph : AppCompatActivity() {
     //    companion object {
     var orderPosition: Int = 1
     var uptoHourPosition: Int = 23
-//    }
+
+    //    }
+    lateinit var legacyTableView: LegacyTableView
+    lateinit var legacyTableView2: LegacyTableView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -434,8 +438,6 @@ class HrVsAreaPerGraph : AppCompatActivity() {
         intensityChartPlot.invalidate()
     }
 
-    lateinit var legacyTableView: LegacyTableView
-    lateinit var legacyTableView2: LegacyTableView
 
     private fun plotTable(
         newHrvsArea: ArrayList<HrVsAreaPer>,

@@ -20,6 +20,7 @@ public class UsersDatabase extends SQLiteOpenHelper {
         super(context, "userdatabase.db", null, 3);
     }
 
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create Table Userdetails(name TEXT,role TEXT,id TEXT," +
@@ -61,6 +62,7 @@ public class UsersDatabase extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("Select * from UserLogDetails", null);
         return cursor;
     }
+
 
 
     public boolean updateUserDetails(String name, String uid, String newName, String role, String password) {

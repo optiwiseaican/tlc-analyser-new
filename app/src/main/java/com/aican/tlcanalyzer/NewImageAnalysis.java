@@ -2424,7 +2424,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
         for (int i = 0; i < highlightedRegionPeak.size(); i++) {
             highlightedRegions.add(new Pair<>(highlightedRegionPeak.get(i).first, highlightedRegionPeak.get(i).second));
-            System.out.println("Pairss " + highlightedRegionPeak.get(i).first + ", " + highlightedRegionPeak.get(i).second);
+            System.out.println("Pair " + highlightedRegionPeak.get(i).first + ", " + highlightedRegionPeak.get(i).second);
         }
 
         runOnUiThread(new Runnable() {
@@ -3730,6 +3730,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
             e.printStackTrace();
         }
     }
+
 
     private void plotContourRemove(String removeIndex, String contourType) {
 
@@ -5083,10 +5084,9 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         if (work.equals(works[1])) {
             File outFile = new File(dir, projectImage);
             if (outFile.exists()) {
-                Bitmap myBitmap = BitmapFactory.decodeFile(outFile.getAbsolutePath());
 
 //                captured_image.setImageBitmap(myBitmap);
-                bitImage = myBitmap;
+                bitImage = BitmapFactory.decodeFile(outFile.getAbsolutePath());
 
             } else {
 //                Source.toast(this, "Image not available or deleted");

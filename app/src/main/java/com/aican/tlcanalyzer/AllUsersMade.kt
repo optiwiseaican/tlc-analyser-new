@@ -56,6 +56,8 @@ class AllUsersMade : AppCompatActivity(), refreshProjectArrayList {
 
             startActivity(Intent(this@AllUsersMade, ProjectView::class.java))
             finishAffinity()
+
+
         })
 
         addUsersbtn = findViewById(R.id.addUsersbtn)

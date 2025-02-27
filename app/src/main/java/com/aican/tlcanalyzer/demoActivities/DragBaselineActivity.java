@@ -115,7 +115,7 @@ public class DragBaselineActivity extends AppCompatActivity implements OnChartGe
 
     @Override
     public void onNothingSelected() {
-        // Handle nothing selected
+        // Handle nothing selectedg
     }
 
     private float getBaselineY(MotionEvent me) {
