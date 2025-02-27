@@ -159,76 +159,93 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners {
         }
 
         binding.hrVsAreaPer.setOnClickListener {
-
+            // Clear previous values
             Source.hrVsAreaPerArrayListRM = ArrayList()
             Source.hrVsAreaPerArrayListFinal = ArrayList()
-            val hrVsAreaPerArrayRM: ArrayList<HrVsAreaPer> = ArrayList()
-            val hrVsAreaPerArrayFinal: ArrayList<HrVsAreaPer> = ArrayList()
 
-            if (splitContourDataList.size <= 0) {
+            val hrVsAreaPerArrayRM = ArrayList<HrVsAreaPer>()
+            val hrVsAreaPerArrayFinal = ArrayList<HrVsAreaPer>()
 
-                Toast.makeText(
-                    this@PlotMultipleIntensity,
-                    "Please select the images before analysis",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-            } else {
-
-
-                val splitContourDataList = ArrayList<SplitContourData>(splitContourDataList)
-
-
-                for ((i, split) in splitContourDataList.withIndex()) {
-
-                    val lengthh = split.name.length
-//                    Toast.makeText(this@PlotMultipleIntensity, "" + lengthh, Toast.LENGTH_SHORT)
-//                        .show()
-
-                    if (split.isSelected && (lengthh > 14)) {
-
-                        val hr: Float = 0f
-                        val areaPer = 0f
-
-                        var totalArea: Float = 0f
-                        var rmArea: Float = 0f
-                        var rmAreaPercent = 0f
-                        var finalArea: Float = 0f
-                        var finalPercent = 0f
-
-
-                        for (s in split.contourData) {
-
-                            totalArea += s.area.toFloat()
-
-                        }
-                        for (s in split.contourData) {
-                            if (s.id == split.rmSpot) {
-                                rmArea = s.area.toFloat()
-                            }
-                            if (s.id == split.finalSpot) {
-                                finalArea = s.area.toFloat()
-                            }
-                        }
-
-                        rmAreaPercent = (rmArea / totalArea) * 100
-                        finalPercent = (finalArea / totalArea) * 100
-
-
-                        hrVsAreaPerArrayRM.add(HrVsAreaPer(split.hr.toFloat(), rmAreaPercent))
-                        hrVsAreaPerArrayFinal.add(HrVsAreaPer(split.hr.toFloat(), finalPercent))
-
-                    }
-
-                }
-
-                Source.hrVsAreaPerArrayListRM.addAll(hrVsAreaPerArrayRM)
-                Source.hrVsAreaPerArrayListFinal.addAll(hrVsAreaPerArrayFinal)
-
-                val intentt = Intent(this@PlotMultipleIntensity, HrVsAreaPerGraph::class.java)
-                startActivity(intentt)
+            // ✅ 1. Check if splitContourDataList is empty
+            if (splitContourDataList.isEmpty()) {
+                Toast.makeText(this, "Please select images before analysis", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
 
+            val splitContourDataListCopy = ArrayList(splitContourDataList)
+
+            var isValid = false // ❌ Default to false to prevent navigation if no valid data is found
+
+            for (split in splitContourDataListCopy) {
+                if (!split.isSelected) continue  // ✅ Skip unselected items early
+
+                val lengthh = split.name.length
+                if (lengthh <= 14) continue
+
+                var totalArea = 0f
+                var rmArea = 0f
+                var finalArea = 0f
+
+                // ✅ 2. Check if split.contourData is empty
+                if (split.contourData.isEmpty()) {
+                    Toast.makeText(this, "Error: No contour data for ${split.name}", Toast.LENGTH_SHORT).show()
+                    continue
+                }
+
+                // ✅ 3. Calculate totalArea
+                for (s in split.contourData) {
+                    totalArea += s.area.toFloat()
+                }
+
+                // ✅ 4. Extract rmArea and finalArea
+                for (s in split.contourData) {
+                    if (s.id == split.rmSpot) rmArea = s.area.toFloat()
+                    if (s.id == split.finalSpot) finalArea = s.area.toFloat()
+                }
+
+                // ✅ 5. Check if totalArea is zero (to avoid division by zero)
+                if (totalArea == 0f) {
+                    Toast.makeText(this, "Error: Total Area is zero for ${split.name}", Toast.LENGTH_SHORT).show()
+                    continue
+                }
+
+                // ✅ 6. Check if rmArea or finalArea is missing
+                if (rmArea == 0f) {
+                    Toast.makeText(this, "Error: RM Area is missing for ${split.name}", Toast.LENGTH_SHORT).show()
+                    continue
+                }
+
+                if (finalArea == 0f) {
+                    Toast.makeText(this, "Error: Final Area is missing for ${split.name}", Toast.LENGTH_SHORT).show()
+                    continue
+                }
+
+                // ✅ 7. Calculate percentages
+                val rmAreaPercent = (rmArea / totalArea) * 100
+                val finalPercent = (finalArea / totalArea) * 100
+
+                Log.d("CalculationCheck", "Split: ${split.name}, HR: ${split.hr}")
+                Log.d("CalculationCheck", "Total Area: $totalArea, RM Area: $rmArea, Final Area: $finalArea")
+                Log.d("CalculationCheck", "RM Area %: $rmAreaPercent, Final %: $finalPercent")
+
+                hrVsAreaPerArrayRM.add(HrVsAreaPer(split.hr.toFloat(), rmAreaPercent))
+                hrVsAreaPerArrayFinal.add(HrVsAreaPer(split.hr.toFloat(), finalPercent))
+
+                isValid = true // ✅ Mark as valid if at least one split is processed successfully
+            }
+
+            // ✅ 8. Ensure at least one valid entry exists before proceeding
+            if (!isValid || hrVsAreaPerArrayRM.isEmpty() || hrVsAreaPerArrayFinal.isEmpty()) {
+                Toast.makeText(this, "Error: No valid selection or missing data!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // ✅ 9. If everything is valid, update Source and move to the next activity
+            Source.hrVsAreaPerArrayListRM.addAll(hrVsAreaPerArrayRM)
+            Source.hrVsAreaPerArrayListFinal.addAll(hrVsAreaPerArrayFinal)
+
+            val intentt = Intent(this, HrVsAreaPerGraph::class.java)
+            startActivity(intentt)
         }
 
 
@@ -334,6 +351,8 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners {
                         newRfTop = mRFTop * Source.percentRFTop
                         newRfBottom = mRFBottom * PixelGraph.adjustRfBottom(mRFTop - mRFBottom)
                     }
+                    newRfTop = mRFTop
+                    newRfBottom = mRFBottom
 
 
                     val shadedRegion = ArrayList<Entry>()

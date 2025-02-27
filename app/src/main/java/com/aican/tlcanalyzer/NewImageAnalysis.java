@@ -309,7 +309,6 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         type = getIntent().getStringExtra("type").toString();
 
 
-
         if (type.equals("multi") || type.equals("mainImg")) {
 
 
@@ -326,7 +325,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                         i.putExtra("id", getIntent().getStringExtra("id"));
                         i.putExtra("prevType", "re");
                         i.putExtra("projectName", getIntent().getStringExtra("projectName"));
-                        i.putExtra("type",  getIntent().getStringExtra("type").toString());
+                        i.putExtra("type", getIntent().getStringExtra("type").toString());
                         i.putExtra("img_path", getIntent().getStringExtra("img_path").toString());
                         i.putExtra("projectImage", getIntent().getStringExtra("projectImage").toString());
 
@@ -335,7 +334,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                 });
             }
 
-            if (mType != null && mType.equals("parts")){
+            if (mType != null && mType.equals("parts")) {
                 binding.cropAgain.setVisibility(View.VISIBLE);
 
                 binding.cropAgain.setOnClickListener(new View.OnClickListener() {
@@ -343,12 +342,11 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                     public void onClick(View v) {
 
 
-
                         Intent i = new Intent(NewImageAnalysis.this, ReAutoCropActivity.class);
                         i.putExtra("id", getIntent().getStringExtra("id"));
                         i.putExtra("prevType", "re");
                         i.putExtra("projectName", getIntent().getStringExtra("projectName"));
-                        i.putExtra("type",  "parts");
+                        i.putExtra("type", "parts");
                         i.putExtra("img_path", getIntent().getStringExtra("img_path").toString());
                         i.putExtra("projectImage", getIntent().getStringExtra("projectImage").toString());
                         i.putExtra("imageName", getIntent().getStringExtra("imageName"));
@@ -827,7 +825,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                     i.putExtra("id", getIntent().getStringExtra("id"));
                     i.putExtra("prevType", "re");
                     i.putExtra("projectName", getIntent().getStringExtra("projectName"));
-                    i.putExtra("type",  getIntent().getStringExtra("type").toString());
+                    i.putExtra("type", getIntent().getStringExtra("type").toString());
                     i.putExtra("img_path", getIntent().getStringExtra("img_path").toString());
                     i.putExtra("projectImage", getIntent().getStringExtra("projectImage").toString());
 
@@ -870,7 +868,6 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         }
 
         //
-
 
 
         if (work.equals(works[0])) {
@@ -6199,6 +6196,20 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
             AnalysisTask task1 = new AnalysisTask();
             task1.execute(1);
         }
+
+        String tempHourSelected = getIntent().getStringExtra("reason");
+
+        if ("tempHourSelected".equals(tempHourSelected)) {
+            finish();
+        }
+
+//        if (true) {
+//        this.startActivity(new Intent(NewImageAnalysis.this, PixelGraph.class)
+//                .putExtra("projectName", projectName).putExtra("id", id)
+//                .putExtra("reason", "tempIntensityPlot").
+//                putExtra("contourJsonFileName", contourJsonFileName)
+//                .putExtra("plotTableID", plotTableID));
+////        }
 
     }
 

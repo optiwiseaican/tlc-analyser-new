@@ -1170,6 +1170,13 @@ public class PixelGraph extends AppCompatActivity implements OnClicksListeners, 
         if (Source.contourBaselineEdited) {
             finish();
         }
+
+        String tempHourSelected = getIntent().getStringExtra("reason");
+
+        if ("tempIntensityPlot".equals(tempHourSelected)) {
+            finish();
+        }
+
     }
 
 

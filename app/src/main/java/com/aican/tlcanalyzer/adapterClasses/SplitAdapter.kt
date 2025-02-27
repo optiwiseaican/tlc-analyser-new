@@ -239,6 +239,46 @@ class SplitAdapter(
 //            notifyItemChanged(position)
 
             popupWindow.dismiss()
+
+            val intent = Intent(context, NewImageAnalysis::class.java)
+            intent.putExtra("reason", "tempHourSelected")
+            intent.putExtra("positionOf", position.toString())
+            intent.putExtra("w", "split")
+            intent.putExtra("mtype", "parts")
+            intent.putExtra("hour", hour)
+            intent.putExtra("img_path", outFile.path)
+            intent.putExtra("projectName", projectName)
+            intent.putExtra("projectDescription", data.description)
+            intent.putExtra("projectImage", data.imagePath)
+            intent.putExtra("projectNumber", projectNumber)
+            intent.putExtra("splitProjectName", data.imageName)
+            intent.putExtra("splitId", splitId)
+            if (type == "multi") {
+                intent.putExtra("type", "multi")
+            } else {
+                intent.putExtra("type", "multi")
+            }
+            intent.putExtra("imageName", data.imageName)
+            intent.putExtra("timeStamp", data.timeStamp)
+            intent.putExtra("tableName", tableName)
+            intent.putExtra("roiTableID", data.roiTableID)
+            intent.putExtra("thresholdVal", data.thresholdVal)
+            intent.putExtra("numberOfSpots", data.noOfSpots)
+            intent.putExtra("id", id)
+            intent.putExtra("pid", data.id)
+            intent.putExtra("volumePlotTableID", data.volumePlotTableID)
+            intent.putExtra("intensityPlotTableID", data.intensityPlotTableID)
+            intent.putExtra("plotTableID", data.plotTableID)
+            intent.putExtra("rmSpot", data.rmSpot)
+            intent.putExtra("finalSpot", data.finalSpot)
+
+
+
+            context.startActivity(intent)
+            if (type == "multi") {
+                (context as Activity).finish()
+            }
+
         }
 
         // Show the PopupWindow on TextView click
