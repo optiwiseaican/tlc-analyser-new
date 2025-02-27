@@ -731,7 +731,15 @@ public class PixelGraph extends AppCompatActivity implements OnClicksListeners, 
 //            Toast.makeText(this, "ID" + id, Toast.LENGTH_SHORT).show();
 
 
-//            Log.e("ThisIsNotAnError", "Top : " + newRfTop + " Bottom : " + newRfBottom + " RF : " + mRF);
+            Log.e("ThisIsNotAnErrorVishal", "Top : " + newRfTop + " Bottom : " + newRfBottom + " RF : " + mRF);
+
+
+            // Top : 426.0 Bottom : 338.0 RF : 380.0
+            // Top : 972.0 Bottom : 944.0 RF : 960.0
+
+            //Top : 434.52 Bottom : 297.44 RF : 380.0
+            // Top : 991.44 Bottom : 830.72 RF : 960.0
+
 
             ArrayList<Entry> shadedRegion = new ArrayList<>();
 
@@ -766,7 +774,7 @@ public class PixelGraph extends AppCompatActivity implements OnClicksListeners, 
 //                }
             }
 
-//            Log.e("Int12", int1 + ", " + int2);
+            Log.e("Int12VishalYAxisPoints", int1 + ", " + int2);
 
 //            LineData lineData = new LineData();
 //            chart.setData(lineData);

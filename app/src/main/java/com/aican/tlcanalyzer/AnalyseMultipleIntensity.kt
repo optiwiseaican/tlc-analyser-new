@@ -263,10 +263,15 @@ class AnalyseMultipleIntensity : AppCompatActivity(), OnClicksListeners {
                         contourDataArray.get(s).getRf().toFloat() * Source.PARTS_INTENSITY
                     ).toInt()).toFloat()
 
+                    //            Log.e("CON_ID", id);
+
+//            Toast.makeText(this, "ID" + id, Toast.LENGTH_SHORT).show();
+
 
                     var newRfTop: Float = mRFTop * Source.percentRFTop
 
                     var newRfBottom: Float = mRFBottom * Source.percentRFBottom
+
 
                     if (ids.contains("m")) {
                         newRfTop = mRFTop
@@ -275,7 +280,14 @@ class AnalyseMultipleIntensity : AppCompatActivity(), OnClicksListeners {
                         newRfTop = mRFTop * Source.percentRFTop
                         newRfBottom = mRFBottom * PixelGraph.adjustRfBottom(mRFTop - mRFBottom)
                     }
+                    newRfTop = mRFTop
+                    newRfBottom = mRFBottom
 
+
+                    Log.e(
+                        "ThisIsNotAnErrorVishalMultiple",
+                        "Top : $newRfTop Bottom : $newRfBottom RF : $mRF"
+                    )
 
                     val shadedRegion = ArrayList<Entry>()
 

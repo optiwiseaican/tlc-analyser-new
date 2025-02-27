@@ -3,6 +3,6 @@
 3    package="org.opencv" >
 4
 5    <uses-sdk android:minSdkVersion="21" />
-5-->C:\Users\Lenovo\Desktop\tlc-analyser-new\openCV\java\AndroidManifest.xml
+5-->/Users/vanand/Desktop/tlc-analyser-new/openCV/java/AndroidManifest.xml
 6
 7</manifest>
