@@ -20,9 +20,10 @@ class NewDrawRectangleCont : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityNewDrawRectangleContBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
+
 
         draggableLinesView = binding.draggableLinesView
 
