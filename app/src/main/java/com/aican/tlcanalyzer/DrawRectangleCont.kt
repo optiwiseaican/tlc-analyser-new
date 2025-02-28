@@ -238,8 +238,11 @@ class DrawRectangleCont : AppCompatActivity() {
             drawHorizontalLinesOnImage()
 
             if (userTaps.size >= 2) {
-                val y1 = userTaps[userTaps.size - 2]
-                val y2 = userTaps[userTaps.size - 1]
+                val y1 = userTaps[userTaps.size - 2] // top
+                val y2 = userTaps[userTaps.size - 1] // bottom
+
+                Log.e("userTaps", "$y1, $y2")
+                //userTaps        E  526, 687
                 if (userTaps.size % 2 == 0) {
 
                     rectangles.add(y1 to y2)

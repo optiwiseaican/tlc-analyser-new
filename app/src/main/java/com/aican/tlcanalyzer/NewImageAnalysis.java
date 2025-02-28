@@ -4994,7 +4994,8 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                         Source.manualContourArrayList = new ArrayList<>();
                     }
 
-                    Intent i = new Intent(NewImageAnalysis.this, DrawRectangleCont.class);
+//                    Intent i = new Intent(NewImageAnalysis.this, DrawRectangleCont.class);
+                    Intent i = new Intent(NewImageAnalysis.this, NewDrawRectangleCont.class);
                     startActivity(i);
 
 
