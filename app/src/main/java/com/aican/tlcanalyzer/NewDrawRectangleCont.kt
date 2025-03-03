@@ -24,7 +24,6 @@ class NewDrawRectangleCont : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-
         draggableLinesView = binding.draggableLinesView
 
         binding.back.setOnClickListener {
