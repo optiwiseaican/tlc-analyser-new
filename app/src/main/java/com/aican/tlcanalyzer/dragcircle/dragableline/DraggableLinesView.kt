@@ -36,6 +36,9 @@ class DraggableLinesView(context: Context, attrs: AttributeSet?) : View(context,
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
+        // Get image boundaries
+        val imageBounds = imageBitmap?.let { getFitCenterRect(it) }
+
         // Draw image with fitCenter
         imageBitmap?.let { bitmap ->
             val srcRect = Rect(0, 0, bitmap.width, bitmap.height)  // Original image dimensions
@@ -44,23 +47,40 @@ class DraggableLinesView(context: Context, attrs: AttributeSet?) : View(context,
             canvas.drawBitmap(bitmap, srcRect, dstRect, null)
         }
 
+        // Define percentage increase (e.g., 5% more from the right)
+        val percentageIncrease = 0.05f  // 5% increment
+
         // Draw rectangles between every two consecutive lines
         for (i in 0 until lines.size - 1 step 2) {
             val top = lines[i]
             val bottom = lines[i + 1]
+
             val colorIndex = (i / 2) % rectanglePaints.size  // Cycle through colors
-            canvas.drawRect(0f, top, width.toFloat(), bottom, rectanglePaints[colorIndex])
+
+            // Ensure rectangles are inside image boundaries
+            if (imageBounds != null) {
+                val constrainedLeft = imageBounds.left.toFloat()
+                val extendedRight = imageBounds.right.toFloat() + (imageBounds.width() * percentageIncrease) // Extend by 5%
+                val constrainedTop = maxOf(imageBounds.top.toFloat(), top)
+                val constrainedBottom = minOf(imageBounds.bottom.toFloat(), bottom)
+
+                canvas.drawRect(constrainedLeft, constrainedTop, extendedRight, constrainedBottom, rectanglePaints[colorIndex])
+            }
         }
 
-        // Draw horizontal lines and handles
+        // Draw horizontal lines and handles with percentage extension
         for (y in lines) {
-            canvas.drawLine(0f, y, width.toFloat(), y, paint)
-            canvas.drawCircle(
-                width.toFloat() - 30f,
-                y,
-                20f,
-                handlePaint
-            )  // Draw handle on the right side
+            if (imageBounds != null) {
+                val constrainedY = y.coerceIn(imageBounds.top.toFloat(), imageBounds.bottom.toFloat())
+
+                val extendedRight = imageBounds.right.toFloat() + (imageBounds.width() * percentageIncrease) // Extend by 5%
+
+                // Draw line with increased right side
+                canvas.drawLine(imageBounds.left.toFloat(), constrainedY, extendedRight, constrainedY, paint)
+
+                // Draw handle slightly inside the right boundary
+                canvas.drawCircle(extendedRight - 10f, constrainedY, 10f, handlePaint)
+            }
         }
     }
 

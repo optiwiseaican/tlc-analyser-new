@@ -67,7 +67,7 @@
         android:layout_height="match_parent"
         android:layout_margin="20dp"
         android:layout_weight="1"
-        android:rotation="0"
+        android:rotation="90"
         android:scaleType="fitCenter" />
 
     <LinearLayout
