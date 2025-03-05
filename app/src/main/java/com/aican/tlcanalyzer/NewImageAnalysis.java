@@ -20,6 +20,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -2889,12 +2891,15 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 //        getIntensityData();
 
 
-        Source.splitContourDataList.add(new SplitContourData(imgName, true,
+        System.out.println("intensityPlotTableID vishal : " + intensityPlotTableID);
+
+        Source.splitContourDataList.add(new SplitContourData(id, imgName, true,
                 contourImageFileName,
                 projectImage, hr, rmSpot, finalSpot, volumeArrayList, rFvsAreaArrayList,
-                contourSetArrayList, contourDataArrayList, labelDataArrayList));
+                contourSetArrayList, contourDataArrayList, labelDataArrayList, intensityPlotTableID));
 //        Toast.makeText(this, "RFS" + rFvsAreaArrayList.size(), Toast.LENGTH_SHORT).show();
 
+        System.out.println("Source.splitContourDataList vvv" + Source.splitContourDataList.toString());
 
     }
 
@@ -4851,12 +4856,15 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
                     }
 
-                    Source.splitContourDataList.add(new SplitContourData(imgName, true,
+                    System.out.println("intensityPlotTableID vishal : " + intensityPlotTableID);
+
+                    Source.splitContourDataList.add(new SplitContourData(id, imgName, true,
                             contourImageFileName,
                             projectImage, hr, rmSpot, finalSpot, volumeArrayList, rFvsAreaArrayList,
-                            contourSetArrayList, contourDataArrayList, labelDataArrayList));
+                            contourSetArrayList, contourDataArrayList, labelDataArrayList, intensityPlotTableID));
 //        Toast.makeText(this, "" + volumeArrayList.size(), Toast.LENGTH_SHORT).show();
 
+                    System.out.println("Source.splitContourDataList vvv" + Source.splitContourDataList.toString());
 
                     String imageFileName = contourImageFileName;
 
@@ -5432,11 +5440,18 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         }
 //        ggrgr
 //        Source.splitContourDataList.add(new SplitContourData(imgName, true, contourImageFileName, projectImage, volumeArrayList, rFvsAreaArrayList, contourSetArrayList, contourDataArrayList));
-        Source.splitContourDataList.add(new SplitContourData(imgName, true, contourImageFileName, projectImage, hr, rmSpot, finalSpot,
+
+        System.out.println("intensityPlotTableID vishal : " + intensityPlotTableID);
+
+
+
+        Source.splitContourDataList.add(new SplitContourData(id, imgName, true, contourImageFileName,
+                projectImage, hr, rmSpot, finalSpot,
                 volumeArrayList, Source.rFvsAreaArrayList, contourSetArrayList, contourDataArrayList
-                , labelDataArrayList
+                , labelDataArrayList, intensityPlotTableID
         ));
 //
+        System.out.println("Source.splitContourDataList vvv" + Source.splitContourDataList.toString());
 
         binding.anaL.spotDetection.spotContours.setText("Regenerate Spots");
 
@@ -6124,11 +6139,14 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
                 }
 
-                Source.splitContourDataList.add(new SplitContourData(imgName, true,
+                System.out.println("intensityPlotTableID vishal : " + intensityPlotTableID);
+
+                Source.splitContourDataList.add(new SplitContourData(id, imgName, true,
                         contourImageFileName,
                         projectImage, hr, rmSpot, finalSpot, volumeArrayList, rFvsAreaArrayList,
-                        contourSetArrayList, contourDataArrayList, labelDataArrayList));
+                        contourSetArrayList, contourDataArrayList, labelDataArrayList, intensityPlotTableID));
 //        Toast.makeText(this, "" + volumeArrayList.size(), Toast.LENGTH_SHORT).show();
+                System.out.println("Source.splitContourDataList vvv" + Source.splitContourDataList.toString());
 
 
                 String imageFileName = contourImageFileName;
@@ -6211,8 +6229,30 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 //                putExtra("contourJsonFileName", contourJsonFileName)
 //                .putExtra("plotTableID", plotTableID));
 ////        }
+        String processing = getIntent().getStringExtra("processing");
+
+        if ("intensity".equals(processing)) {
+            // Show loading dialog
+            Source.showLoadingDialog(NewImageAnalysis.this);
+
+            // Delay before moving to ActivityC
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    Intent intent = new Intent(NewImageAnalysis.this, PixelGraph.class);
+                    intent.putExtra("processing", "intensity");
+                    intent.putExtra("projectName", projectName).putExtra("id", id);
+                    intent.putExtra("contourJsonFileName", contourJsonFileName);
+                    intent.putExtra("plotTableID", plotTableID);
+                    startActivity(intent);
+                    finish(); // Finish Activity B
+                }
+            }, 2000); // Delay of 2 seconds
+        }
 
     }
+
 
     public static boolean hasDarkerPixels(Mat grayMat, double rfTop, double rfBottom) {
         int imageWidth = grayMat.cols(); // Width of the grayscale image

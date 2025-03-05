@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.PopupWindow
 import android.widget.TextView
@@ -69,10 +70,13 @@ class SplitAdapter(
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val splitImage = itemView.findViewById<ImageView>(R.id.splitImage)
         val spinnerText = itemView.findViewById<TextView>(R.id.spinnerText)
+        val rmValue = itemView.findViewById<TextView>(R.id.rmValue)
+        val finalValue = itemView.findViewById<TextView>(R.id.finalValue)
+        val hrValue = itemView.findViewById<TextView>(R.id.hrValue)
         val imageName = itemView.findViewById<TextView>(R.id.imageName)
         val imageTimeStamp = itemView.findViewById<TextView>(R.id.imageTimeStamp)
-        val checkSpottedGreen = itemView.findViewById<ImageView>(R.id.checkSpottedGreen)
-        val checkSpottedRed = itemView.findViewById<ImageView>(R.id.checkSpottedRed)
+        val checkSpottedGreen = itemView.findViewById<LinearLayout>(R.id.checkSpottedGreen)
+        val checkSpottedRed = itemView.findViewById<LinearLayout>(R.id.checkSpottedRed)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -99,11 +103,16 @@ class SplitAdapter(
         holder.checkSpottedGreen.visibility = View.GONE
         holder.checkSpottedRed.visibility = View.VISIBLE
 
+
+
         if (contOutFile.exists()) {
 //            holder.checkSpotted.visibility = View.VISIBLE
 
             holder.checkSpottedGreen.visibility = View.VISIBLE
             holder.checkSpottedRed.visibility = View.GONE
+
+            holder.rmValue.text = "RM: " + data.rmSpot
+            holder.finalValue.text = "Final: " + data.finalSpot
         }
 
         if (outFile.exists()) {
@@ -280,6 +289,9 @@ class SplitAdapter(
             }
 
         }
+
+        holder.hrValue.text = "Hour: " + data.hour + " hour"
+
 
         // Show the PopupWindow on TextView click
         holder.spinnerText.setOnClickListener {

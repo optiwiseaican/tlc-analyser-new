@@ -67,6 +67,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //        onCreate(db);
     }
 
+    public boolean isTableExistsAndNotEmpty(String tableName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        boolean tableExists = false;
+        boolean hasData = false;
+
+        // Check if the table exists
+        Cursor cursor = db.rawQuery(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
+                new String[]{tableName});
+
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                tableExists = true;
+            }
+            cursor.close();
+        }
+
+        // If the table exists, check if it contains data
+        if (tableExists) {
+            Cursor dataCursor = db.rawQuery("SELECT COUNT(*) FROM " + tableName, null);
+            if (dataCursor != null) {
+                if (dataCursor.moveToFirst()) {
+                    int rowCount = dataCursor.getInt(0);
+                    hasData = rowCount > 0;
+                }
+                dataCursor.close();
+            }
+        }
+
+        db.close();
+
+        // Return true if the table exists and has data
+        return tableExists && hasData;
+    }
+
+
     public boolean logUserAction(String name, String role, String activity, String projectName,
                                  String projectID, String projectType) {
         SQLiteDatabase db = this.getWritableDatabase();

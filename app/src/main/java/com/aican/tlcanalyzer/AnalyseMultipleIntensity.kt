@@ -143,6 +143,7 @@ class AnalyseMultipleIntensity : AppCompatActivity(), OnClicksListeners {
             ).show()
 
             val updatedSplitContourData = SplitContourData(
+                split.id,
                 split.name,
                 split.isSelected,
                 split.contourImageName,
@@ -154,7 +155,8 @@ class AnalyseMultipleIntensity : AppCompatActivity(), OnClicksListeners {
                 split.rFvsAreaArrayList,
                 split.contourSetArrayList,
                 updatedContourDataList,
-                split.labelDataArrayList
+                split.labelDataArrayList,
+                split.intensityPlotTableID
             )
             if (updatedSplitContourData.isSelected) {
 

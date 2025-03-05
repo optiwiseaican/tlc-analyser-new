@@ -1,5 +1,6 @@
 package com.aican.tlcanalyzer
 
+import android.app.ProgressDialog
 import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
@@ -22,13 +23,17 @@ import com.aican.tlcanalyzer.dataClasses.AreaWithContourID
 import com.aican.tlcanalyzer.dataClasses.ContourData
 import com.aican.tlcanalyzer.dataClasses.ContourGraphSelModel
 import com.aican.tlcanalyzer.dataClasses.HrVsAreaPer
+import com.aican.tlcanalyzer.dataClasses.LabelData
 import com.aican.tlcanalyzer.dataClasses.RFvsArea
 import com.aican.tlcanalyzer.dataClasses.SplitContourData
+import com.aican.tlcanalyzer.dataClasses.SplitData
+import com.aican.tlcanalyzer.database.DatabaseHelper
 import com.aican.tlcanalyzer.databinding.ActivityPlotMultipleIntensityBinding
 import com.aican.tlcanalyzer.interfaces.OnClicksListeners
+import com.aican.tlcanalyzer.interfaces.OnPlotClickListeners
+import com.aican.tlcanalyzer.specialHelperClasses.ImageAnalysisClass
 import com.aican.tlcanalyzer.utils.RandomColors
 import com.aican.tlcanalyzer.utils.Source
-import com.aican.tlcanalyzer.utils.Source.splitContourDataList
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -44,6 +49,7 @@ import com.github.mikephil.charting.utils.ColorTemplate
 import com.itextpdf.io.image.ImageDataFactory
 import com.itextpdf.kernel.colors.DeviceGray
 import com.itextpdf.kernel.colors.DeviceRgb
+import com.itextpdf.kernel.colors.Lab
 import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfWriter
 import com.itextpdf.layout.Document
@@ -53,6 +59,9 @@ import com.itextpdf.layout.element.Paragraph
 import com.itextpdf.layout.element.Table
 import com.itextpdf.layout.element.Text
 import com.itextpdf.layout.property.TextAlignment
+import org.opencv.android.Utils
+import org.opencv.core.Mat
+import org.opencv.imgproc.Imgproc
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -63,19 +72,28 @@ import java.util.Locale
 import java.util.Random
 
 
-class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners {
+class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners, OnPlotClickListeners {
+
+    companion object {
+        var splitImageArrayList: java.util.ArrayList<SplitData> = ArrayList()
+
+    }
 
     lateinit var binding: ActivityPlotMultipleIntensityBinding
     lateinit var adapter: MultiSplitAdapter
     lateinit var id: String
+    lateinit var pid: String
     lateinit var projectName: String
     lateinit var intensityLineChart: LineChart
     lateinit var splitContourData: ArrayList<SplitContourData>
     lateinit var splitContourDatas: ArrayList<SplitContourData>
     private val splitContourDataList2 = ArrayList<SplitContourData>()
+    lateinit var databaseHelper: DatabaseHelper
 
-//    lateinit var splitContourDataList: ArrayList<SplitContourData>
+    var splitContourDataList = ArrayList<SplitContourData>()
 
+    //    lateinit var splitContourDataList: ArrayList<SplitContourData>
+    lateinit var imageAnalysisClass: ImageAnalysisClass
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,11 +101,15 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners {
         setContentView(binding.root)
         supportActionBar?.hide()
         binding.projectName.setText(intent.getStringExtra("projectName").toString())
+        imageAnalysisClass = ImageAnalysisClass(this)
 
         binding.back.setOnClickListener(View.OnClickListener { finish() })
         contoursAreaArrayList = java.util.ArrayList()
 
+        databaseHelper = DatabaseHelper(this)
+
         id = intent.getStringExtra("id").toString()
+        pid = intent.getStringExtra("pid").toString()
         projectName = intent.getStringExtra("projectName").toString()
 //        Source.toast(this@PlotMultipleIntensity, intent.getStringExtra("tableName"))
 
@@ -96,7 +118,21 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners {
             exportDir.mkdirs()
         }
 
-        splitContourDataList = Source.splitContourDataList
+
+        // if splitContourDataList is empty
+        if (splitContourDataList.isEmpty()) {
+
+            if (splitImageArrayList.isEmpty()) {
+                Toast.makeText(this@PlotMultipleIntensity, "No data available", Toast.LENGTH_SHORT)
+                    .show()
+                finish()
+            }
+
+            loadAllDataOfSplitContourData()
+
+        }
+
+
 
         binding.analyseInt.setOnClickListener {
             if (splitContourDataList.size <= 0) {
@@ -168,13 +204,15 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners {
 
             // ✅ 1. Check if splitContourDataList is empty
             if (splitContourDataList.isEmpty()) {
-                Toast.makeText(this, "Please select images before analysis", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Please select images before analysis", Toast.LENGTH_SHORT)
+                    .show()
                 return@setOnClickListener
             }
 
             val splitContourDataListCopy = ArrayList(splitContourDataList)
 
-            var isValid = false // ❌ Default to false to prevent navigation if no valid data is found
+            var isValid =
+                false // ❌ Default to false to prevent navigation if no valid data is found
 
             for (split in splitContourDataListCopy) {
                 if (!split.isSelected) continue  // ✅ Skip unselected items early
@@ -188,7 +226,11 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners {
 
                 // ✅ 2. Check if split.contourData is empty
                 if (split.contourData.isEmpty()) {
-                    Toast.makeText(this, "Error: No contour data for ${split.name}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Error: No contour data for ${split.name}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     continue
                 }
 
@@ -205,18 +247,30 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners {
 
                 // ✅ 5. Check if totalArea is zero (to avoid division by zero)
                 if (totalArea == 0f) {
-                    Toast.makeText(this, "Error: Total Area is zero for ${split.name}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Error: Total Area is zero for ${split.name}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     continue
                 }
 
                 // ✅ 6. Check if rmArea or finalArea is missing
                 if (rmArea == 0f) {
-                    Toast.makeText(this, "Error: RM Area is missing for ${split.name}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Error: RM Area is missing for ${split.name}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     continue
                 }
 
                 if (finalArea == 0f) {
-                    Toast.makeText(this, "Error: Final Area is missing for ${split.name}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Error: Final Area is missing for ${split.name}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     continue
                 }
 
@@ -225,7 +279,10 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners {
                 val finalPercent = (finalArea / totalArea) * 100
 
                 Log.d("CalculationCheck", "Split: ${split.name}, HR: ${split.hr}")
-                Log.d("CalculationCheck", "Total Area: $totalArea, RM Area: $rmArea, Final Area: $finalArea")
+                Log.d(
+                    "CalculationCheck",
+                    "Total Area: $totalArea, RM Area: $rmArea, Final Area: $finalArea"
+                )
                 Log.d("CalculationCheck", "RM Area %: $rmAreaPercent, Final %: $finalPercent")
 
                 hrVsAreaPerArrayRM.add(HrVsAreaPer(split.hr.toFloat(), rmAreaPercent))
@@ -236,7 +293,11 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners {
 
             // ✅ 8. Ensure at least one valid entry exists before proceeding
             if (!isValid || hrVsAreaPerArrayRM.isEmpty() || hrVsAreaPerArrayFinal.isEmpty()) {
-                Toast.makeText(this, "Error: No valid selection or missing data!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Error: No valid selection or missing data!",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
 
@@ -250,6 +311,129 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners {
 
 
     }
+
+    private fun loadAllDataOfSplitContourData() {
+
+        splitContourDataList.clear()
+
+        splitImageArrayList.forEachIndexed { index, splitData ->
+
+
+            // load all contour data from database
+
+            // load rfVsArea list from database - intensity plot
+
+            // load label data list from database
+
+            // volume plot
+
+            var volumeArrayList = ArrayList<Double>()
+
+            if (volumeArrayList == null || volumeArrayList.isEmpty()) {
+                volumeArrayList = java.util.ArrayList<Double>()
+
+                val cursor = databaseHelper.getDataFromTable(splitData.volumePlotTableID)
+                if (cursor != null) {
+                    if (cursor.moveToFirst()) {
+                        do {
+                            volumeArrayList.add(cursor.getString(2).toString().toDouble())
+                        } while (cursor.moveToNext())
+                    }
+                }
+            }
+
+            val rFvsAreaArrayList: java.util.ArrayList<RFvsArea> = java.util.ArrayList<RFvsArea>()
+
+            if (rFvsAreaArrayList == null || rFvsAreaArrayList.size == 0) {
+                val cursor = databaseHelper.getDataFromTable(splitData.intensityPlotTableID)
+
+                //            Toast.makeText(this, "In " + cursor.getCount(), Toast.LENGTH_SHORT).show();
+                if (cursor != null) {
+                    if (cursor.moveToFirst()) {
+                        do {
+                            rFvsAreaArrayList.add(
+                                RFvsArea(
+                                    cursor.getString(1).toString().toDouble(),
+                                    cursor.getString(2).toString().toDouble()
+                                )
+                            )
+                        } while (cursor.moveToNext())
+                    }
+                }
+            }
+            var contourDataArrayList: java.util.ArrayList<ContourData> =
+                java.util.ArrayList<ContourData>()
+
+
+            if (contourDataArrayList == null || contourDataArrayList.size == 0) {
+                contourDataArrayList = java.util.ArrayList<ContourData>()
+
+                val cursor = databaseHelper.getDataFromTable(splitData.plotTableID)
+
+                if (cursor != null) {
+                    if (cursor.moveToFirst()) {
+                        do {
+                            contourDataArrayList.add(
+                                ContourData(
+                                    cursor.getString(0),
+                                    cursor.getString(1),
+                                    cursor.getString(2),
+                                    cursor.getString(3),
+                                    cursor.getString(4),
+                                    cursor.getString(5),
+                                    cursor.getString(7),
+                                    "na" //                                cursor.getString(8)
+
+                                )
+                            )
+                        } while (cursor.moveToNext())
+                    }
+                }
+            }
+
+            var labelDataArrayList = ArrayList<LabelData>()
+
+            if (labelDataArrayList == null || labelDataArrayList.size == 0) {
+                labelDataArrayList = java.util.ArrayList<LabelData>()
+                val cursor = databaseHelper.getDataFromTable("LABEL_" + splitData.plotTableID)
+
+                if (cursor != null) {
+                    if (cursor.moveToFirst()) {
+                        do {
+                            labelDataArrayList.add(
+                                LabelData(
+                                    cursor.getString(0),
+                                    cursor.getString(1)
+                                )
+                            )
+                        } while (cursor.moveToNext())
+                    }
+                }
+            }
+
+            splitContourDataList.add(
+                SplitContourData(
+                    id,
+                    splitData.imageName,
+                    true,
+                    "CONT" + splitData.id + ".png",
+                    splitData.imagePath,
+                    splitData.hour,
+                    splitData.rmSpot,
+                    splitData.finalSpot,
+                    volumeArrayList,
+                    rFvsAreaArrayList,
+                    ArrayList(),
+                    contourDataArrayList,
+                    labelDataArrayList,
+                    splitData.intensityPlotTableID,
+                )
+            )
+        }
+
+        Source.splitContourDataList = splitContourDataList
+    }
+
 
     private fun showChart(iLineDataSets: ArrayList<ILineDataSet>) {
 
@@ -411,7 +595,13 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners {
                 updatedContourDataList.add(contourData)
             }
 
+            //        getIntensityData();
+            println("intensityPlotTableID vishal : ${split.intensityPlotTableID}")
+//            println("Source.splitContourDataList vvv" + splitContourDataList.toString())
+
+
             val updatedSplitContourData = SplitContourData(
+                split.id,
                 split.name,
                 split.isSelected,
                 split.contourImageName,
@@ -423,7 +613,8 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners {
                 split.rFvsAreaArrayList,
                 split.contourSetArrayList,
                 updatedContourDataList,
-                split.labelDataArrayList
+                split.labelDataArrayList,
+                split.intensityPlotTableID
             )
             if (updatedSplitContourData.isSelected) {
 
@@ -1178,7 +1369,7 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners {
 
 
     private fun setRecView() {
-        adapter = MultiSplitAdapter(this, splitContourDataList, this)
+        adapter = MultiSplitAdapter(id, this, splitContourDataList, this, this)
         binding.recView.adapter = adapter
         adapter.notifyDataSetChanged()
     }
@@ -1522,6 +1713,11 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners {
     }
 
     override fun newOnClick(position: Int) {
+
+        refreshPlotMultipleIntensityActivity()
+    }
+
+    fun refreshPlotMultipleIntensityActivity() {
         val i = Intent(this@PlotMultipleIntensity, PlotMultipleIntensity::class.java)
         i.putExtra("w", "split")
         i.putExtra("img_path", intent.getStringExtra("img_path"))
@@ -1549,7 +1745,149 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners {
         startActivity(i)
         finish()
         overridePendingTransition(0, 0)
+    }
 
+    override fun onPlotClick(position: Int, projectImage: String, intensityPlotTableID: String) {
+        val dir = File(
+            ContextWrapper(this).externalMediaDirs[0],
+            resources.getString(R.string.app_name) + id
+        )
+
+        println("position = $position, projectImage = $projectImage, intensityPlotTableID = $intensityPlotTableID")
+
+        // ✅ Show Progress Dialog
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setMessage("Processing intensity plot, please wait...")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            // ✅ Perform analysis in the background
+            Thread {
+                val rFvsAreaArrayList = performAnalysis(
+                    dir,
+                    projectImage,
+                    imageAnalysisClass,
+                    databaseHelper,
+                    intensityPlotTableID,
+                )
+
+                runOnUiThread {
+                    // ✅ Dismiss Progress Dialog
+                    progressDialog.dismiss()
+
+                    // ✅ Find the correct index
+                    val index = splitContourDataList.indexOfFirst {
+                        it.intensityPlotTableID == intensityPlotTableID
+                    }
+
+                    if (index != -1) {
+                        // ✅ Update the correct entry
+                        splitContourDataList[index].rFvsAreaArrayList = rFvsAreaArrayList
+                    } else {
+                        Log.e("onPlotClick", "No matching intensityPlotTableID found!")
+                    }
+
+                    refreshPlotMultipleIntensityActivity()
+                }
+            }.start()
+        }
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private fun performAnalysis(
+        dir: File,
+        projectImage: String,
+        imageAnalysisClass: ImageAnalysisClass,
+        databaseHelper: DatabaseHelper,
+        intensityPlotTableID: String,
+
+        ): ArrayList<RFvsArea> {
+
+        var bitImage: Bitmap? = null
+
+        val outFile: File = File(dir, projectImage)
+        if (outFile.exists()) {
+            val myBitmap = BitmapFactory.decodeFile(outFile.absolutePath)
+
+            bitImage = myBitmap
+        } else {
+//                Source.toast(this, "Image not available or deleted");
+        }
+
+
+        val config: Bitmap.Config = bitImage?.config!!
+
+        Log.e("BitImage", imageAnalysisClass.configToBitDepth(config).toString() + "")
+
+
+        val firstImage = Mat()
+        Utils.bitmapToMat(bitImage, firstImage)
+
+        // grayscale
+        var grayScaleImage = Mat()
+        Imgproc.cvtColor(firstImage, grayScaleImage, Imgproc.COLOR_BGR2GRAY)
+
+
+        //        Mat binary = new Mat();
+//        Imgproc.threshold(grayScaleImage, binary, threshVal, 255, 0);
+
+
+        // Preprocess the image and calculate intensities
+        val rfValues: DoubleArray =
+            imageAnalysisClass.calculateRFValues(Source.PARTS_INTENSITY) // Calculated RF values
+
+
+        for (i in rfValues.indices) {
+            Log.e("RFValuesEEEE", rfValues[i].toString() + "")
+        }
+
+        val intensityValues: java.util.ArrayList<Double> =
+            imageAnalysisClass.calculateIntensities(grayScaleImage, rfValues)
+
+        val windowSize = Source.PARTS_INTENSITY / 25
+
+
+        //        ArrayList<Double> movingAvgList = imageAnalysisClass.applyMovingAverage(intensityValues, windowSize);
+        val movingAvgList = intensityValues
+
+        val rFvsAreas = java.util.ArrayList<RFvsArea>()
+
+        for (i in movingAvgList.indices) {
+            rFvsAreas.add(RFvsArea(i.toDouble(), (255 - movingAvgList[i])))
+            //            rFvsAreas.add(new RFvsArea(rfValues[i], (255 - movingAvgList.get(i))));
+//            rFvsAreas.add(new RFvsArea(i, (movingAvgList.get(i))));
+            Log.d("IntValuesMy", " i = " + i + " & intensity = " + (255 - movingAvgList[i]))
+        }
+        Source.rFvsAreaArrayList = rFvsAreas
+
+        databaseHelper.deleteDataFromTable(intensityPlotTableID)
+
+
+        for (im in Source.rFvsAreaArrayList.indices) {
+            databaseHelper.insertRfVsAreaIntensityPlotTableData(
+                intensityPlotTableID,
+                im.toString(),
+                Source.rFvsAreaArrayList[im].rf.toString(),
+                Source.rFvsAreaArrayList[im].area.toString()
+            )
+        }
+
+
+//        if (so == 1) {
+//            this.startActivity(
+//                Intent(
+//                    this@PlotMultipleIntensity,
+//                    PixelGraph::class.java
+//                )
+//                    .putExtra("projectName", projectName).putExtra("id", id).putExtra
+//                        ("contourJsonFileName", contourJsonFileName)
+//                    .putExtra("plotTableID", plotTableID)
+//            )
+//        }
+
+        return Source.rFvsAreaArrayList
     }
 
 

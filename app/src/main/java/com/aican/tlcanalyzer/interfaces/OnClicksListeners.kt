@@ -15,4 +15,5 @@ interface OnClicksListeners {
     fun newOnClick(position: Int)
 
 
+
 }

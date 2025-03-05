@@ -240,31 +240,40 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
 
 
         binding.floatingActionBtn!!.setOnClickListener {
-            val i = Intent(this@SplitImage, PlotMultipleIntensity::class.java)
-            i.putExtra("w", "split")
-            i.putExtra("img_path", intent.getStringExtra("img_path"))
-            i.putExtra("projectName", intent.getStringExtra("projectName"))
-            i.putExtra("projectDescription", intent.getStringExtra("projectDescription"))
-            i.putExtra("projectImage", intent.getStringExtra("projectImage"))
-            i.putExtra("projectNumber", intent.getStringExtra("projectNumber"))
-            i.putExtra("imageName", intent.getStringExtra("imageName"))
-            i.putExtra("splitId", intent.getStringExtra("splitId"))
-            i.putExtra("tableName", tableName)
-            i.putExtra("roiTableID", intent.getStringExtra("roiTableID"))
-            i.putExtra("thresholdVal", intent.getStringExtra("thresholdVal"))
-            i.putExtra("numberOfSpots", intent.getStringExtra("numberOfSpots"))
-            i.putExtra("id", intent.getStringExtra("id"))
-            i.putExtra("pid", intent.getStringExtra("pid"))
-            i.putExtra(
-                "volumePlotTableID", intent.getStringExtra("volumePlotTableID"),
-            )
-            i.putExtra(
-                "intensityPlotTableID", intent.getStringExtra("intensityPlotTableID"),
-            )
-            i.putExtra(
-                "plotTableID", intent.getStringExtra("plotTableID"),
-            )
-            startActivity(i)
+
+            if (!arrayList.isNullOrEmpty()) {
+                PlotMultipleIntensity.splitImageArrayList = arrayList
+
+
+                val i = Intent(this@SplitImage, PlotMultipleIntensity::class.java)
+                i.putExtra("w", "split")
+                i.putExtra("img_path", intent.getStringExtra("img_path"))
+                i.putExtra("projectName", intent.getStringExtra("projectName"))
+                i.putExtra("projectDescription", intent.getStringExtra("projectDescription"))
+                i.putExtra("projectImage", intent.getStringExtra("projectImage"))
+                i.putExtra("projectNumber", intent.getStringExtra("projectNumber"))
+                i.putExtra("imageName", intent.getStringExtra("imageName"))
+                i.putExtra("splitId", intent.getStringExtra("splitId"))
+                i.putExtra("tableName", tableName)
+                i.putExtra("roiTableID", intent.getStringExtra("roiTableID"))
+                i.putExtra("thresholdVal", intent.getStringExtra("thresholdVal"))
+                i.putExtra("numberOfSpots", intent.getStringExtra("numberOfSpots"))
+                i.putExtra("id", intent.getStringExtra("id"))
+                i.putExtra("pid", intent.getStringExtra("pid"))
+                i.putExtra(
+                    "volumePlotTableID", intent.getStringExtra("volumePlotTableID"),
+                )
+                i.putExtra(
+                    "intensityPlotTableID", intent.getStringExtra("intensityPlotTableID"),
+                )
+                i.putExtra(
+                    "plotTableID", intent.getStringExtra("plotTableID"),
+                )
+                startActivity(i)
+
+            } else {
+
+            }
         }
 
 

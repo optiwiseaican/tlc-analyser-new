@@ -1177,6 +1177,16 @@ public class PixelGraph extends AppCompatActivity implements OnClicksListeners, 
             finish();
         }
 
+
+        String processing = getIntent().getStringExtra("processing");
+
+        if ("intensity".equals(processing)) {
+            finish();
+        }
+
+
+
+
     }
 
 

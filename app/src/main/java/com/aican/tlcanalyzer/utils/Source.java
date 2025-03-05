@@ -1,6 +1,7 @@
 package com.aican.tlcanalyzer.utils;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -11,10 +12,13 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.aican.tlcanalyzer.R;
 import com.aican.tlcanalyzer.dataClasses.ContourData;
@@ -120,6 +124,15 @@ public class Source {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
+    public static void showLoadingDialog(AppCompatActivity activity) {
+        ProgressDialog progressDialog = new ProgressDialog(activity);
+        progressDialog.setMessage("Processing...");
+        progressDialog.setCancelable(false); // Prevent dismissal
+        progressDialog.show();
+
+        new Handler().postDelayed(progressDialog::dismiss, 3000); // Auto-dismiss after 3 seconds
+    }
+
     public static String formatToTwoDecimalPlaces(String value) {
         try {
             BigDecimal decimalValue = new BigDecimal(value).setScale(2, RoundingMode.HALF_UP);
@@ -128,6 +141,7 @@ public class Source {
             return "0.00";  // Default to 0.00 if input is invalid
         }
     }
+
     public static void checkInternet(Context context) {
 
         if (!Source.isInternetAvailable(context)) {

@@ -235,8 +235,16 @@ class CapturedImagePreview : AppCompatActivity() {
 
             binding.splitBtn.setOnClickListener {
 
+
+                originalBitmap = binding.ivCrop.bitmap
                 splitBitmap = binding.ivCrop.crop()
+
                 splitBitmap = cropBitmapByPercentage(splitBitmap!!, 5f)
+
+
+
+//                splitBitmap = binding.ivCrop.crop()
+//                splitBitmap = cropBitmapByPercentage(splitBitmap!!, 5f)
 
                 //
                 val intwnt = Intent(

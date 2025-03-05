@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class SplitContourData {
 
+    String id;
     String name;
     boolean isSelected;
     String contourImageName;
@@ -12,6 +13,7 @@ public class SplitContourData {
     String hr;
     String rmSpot;
     String finalSpot;
+    String intensityPlotTableID;
     ArrayList<Double> volumeDATAList;
     public ArrayList<RFvsArea> rFvsAreaArrayList;
     ArrayList<ContourSet> contourSetArrayList;
@@ -22,21 +24,23 @@ public class SplitContourData {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("SplitContourData{name='").append(name).append("', isSelected=").append(isSelected)
-                .append(", contourImageName='").append(contourImageName).append("', mainImageName='").append(mainImageName).append("'}");
-
-        sb.append("\nVolume Data: ").append(volumeDATAList);
-        sb.append("\nRF vs Area List: ").append(rFvsAreaArrayList);
-        sb.append("\nContour Set List: ").append(contourSetArrayList);
-        sb.append("\nContour Data List: ").append(contourData);
+//        sb.append("SplitContourData{name='").append(name).append("', isSelected=").append(isSelected)
+//                .append(", contourImageName='").append(contourImageName).append("', mainImageName='").append(mainImageName).append("'}");
+//
+//        sb.append("\nVolume Data: ").append(volumeDATAList);
+//        sb.append("\nRF vs Area List: ").append(rFvsAreaArrayList);
+//        sb.append("\nContour Set List: ").append(contourSetArrayList);
+//        sb.append("\nContour Data List: ").append(contourData);
+        sb.append("\nintensityPlotTableID: ").append(intensityPlotTableID);
 
         return sb.toString();
     }
 
-    public SplitContourData(String name, boolean isSelected, String contourImageName, String mainImageName,
+    public SplitContourData(String id, String name, boolean isSelected, String contourImageName, String mainImageName,
                             String hr, String rmSpot, String finalSpot, ArrayList<Double> volumeDATAList, ArrayList<RFvsArea> rFvsAreaArrayList,
                             ArrayList<ContourSet> contourSetArrayList, ArrayList<ContourData> contourData,
-                            ArrayList<LabelData> labelDataArrayList) {
+                            ArrayList<LabelData> labelDataArrayList, String intensityPlotTableID) {
+        this.id = id;
         this.name = name;
         this.isSelected = isSelected;
         this.contourImageName = contourImageName;
@@ -49,6 +53,7 @@ public class SplitContourData {
         this.contourSetArrayList = contourSetArrayList;
         this.contourData = contourData;
         this.labelDataArrayList = labelDataArrayList;
+        this.intensityPlotTableID = intensityPlotTableID;
     }
 
 //    public SplitContourData(String name, boolean isSelected, String contourImageName, String mainImageName, ArrayList<Double> volumeDATAList, ArrayList<RFvsArea> rFvsAreaArrayList, ArrayList<ContourSet> contourSetArrayList, ArrayList<ContourData> contourData) {
@@ -71,6 +76,13 @@ public class SplitContourData {
 //        this.contourData = contourData;
 //    }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public ArrayList<LabelData> getLabelDataArrayList() {
         return labelDataArrayList;
@@ -110,6 +122,14 @@ public class SplitContourData {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getIntensityPlotTableID() {
+        return intensityPlotTableID;
+    }
+
+    public void setIntensityPlotTableID(String intensityPlotTableID) {
+        this.intensityPlotTableID = intensityPlotTableID;
     }
 
     public boolean isSelected() {
