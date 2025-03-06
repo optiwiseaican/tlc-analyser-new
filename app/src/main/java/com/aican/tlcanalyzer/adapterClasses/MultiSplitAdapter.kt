@@ -74,9 +74,10 @@ class MultiSplitAdapter(
 
         holder.checkBox.setOnClickListener {
             data.isSelected = holder.checkBox.isChecked
+            // ❌ Don't call `onClicksListeners.newOnClick(position)`
             notifyItemChanged(position)
 
-            onClicksListeners.newOnClick(position)
+//            onClicksListeners.newOnClick(position)
 
 
         }

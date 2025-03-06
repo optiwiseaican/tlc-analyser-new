@@ -114,6 +114,8 @@ public class CroppingTemp extends AppCompatActivity {
 
                 Bitmap mainImageBitmap = bitmap;
 
+                // here main image is saving
+                saveImageToDownloads(mainImageBitmap, projectImage, this);
                 saveImageViewToFile(mainImageBitmap, tempFileName, this);
                 saveImageViewToFile(CapturedImagePreview.Companion.getOriginalBitmap(), originalFileName, this);
 
@@ -143,6 +145,10 @@ public class CroppingTemp extends AppCompatActivity {
 
                 Bitmap mainImageBitmap = bitmap;
 
+
+                // here main image is saving
+
+                saveImageToDownloads(mainImageBitmap, projectImage, this);
                 saveImageViewToFile(mainImageBitmap, tempFileName, this);
                 saveImageViewToFile(CapturedImagePreview.Companion.getOriginalBitmap(), originalFileName, this);
 
@@ -257,6 +263,53 @@ public class CroppingTemp extends AppCompatActivity {
 
     }
 
+    public String saveImageToDownloads(Bitmap originalBitmapImage, String projectName, Context context) {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        String fileName = projectName + "_" + timeStamp + ".jpg";
+
+        // Get the Downloads directory
+        File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+
+        // Create the TLC_IMAGES directory inside Downloads
+        File tlcImagesDir = new File(downloadsDir, "TLC_IMAGES");
+        if (!tlcImagesDir.exists()) {
+            if (tlcImagesDir.mkdirs()) {
+                Log.d("TAG", "TLC_IMAGES directory created successfully");
+            } else {
+                Log.e("TAG", "Failed to create TLC_IMAGES directory");
+                return null;
+            }
+        }
+
+        // Save the image inside TLC_IMAGES directory
+        File outFile = new File(tlcImagesDir, fileName);
+
+        FileOutputStream outStream = null;
+        try {
+            outStream = new FileOutputStream(outFile);
+            originalBitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
+            outStream.flush();
+            outStream.close();
+            Log.d("TAG", "Image saved to: " + outFile.getAbsolutePath());
+
+            // Show a Toast message with the file path
+            Toast.makeText(context, "Saved to TLC_IMAGES: " + outFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (outStream != null) {
+                try {
+                    outStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return outFile.getAbsolutePath();
+    }
+
+
     private void loadOpenCV() {
         if (!OpenCVLoader.initDebug()) {
             Log.d("OpenCV", "Internal OpenCV library not found. Using OpenCV Manager for initialization");
@@ -352,7 +405,11 @@ public class CroppingTemp extends AppCompatActivity {
 
             saveImageViewToFile(mainImageBitmap, tempFileName, this);
 
-            boolean s = databaseHelper.insertSplitImage(tableName, fileId, fileName, filePath, timeStamp, "100", "2", roiTableIDF, volumePlotTableID, intensityPlotTableID, plotTableID, getIntent().getStringExtra("projectDescription").toString(), "0", "-1000", "-1000");
+            boolean s = databaseHelper.insertSplitImage(tableName, fileId, fileName,
+                    filePath, timeStamp, "100", "2",
+                    roiTableIDF, volumePlotTableID, intensityPlotTableID,
+                    plotTableID, getIntent().getStringExtra("projectDescription").toString(),
+                    "0", "-1000", "-1000");
 
             if (s) {
                 databaseHelper.createVolumePlotTable(volumePlotTableID);

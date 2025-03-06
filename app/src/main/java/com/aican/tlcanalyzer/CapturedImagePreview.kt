@@ -1,5 +1,6 @@
 package com.aican.tlcanalyzer
 
+import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
@@ -24,6 +25,9 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 class CapturedImagePreview : AppCompatActivity() {
@@ -85,8 +89,11 @@ class CapturedImagePreview : AppCompatActivity() {
 
 
                 //
+//                val intwnt = Intent(
+//                    this@CapturedImagePreview, CroppingTemp::class.java
+//                )
                 val intwnt = Intent(
-                    this@CapturedImagePreview, CroppingTemp::class.java
+                    this@CapturedImagePreview, NewCroppingTemp::class.java
                 )
 //            intwnt.putExtra("img_path", intent.getStringExtra("img_path"))
                 intwnt.putExtra("p", "pixel")
@@ -127,6 +134,12 @@ class CapturedImagePreview : AppCompatActivity() {
                 var uriPath: Uri? = null
 
                 if (!outFile.exists()) {
+
+                    saveImageToDownloads(
+                        originalImageBit,
+                        intent.getStringExtra("projectName").toString(),
+                        this
+                    )
 
                     //original image
                     saveImageViewToFile(
@@ -242,13 +255,15 @@ class CapturedImagePreview : AppCompatActivity() {
                 splitBitmap = cropBitmapByPercentage(splitBitmap!!, 5f)
 
 
-
 //                splitBitmap = binding.ivCrop.crop()
 //                splitBitmap = cropBitmapByPercentage(splitBitmap!!, 5f)
 
                 //
+//                val intwnt = Intent(
+//                    this@CapturedImagePreview, CroppingTemp::class.java
+//                )
                 val intwnt = Intent(
-                    this@CapturedImagePreview, CroppingTemp::class.java
+                    this@CapturedImagePreview, NewCroppingTemp::class.java
                 )
 //            intwnt.putExtra("img_path", intent.getStringExtra("img_path"))
                 intwnt.putExtra("p", "pixel")
@@ -324,6 +339,59 @@ class CapturedImagePreview : AppCompatActivity() {
         return Bitmap.createBitmap(originalBitmap, left, top, right - left, bottom - top)
     }
 
+    fun saveImageToDownloads(
+        originalBitmapImage: Bitmap,
+        projectName: String,
+        context: Context?
+    ): String? {
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val fileName = projectName + "_" + timeStamp + ".jpg"
+
+        // Get the Downloads directory
+        val downloadsDir =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+
+        // Create the TLC_IMAGES directory inside Downloads
+        val tlcImagesDir = File(downloadsDir, "TLC_IMAGES")
+        if (!tlcImagesDir.exists()) {
+            if (tlcImagesDir.mkdirs()) {
+                Log.d("TAG", "TLC_IMAGES directory created successfully")
+            } else {
+                Log.e("TAG", "Failed to create TLC_IMAGES directory")
+                return null
+            }
+        }
+
+        // Save the image inside TLC_IMAGES directory
+        val outFile = File(tlcImagesDir, fileName)
+
+        var outStream: FileOutputStream? = null
+        try {
+            outStream = FileOutputStream(outFile)
+            originalBitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, outStream)
+            outStream.flush()
+            outStream.close()
+            Log.d("TAG", "Image saved to: " + outFile.absolutePath)
+
+            // Show a Toast message with the file path
+            Toast.makeText(
+                context,
+                "Saved to TLC_IMAGES: " + outFile.absolutePath,
+                Toast.LENGTH_SHORT
+            ).show()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            if (outStream != null) {
+                try {
+                    outStream.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        return outFile.absolutePath
+    }
 
     private fun saveImageViewToFile(originalBitmapImage: Bitmap, fileName: String?): String? {
 

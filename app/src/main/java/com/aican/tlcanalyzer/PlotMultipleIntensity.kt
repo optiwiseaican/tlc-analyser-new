@@ -49,7 +49,6 @@ import com.github.mikephil.charting.utils.ColorTemplate
 import com.itextpdf.io.image.ImageDataFactory
 import com.itextpdf.kernel.colors.DeviceGray
 import com.itextpdf.kernel.colors.DeviceRgb
-import com.itextpdf.kernel.colors.Lab
 import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfWriter
 import com.itextpdf.layout.Document
@@ -59,6 +58,9 @@ import com.itextpdf.layout.element.Paragraph
 import com.itextpdf.layout.element.Table
 import com.itextpdf.layout.element.Text
 import com.itextpdf.layout.property.TextAlignment
+import org.opencv.android.BaseLoaderCallback
+import org.opencv.android.LoaderCallbackInterface
+import org.opencv.android.OpenCVLoader
 import org.opencv.android.Utils
 import org.opencv.core.Mat
 import org.opencv.imgproc.Imgproc
@@ -78,6 +80,8 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners, OnPlotClic
         var splitImageArrayList: java.util.ArrayList<SplitData> = ArrayList()
 
     }
+
+    var rgba: Mat? = null
 
     lateinit var binding: ActivityPlotMultipleIntensityBinding
     lateinit var adapter: MultiSplitAdapter
@@ -105,6 +109,7 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners, OnPlotClic
 
         binding.back.setOnClickListener(View.OnClickListener { finish() })
         contoursAreaArrayList = java.util.ArrayList()
+        loadOpenCV()
 
         databaseHelper = DatabaseHelper(this)
 
@@ -1747,51 +1752,35 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners, OnPlotClic
         overridePendingTransition(0, 0)
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onPlotClick(position: Int, projectImage: String, intensityPlotTableID: String) {
-        val dir = File(
-            ContextWrapper(this).externalMediaDirs[0],
-            resources.getString(R.string.app_name) + id
-        )
-
-        println("position = $position, projectImage = $projectImage, intensityPlotTableID = $intensityPlotTableID")
-
-        // ✅ Show Progress Dialog
         val progressDialog = ProgressDialog(this)
         progressDialog.setMessage("Processing intensity plot, please wait...")
         progressDialog.setCancelable(false)
         progressDialog.show()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            // ✅ Perform analysis in the background
-            Thread {
-                val rFvsAreaArrayList = performAnalysis(
-                    dir,
-                    projectImage,
-                    imageAnalysisClass,
-                    databaseHelper,
-                    intensityPlotTableID,
-                )
+        Thread {
+            val rFvsAreaArrayList = performAnalysis(
+                File(ContextWrapper(this).externalMediaDirs[0], resources.getString(R.string.app_name) + id),
+                projectImage,
+                imageAnalysisClass,
+                databaseHelper,
+                intensityPlotTableID
+            )
 
-                runOnUiThread {
-                    // ✅ Dismiss Progress Dialog
-                    progressDialog.dismiss()
+            runOnUiThread {
+                progressDialog.dismiss()
 
-                    // ✅ Find the correct index
-                    val index = splitContourDataList.indexOfFirst {
-                        it.intensityPlotTableID == intensityPlotTableID
-                    }
-
-                    if (index != -1) {
-                        // ✅ Update the correct entry
-                        splitContourDataList[index].rFvsAreaArrayList = rFvsAreaArrayList
-                    } else {
-                        Log.e("onPlotClick", "No matching intensityPlotTableID found!")
-                    }
-
-                    refreshPlotMultipleIntensityActivity()
+                // ✅ Update only the dataset without restarting the activity
+                val index = splitContourDataList.indexOfFirst { it.intensityPlotTableID == intensityPlotTableID }
+                if (index != -1) {
+                    splitContourDataList[index].rFvsAreaArrayList = rFvsAreaArrayList
+                    adapter.notifyItemChanged(index) // ✅ Refresh only the modified item
                 }
-            }.start()
-        }
+
+                // ❌ **No more calling refreshPlotMultipleIntensityActivity()**
+            }
+        }.start()
     }
 
 
@@ -1890,5 +1879,30 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners, OnPlotClic
         return Source.rFvsAreaArrayList
     }
 
+    private fun loadOpenCV() {
+        if (!OpenCVLoader.initDebug()) {
+            Log.d(
+                "OpenCV",
+                "Internal OpenCV library not found. Using OpenCV Manager for initialization"
+            )
+            OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_0_0, this, mLoaderCallback)
+        } else {
+            Log.d("OpenCV", "OpenCV library found inside package. Using it!")
+            mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS)
+        }
+    }
+    private val mLoaderCallback: BaseLoaderCallback = object : BaseLoaderCallback(this) {
+        override fun onManagerConnected(status: Int) {
+            when (status) {
+                SUCCESS -> {
+                    Log.i("OpenCV", "OpenCV loaded successfully")
+                    rgba = Mat()
+                }
 
+                else -> {
+                    super.onManagerConnected(status)
+                }
+            }
+        }
+    }
 }
