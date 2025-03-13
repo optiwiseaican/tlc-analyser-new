@@ -8,448 +8,475 @@
     tools:context=".NewImageAnalysis">
 
     <LinearLayout
-        android:id="@+id/topPanel"
+        android:id="@+id/whiteBackground"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_height="match_parent"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:visibility="gone">
 
-        <ImageView
-            android:id="@+id/back"
-            android:layout_width="@dimen/drwr_dim_ham"
-            android:layout_height="@dimen/drwr_dim_ham"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="10dp"
-            android:src="@drawable/back" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/projectName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="10dp"
-                android:drawableEnd="@drawable/details"
-                android:drawablePadding="10dp"
-                android:gravity="center_vertical"
-                android:text="Project 1"
-                android:textColor="@color/blueColor"
-                android:textSize="20dp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/saveData"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/button_bc"
-            android:text="Save" />
-
-        <ImageView
-            android:id="@+id/splitSettings"
-            android:layout_width="60dp"
-            android:layout_height="38dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="-20dp"
-            android:layout_marginEnd="5dp"
-            android:src="@drawable/baseline_settings_24"
-            android:visibility="visible"
-            app:tint="@color/aican_blue" />
-
-
-        <ImageView
-            android:id="@+id/cropAgain"
-            android:layout_width="60dp"
-            android:layout_height="38dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="-20dp"
-            android:layout_marginEnd="5dp"
-            android:src="@drawable/baseline_crop_24"
-            android:visibility="visible"
-            app:tint="@color/ai_red" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/errorToast"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="50dp"
-        android:background="@drawable/blue_tab_bac3_red"
-        android:backgroundTint="#EA0D0D"
-        android:gravity="center"
-        android:padding="10dp"
-        android:text="Warning : "
-        android:textColor="@color/white"
-        android:textSize="14dp"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/splitProjectName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:drawablePadding="10dp"
-        android:gravity="center"
-        android:text="Project 1"
-        android:textColor="@color/blueColor"
-        android:textSize="16dp"
-        android:textStyle="bold" />
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:text="Processing...."
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
+    </LinearLayout>
 
-            <!--            <ImageView-->
-            <!--                android:id="@+id/captured_image"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="300dp"-->
-            <!--                android:layout_marginStart="20dp"-->
-            <!--                android:layout_marginTop="20dp"-->
-            <!--                android:layout_marginEnd="20dp"-->
-            <!--                android:src="@drawable/gray_stroke" />-->
+    <LinearLayout
+        android:id="@+id/analyserLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <LinearLayout
+            android:id="@+id/topPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal">
 
-            <com.jsibbold.zoomage.ZoomageView
-                android:id="@+id/captured_image"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="@dimen/drwr_dim_ham"
+                android:layout_height="@dimen/drwr_dim_ham"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:rotation="90"
-                android:src="@drawable/gray_stroke"
-                app:zoomage_animateOnReset="true"
-                app:zoomage_autoCenter="true"
-                app:zoomage_autoResetMode="UNDER"
-                app:zoomage_maxScale="8"
-                app:zoomage_minScale="0.6"
-                app:zoomage_restrictBounds="false"
-                app:zoomage_translatable="true"
-                app:zoomage_zoomable="true" />
-
-
-            <com.jsibbold.zoomage.ZoomageView
-                android:id="@+id/sampleImg"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="20dp"
-                android:src="@drawable/gray_stroke"
-                app:zoomage_animateOnReset="true"
-                app:zoomage_autoCenter="true"
-                app:zoomage_autoResetMode="UNDER"
-                app:zoomage_maxScale="8"
-                app:zoomage_minScale="0.6"
-                app:zoomage_restrictBounds="false"
-                app:zoomage_translatable="true"
-                app:zoomage_zoomable="true" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-
-                    <TextView
-                        android:id="@+id/revertToMainImg"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginEnd="10dp"
-                        android:background="@drawable/blue_tab_bac3_red"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:text="Revert to main image"
-                        android:textColor="@color/white"
-                        android:textSize="14dp" />
-
-                    <TextView
-                        android:id="@+id/manageSpots"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:background="@drawable/blue_tab_bac3_red"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:text="Manage Spots"
-                        android:textColor="@color/white"
-                        android:textSize="14dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/removeContour"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginEnd="20dp"
-                        android:background="@drawable/blue_tab_bac3_red"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:text="Remove/Edit Spots"
-                        android:textColor="@color/white"
-                        android:textSize="14dp" />
-
-                    <TextView
-                        android:id="@+id/clearAllData"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginBottom="5dp"
-                        android:background="@drawable/blue_tab_bac3_red"
-                        android:fontFamily="@font/lato_bold"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:text="Clear All"
-                        android:textColor="@color/white"
-                        android:textSize="14dp" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="14dp"
-                android:layout_marginEnd="20dp"
-                android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/analyzerLay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="0dp"
-                        android:fontFamily="@font/lato_bold"
-                        android:gravity="center_vertical"
-                        android:text="Detect"
-                        android:textColor="@color/blueColor"
-                        android:textSize="17dp"
-                        android:textStyle="bold" />
-
-                    <View
-                        android:id="@+id/analyzerLine"
-                        android:layout_width="50dp"
-                        android:layout_height="1dp"
-                        android:background="@color/blueColor" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/roiLay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="0dp"
-                        android:fontFamily="@font/lato_bold"
-                        android:gravity="center_vertical"
-                        android:text="Region of Interest"
-                        android:textColor="@color/blueColor"
-                        android:textSize="17dp"
-                        android:textStyle="bold" />
-
-                    <View
-                        android:id="@+id/roiLine"
-                        android:layout_width="80dp"
-                        android:layout_height="1dp"
-                        android:background="@color/blueColor" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/plotterLay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="0dp"
-                        android:fontFamily="@font/lato_bold"
-                        android:text="Report"
-                        android:textColor="@color/blueColor"
-                        android:textSize="17dp"
-                        android:textStyle="bold" />
-
-                    <View
-                        android:id="@+id/plotterLine"
-                        android:layout_width="50dp"
-                        android:layout_height="1dp"
-                        android:background="@color/blueColor" />
-                </LinearLayout>
-
-
-            </LinearLayout>
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/back" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="horizontal"
-                android:visibility="gone">
+                android:orientation="horizontal">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/detectButtonNew"
-                    android:layout_width="180dp"
+                <TextView
+                    android:id="@+id/projectName"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="5dp"
-                    app:cardCornerRadius="10dp"
-                    app:cardElevation="20dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
-
-                        <ImageView
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:padding="5dp"
-                            android:src="@drawable/detect_head" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:text="Detect"
-                            android:textColor="@color/aican_blue"
-                            android:textSize="16dp" />
-
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/analysisButtonNew"
-                    android:layout_width="180dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="5dp"
-                    android:layout_marginBottom="5dp"
-                    app:cardCornerRadius="10dp"
-                    app:cardElevation="20dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
-
-                        <ImageView
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:padding="5dp"
-                            android:src="@drawable/analyse_head" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:text="Analysis"
-                            android:textColor="@color/aican_blue"
-                            android:textSize="16dp" />
-
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"
+                    android:drawableEnd="@drawable/details"
+                    android:drawablePadding="10dp"
+                    android:gravity="center_vertical"
+                    android:text="Project 1"
+                    android:textColor="@color/blueColor"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
             </LinearLayout>
+
+            <Button
+                android:id="@+id/saveData"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/button_bc"
+                android:text="Save" />
+
+            <ImageView
+                android:id="@+id/splitSettings"
+                android:layout_width="60dp"
+                android:layout_height="38dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="-20dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/baseline_settings_24"
+                android:visibility="visible"
+                app:tint="@color/aican_blue" />
+
+
+            <ImageView
+                android:id="@+id/cropAgain"
+                android:layout_width="60dp"
+                android:layout_height="38dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="-20dp"
+                android:layout_marginEnd="5dp"
+                android:src="@drawable/baseline_crop_24"
+                android:visibility="visible"
+                app:tint="@color/ai_red" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/errorToast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="50dp"
+            android:background="@drawable/blue_tab_bac3_red"
+            android:backgroundTint="#EA0D0D"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="Warning : "
+            android:textColor="@color/white"
+            android:textSize="14dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/splitProjectName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
+            android:drawablePadding="10dp"
+            android:gravity="center"
+            android:text="Project 1"
+            android:textColor="@color/blueColor"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
 
             <LinearLayout
-                android:id="@+id/allLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
 
-                <include
-                    android:id="@+id/anaL"
-                    layout="@layout/analyser_lay" />
+                <!--            <ImageView-->
+                <!--                android:id="@+id/captured_image"-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                android:layout_height="300dp"-->
+                <!--                android:layout_marginStart="20dp"-->
+                <!--                android:layout_marginTop="20dp"-->
+                <!--                android:layout_marginEnd="20dp"-->
+                <!--                android:src="@drawable/gray_stroke" />-->
 
-                <include
-                    android:id="@+id/roiL"
-                    layout="@layout/region_of_int" />
 
-                <include
-                    android:id="@+id/plotL"
-                    layout="@layout/plotter_lay" />
+                <com.jsibbold.zoomage.ZoomageView
+                    android:id="@+id/captured_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:rotation="90"
+                    android:src="@drawable/gray_stroke"
+                    app:zoomage_animateOnReset="true"
+                    app:zoomage_autoCenter="true"
+                    app:zoomage_autoResetMode="UNDER"
+                    app:zoomage_maxScale="8"
+                    app:zoomage_minScale="0.6"
+                    app:zoomage_restrictBounds="false"
+                    app:zoomage_translatable="true"
+                    app:zoomage_zoomable="true" />
+
+
+                <com.jsibbold.zoomage.ZoomageView
+                    android:id="@+id/sampleImg"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/gray_stroke"
+                    android:visibility="gone"
+                    app:zoomage_animateOnReset="true"
+                    app:zoomage_autoCenter="true"
+                    app:zoomage_autoResetMode="UNDER"
+                    app:zoomage_maxScale="8"
+                    app:zoomage_minScale="0.6"
+                    app:zoomage_restrictBounds="false"
+                    app:zoomage_translatable="true"
+                    app:zoomage_zoomable="true" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/revertToMainImg"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/blue_tab_bac3_red"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="Revert to main image"
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/manageSpots"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="@drawable/blue_tab_bac3_red"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="Manage Spots"
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/removeContour"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="20dp"
+                            android:background="@drawable/blue_tab_bac3_red"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="Remove/Edit Spots"
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/clearAllData"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="20dp"
+                            android:layout_marginBottom="5dp"
+                            android:background="@drawable/blue_tab_bac3_red"
+                            android:fontFamily="@font/lato_bold"
+                            android:gravity="center"
+                            android:padding="10dp"
+                            android:text="Clear All"
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginEnd="20dp"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/analyzerLay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="0dp"
+                            android:fontFamily="@font/lato_bold"
+                            android:gravity="center_vertical"
+                            android:text="Detect"
+                            android:textColor="@color/blueColor"
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:id="@+id/analyzerLine"
+                            android:layout_width="50dp"
+                            android:layout_height="1dp"
+                            android:background="@color/blueColor" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/roiLay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginStart="0dp"
+                            android:fontFamily="@font/lato_bold"
+                            android:gravity="center_vertical"
+                            android:text="Region of Interest"
+                            android:textColor="@color/blueColor"
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:id="@+id/roiLine"
+                            android:layout_width="80dp"
+                            android:layout_height="1dp"
+                            android:background="@color/blueColor" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/plotterLay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="0dp"
+                            android:fontFamily="@font/lato_bold"
+                            android:text="Report"
+                            android:textColor="@color/blueColor"
+                            android:textSize="17dp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:id="@+id/plotterLine"
+                            android:layout_width="50dp"
+                            android:layout_height="1dp"
+                            android:background="@color/blueColor" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/detectButtonNew"
+                        android:layout_width="180dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="5dp"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="20dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:padding="5dp">
+
+                            <ImageView
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:padding="5dp"
+                                android:src="@drawable/detect_head" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:text="Detect"
+                                android:textColor="@color/aican_blue"
+                                android:textSize="16dp" />
+
+
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/analysisButtonNew"
+                        android:layout_width="180dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="5dp"
+                        android:layout_marginBottom="5dp"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="20dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:padding="5dp">
+
+                            <ImageView
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:padding="5dp"
+                                android:src="@drawable/analyse_head" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:text="Analysis"
+                                android:textColor="@color/aican_blue"
+                                android:textSize="16dp" />
+
+
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/allLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <include
+                        android:id="@+id/anaL"
+                        layout="@layout/analyser_lay" />
+
+                    <include
+                        android:id="@+id/roiL"
+                        layout="@layout/region_of_int" />
+
+                    <include
+                        android:id="@+id/plotL"
+                        layout="@layout/plotter_lay" />
+
+                </LinearLayout>
+
+                <com.aican.tlcanalyzer.customClasses.LegacyTableView
+                    android:id="@+id/legacy_table_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="20dp" />
+
 
             </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
-            <com.aican.tlcanalyzer.customClasses.LegacyTableView
-                android:id="@+id/legacy_table_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="20dp" />
-
-
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-
+    </LinearLayout>
 
 </LinearLayout>

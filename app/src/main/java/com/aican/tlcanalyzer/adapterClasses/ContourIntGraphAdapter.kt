@@ -87,6 +87,7 @@ class ContourIntGraphAdapter(
                 Source.spotPositionFromAdapter = holder.adapterPosition
                 Source.removingContourID = data.id
                 Source.removingContourFromAdapter = true
+                Source.hideAnalyserLayout = true
 
                 Log.e("ContextNull", "Yess Clicked")
 

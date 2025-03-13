@@ -59,6 +59,7 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
 
         final var addingMainImage = false
         var sizeOfMainImagesList = 0
+        var sizeOfSplitImageList = 0
         var completed = false
 
         var completedSplit = false
@@ -412,7 +413,7 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
         }
 
         if (!isSourceImg) {
-
+            println("Main image not found hello ")
             val filePath = "SPLIT_NAME" + System.currentTimeMillis() + ".jpg"
             val fileId = "SPLIT_ID" + System.currentTimeMillis()
             val fileName = projectImage
@@ -495,6 +496,7 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
             getIntent().getStringExtra("projectNumber").toString(),
             getIntent().getStringExtra("splitId").toString()
         )
+        sizeOfSplitImageList = arrayList.size
         binding.recView.adapter = adapter
         adapter.notifyDataSetChanged()
 

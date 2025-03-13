@@ -144,7 +144,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
     TextView thresholdValue;
     TextView rfValues;
     int threshVal = 100;
-    ArrayList<ContourData> contourDataArrayList;
+    ArrayList<ContourData> contourDataArrayList = new ArrayList<>();
     //    ContourDataAdapter contourDataAdapter;
     ArrayList<Double> volumeArrayList;
     TextView numberCountText;
@@ -2766,6 +2766,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
 
         if (so == 1) {
+
 
             this.startActivity(new Intent(NewImageAnalysis.this, PixelGraph.class)
                     .putExtra("projectName", projectName).putExtra("id", id).
@@ -5444,7 +5445,6 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         System.out.println("intensityPlotTableID vishal : " + intensityPlotTableID);
 
 
-
         Source.splitContourDataList.add(new SplitContourData(id, imgName, true, contourImageFileName,
                 projectImage, hr, rmSpot, finalSpot,
                 volumeArrayList, Source.rFvsAreaArrayList, contourSetArrayList, contourDataArrayList
@@ -6194,6 +6194,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
         if (Source.contourBaselineEdited) {
             Source.contourBaselineEdited = false;
+
             AnalysisTask task1 = new AnalysisTask();
             task1.execute(1);
         }
@@ -6232,6 +6233,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         String processing = getIntent().getStringExtra("processing");
 
         if ("intensity".equals(processing)) {
+
             // Show loading dialog
             Source.showLoadingDialog(NewImageAnalysis.this);
 
@@ -6434,6 +6436,21 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (Source.hideAnalyserLayout) {
+                        System.out.println("Hiding analyser layout");
+                        binding.analyserLinearLayout.setVisibility(View.GONE);
+                        binding.whiteBackground.setVisibility(View.VISIBLE);
+                    } else {
+                        System.out.println("UnHiding analyser layout");
+
+                        binding.analyserLinearLayout.setVisibility(View.VISIBLE);
+                        binding.whiteBackground.setVisibility(View.GONE);
+                    }
+                }
+            });
             LoadingDialog.showLoading(NewImageAnalysis.this, false, false, "Processing...");
         }
 
@@ -6456,6 +6473,12 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            });
             LoadingDialog.cancelLoading();
             if (typee == 15) {
                 showData();

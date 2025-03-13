@@ -109,6 +109,7 @@ public class Source {
     public static boolean rectangle = false;
     public static boolean rectangleOneActivityToPixelActivity = false;
     public static boolean contourBaselineEdited = false;
+    public static boolean hideAnalyserLayout = false;
     public static boolean rectangleContourEdited = false;
 
     public static int spotPositionFromAdapter = -1;

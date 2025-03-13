@@ -1,13 +1,16 @@
 package com.aican.tlcanalyzer.adapterClasses
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.aican.tlcanalyzer.NewImageAnalysis
@@ -37,6 +40,7 @@ class SplitMainImageAdtr(
         val mainImage = itemView.findViewById<ImageView>(R.id.mainImage)
         val mainImageName = itemView.findViewById<TextView>(R.id.mainImageName)
         val spottedView = itemView.findViewById<View>(R.id.spottedView)
+        val sideMenu = itemView.findViewById<ImageView>(R.id.sideMenu)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -114,6 +118,49 @@ class SplitMainImageAdtr(
 
         }
 
+        holder.sideMenu.setOnClickListener {
+            val popup = PopupMenu(context, holder.sideMenu)
+            //inflating menu from xml resource
+            popup.inflate(R.menu.delete_menu)
+            //adding click listener
+            popup.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
+                override fun onMenuItemClick(item: MenuItem): Boolean {
+                    return when (item.getItemId()) {
+
+                        R.id.delete_this -> {
+                            deleteMainImage(context)
+                            true
+                        }
+
+                        else -> false
+                    }
+                }
+            })
+            //displaying the popup
+            popup.show()
+        }
+
+    }
+
+    fun deleteMainImage(context: Context) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle("Delete Main Image")
+        builder.setMessage("Are you sure you want to delete this main image? All corresponding split images will also be deleted.")
+
+        builder.setPositiveButton("Delete") { dialog, which ->
+            // Perform deletion
+            deleteMainImageFromDatabase()
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, which ->
+            dialog.dismiss()
+        }
+
+        val alertDialog = builder.create()
+        alertDialog.show()
+    }
+
+    private fun deleteMainImageFromDatabase() {
 
     }
 

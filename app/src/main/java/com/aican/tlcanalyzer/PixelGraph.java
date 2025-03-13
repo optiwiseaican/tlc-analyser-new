@@ -1162,12 +1162,16 @@ public class PixelGraph extends AppCompatActivity implements OnClicksListeners, 
     @Override
     protected void onResume() {
         super.onResume();
+        Source.hideAnalyserLayout = false;
 
         if (Source.rectangleOneActivityToPixelActivity) {
+//            Source.hideAnalyserLayout = true;
             finish();
         }
 
         if (Source.contourBaselineEdited) {
+            Source.hideAnalyserLayout = true;
+
             finish();
         }
 
@@ -1183,8 +1187,6 @@ public class PixelGraph extends AppCompatActivity implements OnClicksListeners, 
         if ("intensity".equals(processing)) {
             finish();
         }
-
-
 
 
     }

@@ -42,6 +42,12 @@ class CapturedImagePreview : AppCompatActivity() {
     lateinit var databaseHelper: DatabaseHelper
     lateinit var userDatabaseHelper: UsersDatabase
     lateinit var saturationSeekBar: SeekBar
+    var sizeOfMainImageList = 0
+    var sizeOfSplitImageList = 0
+    private var id: String? = null
+    private var projectImage: String? = null
+    private var projectName: String? = null
+    private var tableName: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +61,10 @@ class CapturedImagePreview : AppCompatActivity() {
 
         binding.back.setOnClickListener { finish() }
         img_uri = Uri.parse(intent.getStringExtra("img_path"))
+        id = intent.getStringExtra("id")
+        projectImage = intent.getStringExtra("projectImage")
+        projectName = intent.getStringExtra("projectName")
+        tableName = intent.getStringExtra("tableName")
 
         databaseHelper = DatabaseHelper(this@CapturedImagePreview)
         userDatabaseHelper = UsersDatabase(this@CapturedImagePreview)
@@ -294,11 +304,23 @@ class CapturedImagePreview : AppCompatActivity() {
                 startActivity(intwnt)
 
             }
-
-
+            sizeOfMainImageList = SplitImage.sizeOfMainImagesList
+            sizeOfSplitImageList = SplitImage.sizeOfSplitImageList
+            // save image with single split and single main image
             binding.btnSave.text = "No Split"
             binding.btnSave.setOnClickListener {
-                Toast.makeText(this@CapturedImagePreview, "Ok", Toast.LENGTH_SHORT).show()
+                originalBitmap = binding.ivCrop.bitmap
+                splitBitmap = binding.ivCrop.crop()
+
+                splitBitmap = cropBitmapByPercentage(splitBitmap!!, 5f)
+
+
+                if (splitBitmap != null) {
+                    saveNoSplit(splitBitmap!!)
+                } else {
+                    Toast.makeText(this, "Image not found or loaded", Toast.LENGTH_SHORT).show()
+                }
+
             }
         }
 
@@ -320,6 +342,142 @@ class CapturedImagePreview : AppCompatActivity() {
         })
 
 
+    }
+
+    private fun saveNoSplit(imageBitmap: Bitmap) {
+        saveMainImageViewToFile(
+            imageBitmap!!,
+            "${projectImage}_$sizeOfMainImageList",
+            this@CapturedImagePreview
+        )
+
+        val tempFileName = "TEMP${projectImage}_$sizeOfMainImageList"
+        val originalFileName = "ORG_${projectImage}_$sizeOfMainImageList"
+
+        saveMainImageViewToFile(imageBitmap!!, projectName!!, this@CapturedImagePreview)
+
+        saveMainImageViewToFile(imageBitmap!!, tempFileName, this@CapturedImagePreview)
+        saveMainImageViewToFile(
+            CapturedImagePreview.originalBitmap!!,
+            originalFileName,
+            this@CapturedImagePreview
+        )
+
+
+        val idm = "SPLIT_ID" + System.currentTimeMillis()
+        val timestamp =
+            SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+        val volumePlotTableID = "VOL_" + System.currentTimeMillis()
+        val intensityPlotTableID = "INT_" + System.currentTimeMillis()
+        val plotTableID = "TAB_" + System.currentTimeMillis()
+
+        val success = databaseHelper!!.insertSplitMainImage(
+            "MAIN_IMG_$id", idm,
+            "Main Image ${sizeOfMainImageList + 1}", "${projectImage}_$sizeOfMainImageList",
+            timestamp, "100", "2",
+            intent.getStringExtra("roiTableID"),
+            volumePlotTableID,
+            intensityPlotTableID,
+            plotTableID,
+            intent.getStringExtra("projectDescription"), "0", "-1000", "-1000"
+        )
+
+        databaseHelper!!.createVolumePlotTable(volumePlotTableID)
+        databaseHelper!!.createRfVsAreaIntensityPlotTable(intensityPlotTableID)
+        databaseHelper!!.createAllDataTable(plotTableID)
+        databaseHelper!!.createSpotLabelTable("LABEL_$plotTableID")
+        if (success) {
+
+
+            val fileName = "MI${sizeOfMainImageList + 1} -> Image ${sizeOfSplitImageList + 1}"
+            val filePath = "SPLIT_NAME" + System.currentTimeMillis() + ".jpg"
+            saveMainImageViewToFile(imageBitmap, filePath, this@CapturedImagePreview)
+
+            val roiTableIDF = "ROI_ID" + System.currentTimeMillis()
+            val fileId = "SPLIT_ID" + System.currentTimeMillis()
+            val volumePlotTableID = "VOL_" + System.currentTimeMillis()
+            val intensityPlotTableID = "INT_" + System.currentTimeMillis()
+            val plotTableID = "TAB_" + System.currentTimeMillis()
+            val currentDate = Date(System.currentTimeMillis())
+
+            val tempFileName = "TEMP$filePath"
+            val mainImageBitmap = imageBitmap
+
+            saveMainImageViewToFile(mainImageBitmap, tempFileName, this)
+
+
+            val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+
+            val formattedDate = sdf.format(currentDate)
+
+            val timeStamp = formattedDate
+
+
+            val s = databaseHelper!!.insertSplitImage(
+                tableName, fileId, fileName,
+                filePath, timeStamp, "100", "2",
+                roiTableIDF, volumePlotTableID, intensityPlotTableID,
+                plotTableID, intent.getStringExtra("projectDescription").toString(),
+                "0", "-1000", "-1000"
+            )
+
+            if (s) {
+                databaseHelper!!.createVolumePlotTable(volumePlotTableID)
+                databaseHelper!!.createRfVsAreaIntensityPlotTable(intensityPlotTableID)
+                databaseHelper!!.createAllDataTable(plotTableID)
+                databaseHelper!!.createSpotLabelTable("LABEL_$plotTableID")
+
+                val intent = Intent(this, SplitImage::class.java)
+                intent.putExtra("img_path", getIntent().getStringExtra("img_path").toString())
+                intent.putExtra("p", "pixel")
+                intent.putExtra("w", "new")
+                intent.putExtra("type", "new")
+                intent.putExtra("projectName", getIntent().getStringExtra("projectName"))
+                intent.putExtra(
+                    "projectDescription",
+                    getIntent().getStringExtra("projectDescription")
+                )
+                intent.putExtra("timeStamp", getIntent().getStringExtra("timeStamp"))
+                intent.putExtra("projectImage", getIntent().getStringExtra("projectImage"))
+                intent.putExtra("contourImage", getIntent().getStringExtra("contourImage"))
+                intent.putExtra("id", getIntent().getStringExtra("id"))
+                intent.putExtra("splitId", getIntent().getStringExtra("splitId"))
+                intent.putExtra(
+                    "imageSplitAvailable",
+                    getIntent().getStringExtra("imageSplitAvailable")
+                )
+                intent.putExtra("projectNumber", getIntent().getStringExtra("projectNumber"))
+                intent.putExtra("thresholdVal", getIntent().getStringExtra("thresholdVal"))
+                intent.putExtra("numberOfSpots", getIntent().getStringExtra("numberOfSpots"))
+                intent.putExtra("tableName", getIntent().getStringExtra("tableName"))
+                intent.putExtra("roiTableID", getIntent().getStringExtra("roiTableID"))
+                intent.putExtra("volumePlotTableID", "na")
+                intent.putExtra("intensityPlotTableID", "na")
+                intent.putExtra("plotTableID", "na")
+                startActivity(intent)
+                Source.fileSaved = true
+                SplitImage.completed = true
+                finish()
+            }
+        }
+    }
+
+    private fun saveMainImageViewToFile(bitmap: Bitmap, fileName: String, context: Context) {
+        val dir = File(
+            ContextWrapper(context).externalMediaDirs[0],
+            context.getString(R.string.app_name) + id
+        )
+        dir.mkdirs()
+        val outFile = File(dir, fileName)
+
+        try {
+            FileOutputStream(outFile).use { outStream ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream)
+            }
+            Log.d("TAG", "Image saved: ${outFile.absolutePath}")
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
     }
 
     private fun setSaturation(saturationValue: Float) {

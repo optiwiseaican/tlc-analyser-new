@@ -550,7 +550,8 @@ public class CameraActivity extends AppCompatActivity {
                     }
 
 
-                } else {
+                }
+                else {
                     if (picUri != null) {
 //                    Bitmap photo = (Bitmap) data.getExtras().get("data");
                         Bitmap bitmap = null;
@@ -561,11 +562,41 @@ public class CameraActivity extends AppCompatActivity {
                                     picUri);
                             //                        cameraCaptureBtn.setImageURI(savedUri);
                             cameraCaptureBtn.setClickable(false);
-                            CropImage.activity(picUri)
-                                    .start(CameraActivity.this);
+//                            CropImage.activity(picUri)
+//                                    .start(CameraActivity.this);
 //                            Intent intent = new Intent(CameraActivity.this, ImageProcess.class);
 //                            intent.putExtra("img_path", String.valueOf(savedUri));
 //                            startActivity(intent);
+
+                            Intent intwnt = new Intent(CameraActivity.this, CapturedImagePreview.class);
+                            intwnt.putExtra("img_path", String.valueOf(picUri));
+                            intwnt.putExtra("prevType", "main");
+                            intwnt.putExtra("p", "pixel");
+                            intwnt.putExtra("w", "new");
+                            intwnt.putExtra("type", "new");
+                            intwnt.putExtra("projectName", getIntent().getStringExtra("projectName"));
+                            intwnt.putExtra("projectDescription", getIntent().getStringExtra("projectDescription"));
+                            intwnt.putExtra("timeStamp", getIntent().getStringExtra("timeStamp"));
+                            intwnt.putExtra("projectImage", getIntent().getStringExtra("projectImage"));
+                            intwnt.putExtra("contourImage", getIntent().getStringExtra("contourImage"));
+                            intwnt.putExtra("id", getIntent().getStringExtra("id"));
+                            intwnt.putExtra("splitId", getIntent().getStringExtra("splitId"));
+                            intwnt.putExtra("imageSplitAvailable", getIntent().getStringExtra("imageSplitAvailable"));
+                            intwnt.putExtra("projectNumber", getIntent().getStringExtra("projectNumber"));
+                            intwnt.putExtra("thresholdVal", getIntent().getStringExtra("thresholdVal"));
+                            intwnt.putExtra("numberOfSpots", getIntent().getStringExtra("numberOfSpots"));
+                            intwnt.putExtra("tableName", getIntent().getStringExtra("tableName"));
+                            intwnt.putExtra("roiTableID", getIntent().getStringExtra("roiTableID"));
+                            intwnt.putExtra(
+                                    "volumePlotTableID", getIntent().getStringExtra("volumePlotTableID")
+                            );
+                            intwnt.putExtra(
+                                    "intensityPlotTableID", getIntent().getStringExtra("intensityPlotTableID")
+                            );
+                            intwnt.putExtra(
+                                    "plotTableID", getIntent().getStringExtra("plotTableID")
+                            );
+                            startActivity(intwnt);
 
                         } catch (FileNotFoundException e) {
                             throw new RuntimeException(e);

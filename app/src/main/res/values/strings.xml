@@ -76,7 +76,7 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="if_you_changes">Note: If you changed this value, then you must be plot the intensity graph again, otherwise it will give you the incorrect values and graph</string>
+    <string name="if_you_changes">Note: If you changed this value, then you must plot the intensity graph again, otherwise it will give you the incorrect values and graph</string>
     <string name="show_image"><u>Show Image</u></string>
     <string name="hide_image"><u>Hide Image</u></string>
 
