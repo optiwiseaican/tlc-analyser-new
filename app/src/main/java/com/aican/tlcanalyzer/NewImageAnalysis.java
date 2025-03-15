@@ -47,6 +47,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aican.tlcanalyzer.adapterClasses.ContourIntGraphAdapter;
@@ -460,12 +461,15 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         binding.analysisButtonNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                binding.detectButtonNew.setCardBackgroundColor(Color.WHITE);
-                binding.analysisButtonNew.setCardBackgroundColor(Color.LTGRAY);
-                binding.anaL.analyzerLayout.setVisibility(View.GONE);
-                binding.roiL.roiLayout.setVisibility(View.GONE);
-                binding.plotL.plotterLayout.setVisibility(View.VISIBLE);
+                if (disableSpecificButtons()) {
+                    binding.detectButtonNew.setCardBackgroundColor(Color.WHITE);
+                    binding.analysisButtonNew.setCardBackgroundColor(Color.LTGRAY);
+                    binding.anaL.analyzerLayout.setVisibility(View.GONE);
+                    binding.roiL.roiLayout.setVisibility(View.GONE);
+                    binding.plotL.plotterLayout.setVisibility(View.VISIBLE);
+                } else {
+                    Toast.makeText(NewImageAnalysis.this, "Spot not detected", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -487,13 +491,17 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         binding.plotterLay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                binding.analyzerLine.setVisibility(View.GONE);
-                binding.roiLine.setVisibility(View.GONE);
-                binding.plotterLine.setVisibility(View.VISIBLE);
+                if (disableSpecificButtons()) {
+                    binding.analyzerLine.setVisibility(View.GONE);
+                    binding.roiLine.setVisibility(View.GONE);
+                    binding.plotterLine.setVisibility(View.VISIBLE);
 
-                binding.anaL.analyzerLayout.setVisibility(View.GONE);
-                binding.roiL.roiLayout.setVisibility(View.GONE);
-                binding.plotL.plotterLayout.setVisibility(View.VISIBLE);
+                    binding.anaL.analyzerLayout.setVisibility(View.GONE);
+                    binding.roiL.roiLayout.setVisibility(View.GONE);
+                    binding.plotL.plotterLayout.setVisibility(View.VISIBLE);
+                } else {
+                    Toast.makeText(NewImageAnalysis.this, "Spot not detected", Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -573,7 +581,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 //                    Toast.makeText(this, "" + getIntent().getStringExtra("id") + " " + i, Toast.LENGTH_SHORT).show();
 
 
-                }else if(work.equals(works[1])){
+                } else if (work.equals(works[1])) {
                     numberOfSpots = String.valueOf(numberCount);
 
                     ProjectOfflineData projectOfflineData =
@@ -583,7 +591,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                                     volumePlotTableID, intensityPlotTableID, plotTableID, rmSpot, finalSpot);
 
                     float i = databaseHelper.updateData(projectOfflineData);
-                }else{
+                } else {
                     numberOfSpots = String.valueOf(numberCount);
 
                     ProjectOfflineData projectOfflineData =
@@ -674,7 +682,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 //                    Toast.makeText(this, "" + getIntent().getStringExtra("id") + " " + i, Toast.LENGTH_SHORT).show();
 
 
-                }else if(work.equals(works[1])){
+                } else if (work.equals(works[1])) {
                     numberOfSpots = String.valueOf(numberCount);
 
                     ProjectOfflineData projectOfflineData =
@@ -684,7 +692,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                                     volumePlotTableID, intensityPlotTableID, plotTableID, rmSpot, finalSpot);
 
                     float i = databaseHelper.updateData(projectOfflineData);
-                }else{
+                } else {
                     numberOfSpots = String.valueOf(numberCount);
 
                     ProjectOfflineData projectOfflineData =
@@ -1599,7 +1607,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 //                        databaseHelper.deleteDataFromTable(intensityPlotTableID);
                         databaseHelper.deleteDataFromTable(plotTableID);
                         databaseHelper.deleteDataFromTable("LABEL_" + plotTableID);
-
+                        disableSpecificButtons();
                     }
                 });
                 alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -2441,6 +2449,46 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
     }
 
     // oncreate end
+
+
+    // check if spots are detected or not, if not then disable the analysis type buttons
+
+    private boolean disableSpecificButtons() {
+        File contOutFile = null;
+        if (work.equals(works[0])) {
+            contOutFile = new File(dir, "CONT" + getIntent().getStringExtra("id").toString() + ".png");
+
+        } else if (work.equals(works[1])) {
+            contOutFile = new File(dir, "CONT" + getIntent().getStringExtra("id").toString() + ".png");
+
+        } else {
+            contOutFile = new File(dir, "CONT" + getIntent().getStringExtra("pid").toString() + ".png");
+
+
+        }
+        if (contOutFile != null && contOutFile.exists()) {
+            binding.anaL.intensityPlotting.setEnabled(true);
+            binding.anaL.changeROI.setEnabled(true);
+            binding.clearAllData.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.ai_red));
+            binding.clearAllData.setTextColor(ContextCompat.getColor(this, R.color.white));
+            binding.manageSpots.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.ai_red));
+            binding.manageSpots.setTextColor(ContextCompat.getColor(this, R.color.white));
+            binding.removeContour.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.ai_red));
+            binding.removeContour.setTextColor(ContextCompat.getColor(this, R.color.white));
+            return true;
+        } else {
+            binding.anaL.intensityPlotting.setEnabled(false);
+            binding.anaL.changeROI.setEnabled(false);
+            binding.clearAllData.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.tabGrey));
+            binding.clearAllData.setTextColor(ContextCompat.getColor(this, R.color.grey));
+            binding.manageSpots.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.tabGrey));
+            binding.manageSpots.setTextColor(ContextCompat.getColor(this, R.color.grey));
+            binding.removeContour.setBackgroundTintList(ContextCompat.getColorStateList(this, R.color.tabGrey));
+            binding.removeContour.setTextColor(ContextCompat.getColor(this, R.color.grey));
+
+            return false;
+        }
+    }
 
     private void showData() {
         information.clear();
@@ -3778,6 +3826,8 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
             binding.anaL.spotDetection.spotContours.setText("Generate Spots");
 
         }
+
+        disableSpecificButtons();
     }
 
     void removeManualContourFromJSON(String removeIndex, String fileName34) {
@@ -3818,7 +3868,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        disableSpecificButtons();
     }
 
     private void removeContourFromJSON(String removeIndex, String fileName34) {
@@ -3861,6 +3911,9 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        disableSpecificButtons();
+
     }
 
 
@@ -4673,6 +4726,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
         }
 
+        disableSpecificButtons();
 
         finish();
         this.overridePendingTransition(0, 0);
@@ -4702,6 +4756,8 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
 //        plotNewManualContour(id);
 //        plotContour(id);
+        disableSpecificButtons();
+
         if (alertDialog != null) {
             alertDialog.dismiss();
         }
@@ -4797,6 +4853,8 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         } catch (Exception e) {
             e.printStackTrace();
         }
+        disableSpecificButtons();
+
     }
 
 
@@ -5599,6 +5657,8 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
         // Set the Bitmap in the ImageView
         captured_image.setImageBitmap(bitmap);
+        disableSpecificButtons();
+
 //        removeContour();
     }
 
@@ -5751,7 +5811,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
     public void onResume() {
         super.onResume();
-
+        disableSpecificButtons();
         imageToMat();
         Source.imageMat = imageMat;
 
