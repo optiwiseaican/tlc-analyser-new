@@ -1,0 +1,31 @@
+# C/C++ build system timings
+create_cxx_tasks
+  create-initial-cxx-model
+    create-module-model
+      [gap of 57ms]
+      create-ndk-meta-abi-list 45ms
+      [gap of 133ms]
+      create-cmake-model 13ms
+      [gap of 10ms]
+    create-module-model completed in 258ms
+    create-variant-model 179ms
+    create-ARMEABI_V7A-model 179ms
+    [gap of 117ms]
+    create-ARM64_V8A-model 81ms
+    [gap of 68ms]
+    create-X86-model 66ms
+    create-X86_64-model 87ms
+    create-module-model
+      [gap of 91ms]
+      create-cmake-model 13ms
+      [gap of 22ms]
+    create-module-model completed in 126ms
+    create-variant-model 40ms
+    create-ARMEABI_V7A-model 14ms
+    create-ARM64_V8A-model 17ms
+    create-X86-model 111ms
+    create-X86_64-model 30ms
+  create-initial-cxx-model completed in 1410ms
+  [gap of 11ms]
+create_cxx_tasks completed in 1421ms
+

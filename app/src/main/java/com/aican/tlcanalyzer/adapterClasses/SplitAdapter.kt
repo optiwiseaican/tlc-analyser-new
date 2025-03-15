@@ -111,8 +111,20 @@ class SplitAdapter(
             holder.checkSpottedGreen.visibility = View.VISIBLE
             holder.checkSpottedRed.visibility = View.GONE
 
-            holder.rmValue.text = "RM: " + data.rmSpot
-            holder.finalValue.text = "Final: " + data.finalSpot
+            if (data.rmSpot == "-1000") {
+                holder.rmValue.text = "Raw Material: unassigned"
+            } else {
+                holder.rmValue.text = "Raw Material: " + data.rmSpot
+            }
+
+
+            if (data.finalSpot == "-1000") {
+                holder.finalValue.text = "Final: unassigned"
+            } else {
+                holder.finalValue.text = "Final: " + data.finalSpot
+            }
+
+
         }
 
         if (outFile.exists()) {

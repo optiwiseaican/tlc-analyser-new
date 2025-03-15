@@ -43,7 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
                     android:fontFamily="@font/lato_bold"
-                    android:text="RM"
+                    android:text="Raw Material"
                     android:textColor="@color/semiBlack"
                     android:textSize="18dp"
                     android:textStyle="bold" />

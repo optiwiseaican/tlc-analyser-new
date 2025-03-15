@@ -1602,6 +1602,8 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                 ) {
 
                     ArrayList<String> totalSpots = new ArrayList<>();
+                    totalSpots.add("unassigned");
+
                     for (int i = 0; i < contourDataArrayList.size(); i++) {
                         totalSpots.add("Spot " + contourDataArrayList.get(i).getId());
                     }
@@ -1636,15 +1638,25 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
                     ListView listView1 = popupView1.findViewById(R.id.spinner_list_view);
                     listView1.setAdapter(adapter1);
-                    rmSpinner.setText("Spot " + rmSpot + "");
+                    if (rmSpot.equals("-1000")) {
+                        rmSpinner.setText("unassigned");
+
+                    } else {
+                        rmSpinner.setText("Spot " + rmSpot + "");
+                    }
                     // Handle item selection for Spinner 1
                     listView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             String selectedItem = totalSpots.get(position);
-                            rmSpinner.setText(selectedItem);
-                            rmSpot = selectedItem.replace("Spot ", "");
 
+                            if (selectedItem.equals("unassigned")) {
+                                rmSpinner.setText(selectedItem);
+                                rmSpot = "-1000";
+                            } else {
+                                rmSpinner.setText(selectedItem);
+                                rmSpot = selectedItem.replace("Spot ", "");
+                            }
                             popupWindow1.dismiss();
                         }
                     });
@@ -1676,16 +1688,25 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
                     ListView listView2 = popupView2.findViewById(R.id.spinner_list_view);
                     listView2.setAdapter(adapter2);
+                    if (finalSpot.equals("-1000")) {
+                        finalSpinner.setText("unassigned");
 
-                    finalSpinner.setText("Spot " + finalSpot);
-
+                    } else {
+                        finalSpinner.setText("Spot " + finalSpot);
+                    }
                     // Handle item selection for Spinner 2
                     listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             String selectedItem = totalSpots.get(position);
-                            finalSpinner.setText(selectedItem);
-                            finalSpot = selectedItem.replace("Spot ", "");
+                            if (selectedItem.equals("unassigned")) {
+                                finalSpinner.setText(selectedItem);
+                                finalSpot = "-1000";
+                            } else {
+                                finalSpinner.setText(selectedItem);
+                                finalSpot = selectedItem.replace("Spot ", "");
+
+                            }
                             popupWindow2.dismiss();
                         }
                     });
