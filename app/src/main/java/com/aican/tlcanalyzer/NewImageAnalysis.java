@@ -597,6 +597,32 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                 newThreshold = progress;
                 threshVal = progress;
 
+                // if progress
+//                0 to 49 value ko 50 assign karna hai
+//                50 to 99 ko 100
+//                100 to 149 ko 150
+//                150 to 199 ko 200
+//                200 to 249 ko 250
+
+                int assignedValue;
+
+                if (progress >= 0 && progress <= 49) {
+                    assignedValue = 50;
+                } else if (progress >= 50 && progress <= 99) {
+                    assignedValue = 100;
+                } else if (progress >= 100 && progress <= 149) {
+                    assignedValue = 150;
+                } else if (progress >= 150 && progress <= 199) {
+                    assignedValue = 200;
+                } else if (progress >= 200 && progress <= 249) {
+                    assignedValue = 250;
+                } else {
+                    assignedValue = progress; // Default case (if needed)
+                }
+
+                binding.anaL.spotDetection.thresArrayBtn.setText("" + assignedValue);
+
+                System.out.println("Assigned Value: " + assignedValue);
                 newThresholdString = String.valueOf(newThreshold);
                 thresholdValue.setText("Threshold : " + progress);
             }
@@ -643,23 +669,33 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         binding.anaL.spotDetection.thresArrayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ik[0] <= thresArraySize) {
-
-                    if (ik[0] == thresArraySize) {
-                        ik[0] = 0;
-                        newThreshold = thresArray[ik[0]];
-                        thresholdValue.setText("Threshold : " + newThreshold + "");
-                        binding.anaL.spotDetection.thresArrayBtn.setText(newThreshold + "");
-
-                        setThreshold.setProgress(newThreshold);
-                    } else {
-                        newThreshold = thresArray[ik[0]];
-                        thresholdValue.setText("Threshold : " + newThreshold);
-                        binding.anaL.spotDetection.thresArrayBtn.setText(newThreshold + "");
-                        setThreshold.setProgress(newThreshold);
-                        ik[0]++;
-                    }
+                try {
+                    int newVal = Integer.parseInt(binding.anaL.spotDetection.thresArrayBtn.getText().toString());
+                    newThreshold = newVal;
+                    thresholdValue.setText("Threshold : " + newThreshold + "");
+                    binding.anaL.spotDetection.thresArrayBtn.setText(newThreshold + "");
+                    setThreshold.setProgress(newThreshold);
+                } catch (Exception e) {
+                    Toast.makeText(NewImageAnalysis.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
+
+//                if (ik[0] <= thresArraySize) {
+//
+//                    if (ik[0] == thresArraySize) {
+//                        ik[0] = 0;
+//                        newThreshold = thresArray[ik[0]];
+//                        thresholdValue.setText("Threshold : " + newThreshold + "");
+//                        binding.anaL.spotDetection.thresArrayBtn.setText(newThreshold + "");
+//
+//                        setThreshold.setProgress(newThreshold);
+//                    } else {
+//                        newThreshold = thresArray[ik[0]];
+//                        thresholdValue.setText("Threshold : " + newThreshold);
+//                        binding.anaL.spotDetection.thresArrayBtn.setText(newThreshold + "");
+//                        setThreshold.setProgress(newThreshold);
+//                        ik[0]++;
+//                    }
+//                }
 
             }
         });
