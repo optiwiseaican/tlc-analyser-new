@@ -6,9 +6,9 @@
     "deprecated": false,
     "default": true
   },
-  "cxxBuildFolder": "/Users/vanand/Desktop/tlc-analyser-new/openCV/.cxx/Debug/2h115o65/arm64-v8a",
-  "soFolder": "/Users/vanand/Desktop/tlc-analyser-new/openCV/build/intermediates/cxx/Debug/2h115o65/obj/arm64-v8a",
-  "soRepublishFolder": "/Users/vanand/Desktop/tlc-analyser-new/openCV/build/intermediates/cmake/debug/obj/arm64-v8a",
+  "cxxBuildFolder": "C:\\Users\\karnv\\OneDrive\\Desktop\\tlc-analyser-new\\openCV\\.cxx\\Debug\\2h115o65\\arm64-v8a",
+  "soFolder": "C:\\Users\\karnv\\OneDrive\\Desktop\\tlc-analyser-new\\openCV\\build\\intermediates\\cxx\\Debug\\2h115o65\\obj\\arm64-v8a",
+  "soRepublishFolder": "C:\\Users\\karnv\\OneDrive\\Desktop\\tlc-analyser-new\\openCV\\build\\intermediates\\cmake\\debug\\obj\\arm64-v8a",
   "abiPlatformVersion": 21,
   "cmake": {
     "effectiveConfiguration": {
@@ -33,15 +33,15 @@
     "implicitBuildTargetSet": [],
     "cmakeSettingsConfiguration": "android-gradle-plugin-predetermined-name",
     "module": {
-      "cxxFolder": "/Users/vanand/Desktop/tlc-analyser-new/openCV/.cxx",
-      "intermediatesBaseFolder": "/Users/vanand/Desktop/tlc-analyser-new/openCV/build/intermediates",
-      "intermediatesFolder": "/Users/vanand/Desktop/tlc-analyser-new/openCV/build/intermediates/cxx",
+      "cxxFolder": "C:\\Users\\karnv\\OneDrive\\Desktop\\tlc-analyser-new\\openCV\\.cxx",
+      "intermediatesBaseFolder": "C:\\Users\\karnv\\OneDrive\\Desktop\\tlc-analyser-new\\openCV\\build\\intermediates",
+      "intermediatesFolder": "C:\\Users\\karnv\\OneDrive\\Desktop\\tlc-analyser-new\\openCV\\build\\intermediates\\cxx",
       "gradleModulePathName": ":openCV",
-      "moduleRootFolder": "/Users/vanand/Desktop/tlc-analyser-new/openCV",
-      "moduleBuildFile": "/Users/vanand/Desktop/tlc-analyser-new/openCV/build.gradle",
-      "makeFile": "/Users/vanand/Desktop/tlc-analyser-new/openCV/libcxx_helper/CMakeLists.txt",
+      "moduleRootFolder": "C:\\Users\\karnv\\OneDrive\\Desktop\\tlc-analyser-new\\openCV",
+      "moduleBuildFile": "C:\\Users\\karnv\\OneDrive\\Desktop\\tlc-analyser-new\\openCV\\build.gradle",
+      "makeFile": "C:\\Users\\karnv\\OneDrive\\Desktop\\tlc-analyser-new\\openCV\\libcxx_helper\\CMakeLists.txt",
       "buildSystem": "CMAKE",
-      "ndkFolder": "/Users/vanand/Library/Android/sdk/ndk/23.1.7779620",
+      "ndkFolder": "C:\\Users\\karnv\\AppData\\Local\\Android\\Sdk\\ndk\\23.1.7779620",
       "ndkVersion": "23.1.7779620",
       "ndkSupportedAbiList": [
         "ARMEABI_V7A",
@@ -105,33 +105,33 @@
           "default": true
         }
       ],
-      "cmakeToolchainFile": "/Users/vanand/Library/Android/sdk/ndk/23.1.7779620/build/cmake/android.toolchain.cmake",
+      "cmakeToolchainFile": "C:\\Users\\karnv\\AppData\\Local\\Android\\Sdk\\ndk\\23.1.7779620\\build\\cmake\\android.toolchain.cmake",
       "cmake": {
         "isValidCmakeAvailable": true,
-        "cmakeExe": "/Users/vanand/Library/Android/sdk/cmake/3.22.1/bin/cmake",
+        "cmakeExe": "C:\\Users\\karnv\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\cmake.exe",
         "minimumCmakeVersion": "3.22.1"
       },
       "stlSharedObjectMap": {
         "LIBCXX_SHARED": {
-          "ARMEABI_V7A": "/Users/vanand/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/arm-linux-androideabi/libc++_shared.so",
-          "ARM64_V8A": "/Users/vanand/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/libc++_shared.so",
-          "X86": "/Users/vanand/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/i686-linux-android/libc++_shared.so",
-          "X86_64": "/Users/vanand/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/x86_64-linux-android/libc++_shared.so"
+          "ARMEABI_V7A": "C:\\Users\\karnv\\AppData\\Local\\Android\\Sdk\\ndk\\23.1.7779620\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\arm-linux-androideabi\\libc++_shared.so",
+          "ARM64_V8A": "C:\\Users\\karnv\\AppData\\Local\\Android\\Sdk\\ndk\\23.1.7779620\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\aarch64-linux-android\\libc++_shared.so",
+          "X86": "C:\\Users\\karnv\\AppData\\Local\\Android\\Sdk\\ndk\\23.1.7779620\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\i686-linux-android\\libc++_shared.so",
+          "X86_64": "C:\\Users\\karnv\\AppData\\Local\\Android\\Sdk\\ndk\\23.1.7779620\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\x86_64-linux-android\\libc++_shared.so"
         },
         "LIBCXX_STATIC": {},
         "NONE": {},
         "SYSTEM": {}
       },
       "project": {
-        "rootBuildGradleFolder": "/Users/vanand/Desktop/tlc-analyser-new",
-        "sdkFolder": "/Users/vanand/Library/Android/sdk",
+        "rootBuildGradleFolder": "C:\\Users\\karnv\\OneDrive\\Desktop\\tlc-analyser-new",
+        "sdkFolder": "C:\\Users\\karnv\\AppData\\Local\\Android\\Sdk",
         "isBuildOnlyTargetAbiEnabled": true,
         "ideBuildTargetAbi": "arm64-v8a,armeabi-v7a,armeabi",
         "isCmakeBuildCohabitationEnabled": false,
         "isPrefabEnabled": false
       },
       "outputOptions": [],
-      "ninjaExe": "/Users/vanand/Library/Android/sdk/cmake/3.22.1/bin/ninja"
+      "ninjaExe": "C:\\Users\\karnv\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe"
     },
     "prefabClassPaths": [],
     "prefabPackages": [],
@@ -142,29 +142,29 @@
   "buildSettings": {
     "environmentVariables": []
   },
-  "prefabFolder": "/Users/vanand/Desktop/tlc-analyser-new/openCV/.cxx/Debug/2h115o65/prefab/arm64-v8a",
+  "prefabFolder": "C:\\Users\\karnv\\OneDrive\\Desktop\\tlc-analyser-new\\openCV\\.cxx\\Debug\\2h115o65\\prefab\\arm64-v8a",
   "isActiveAbi": true,
   "fullConfigurationHash": "2h115o65c4t3wl6j2134j2a2p6j4p2sak0f4i5o6v6t566s4q5b3m6y5l",
   "fullConfigurationHashKey": "# Values used to calculate the hash in this folder name.\n# Should not depend on the absolute path of the project itself.\n#   - AGP: 7.4.2.\n#   - $NDK is the path to NDK 23.1.7779620.\n#   - $PROJECT is the path to the parent folder of the root Gradle build file.\n#   - $ABI is the ABI to be built with. The specific value doesn\u0027t contribute to the value of the hash.\n#   - $HASH is the hash value computed from this text.\n#   - $CMAKE is the path to CMake 3.22.1.\n#   - $NINJA is the path to Ninja.\n-H$PROJECT/openCV/libcxx_helper\n-DCMAKE_SYSTEM_NAME\u003dAndroid\n-DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON\n-DCMAKE_SYSTEM_VERSION\u003d21\n-DANDROID_PLATFORM\u003dandroid-21\n-DANDROID_ABI\u003d$ABI\n-DCMAKE_ANDROID_ARCH_ABI\u003d$ABI\n-DANDROID_NDK\u003d$NDK\n-DCMAKE_ANDROID_NDK\u003d$NDK\n-DCMAKE_TOOLCHAIN_FILE\u003d$NDK/build/cmake/android.toolchain.cmake\n-DCMAKE_MAKE_PROGRAM\u003d$NINJA\n-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003d$PROJECT/openCV/build/intermediates/cxx/Debug/$HASH/obj/$ABI\n-DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003d$PROJECT/openCV/build/intermediates/cxx/Debug/$HASH/obj/$ABI\n-DCMAKE_BUILD_TYPE\u003dDebug\n-B$PROJECT/openCV/.cxx/Debug/$HASH/$ABI\n-GNinja\n-DANDROID_STL\u003dc++_shared",
   "configurationArguments": [
-    "-H/Users/vanand/Desktop/tlc-analyser-new/openCV/libcxx_helper",
+    "-HC:\\Users\\karnv\\OneDrive\\Desktop\\tlc-analyser-new\\openCV\\libcxx_helper",
     "-DCMAKE_SYSTEM_NAME\u003dAndroid",
     "-DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON",
     "-DCMAKE_SYSTEM_VERSION\u003d21",
     "-DANDROID_PLATFORM\u003dandroid-21",
     "-DANDROID_ABI\u003darm64-v8a",
     "-DCMAKE_ANDROID_ARCH_ABI\u003darm64-v8a",
-    "-DANDROID_NDK\u003d/Users/vanand/Library/Android/sdk/ndk/23.1.7779620",
-    "-DCMAKE_ANDROID_NDK\u003d/Users/vanand/Library/Android/sdk/ndk/23.1.7779620",
-    "-DCMAKE_TOOLCHAIN_FILE\u003d/Users/vanand/Library/Android/sdk/ndk/23.1.7779620/build/cmake/android.toolchain.cmake",
-    "-DCMAKE_MAKE_PROGRAM\u003d/Users/vanand/Library/Android/sdk/cmake/3.22.1/bin/ninja",
-    "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003d/Users/vanand/Desktop/tlc-analyser-new/openCV/build/intermediates/cxx/Debug/2h115o65/obj/arm64-v8a",
-    "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003d/Users/vanand/Desktop/tlc-analyser-new/openCV/build/intermediates/cxx/Debug/2h115o65/obj/arm64-v8a",
+    "-DANDROID_NDK\u003dC:\\Users\\karnv\\AppData\\Local\\Android\\Sdk\\ndk\\23.1.7779620",
+    "-DCMAKE_ANDROID_NDK\u003dC:\\Users\\karnv\\AppData\\Local\\Android\\Sdk\\ndk\\23.1.7779620",
+    "-DCMAKE_TOOLCHAIN_FILE\u003dC:\\Users\\karnv\\AppData\\Local\\Android\\Sdk\\ndk\\23.1.7779620\\build\\cmake\\android.toolchain.cmake",
+    "-DCMAKE_MAKE_PROGRAM\u003dC:\\Users\\karnv\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+    "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003dC:\\Users\\karnv\\OneDrive\\Desktop\\tlc-analyser-new\\openCV\\build\\intermediates\\cxx\\Debug\\2h115o65\\obj\\arm64-v8a",
+    "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003dC:\\Users\\karnv\\OneDrive\\Desktop\\tlc-analyser-new\\openCV\\build\\intermediates\\cxx\\Debug\\2h115o65\\obj\\arm64-v8a",
     "-DCMAKE_BUILD_TYPE\u003dDebug",
-    "-B/Users/vanand/Desktop/tlc-analyser-new/openCV/.cxx/Debug/2h115o65/arm64-v8a",
+    "-BC:\\Users\\karnv\\OneDrive\\Desktop\\tlc-analyser-new\\openCV\\.cxx\\Debug\\2h115o65\\arm64-v8a",
     "-GNinja",
     "-DANDROID_STL\u003dc++_shared"
   ],
-  "stlLibraryFile": "/Users/vanand/Library/Android/sdk/ndk/23.1.7779620/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/libc++_shared.so",
-  "intermediatesParentFolder": "/Users/vanand/Desktop/tlc-analyser-new/openCV/build/intermediates/cxx/Debug/2h115o65"
+  "stlLibraryFile": "C:\\Users\\karnv\\AppData\\Local\\Android\\Sdk\\ndk\\23.1.7779620\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\aarch64-linux-android\\libc++_shared.so",
+  "intermediatesParentFolder": "C:\\Users\\karnv\\OneDrive\\Desktop\\tlc-analyser-new\\openCV\\build\\intermediates\\cxx\\Debug\\2h115o65"
 }

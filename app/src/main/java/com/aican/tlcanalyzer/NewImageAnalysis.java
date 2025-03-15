@@ -6420,7 +6420,8 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
             alertDialog.dismiss();
         }
 
-        Intent intent = new Intent(NewImageAnalysis.this, EditRectangleContour.class);
+//        Intent intent = new Intent(NewImageAnalysis.this, EditRectangleContour.class);
+        Intent intent = new Intent(NewImageAnalysis.this, NewEditRectangleContour.class);
         Source.editRectangleContourRect = rect;
         intent.putExtra("plotTableName", plotTableID);
         intent.putExtra("contourJsonFileName", contourJsonFileName);

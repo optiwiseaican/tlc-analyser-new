@@ -31,6 +31,9 @@
         android:theme="@style/Theme.TLCAnalyzer"
         tools:targetApi="31">
         <activity
+            android:name=".NewEditRectangleContour"
+            android:exported="false" />
+        <activity
             android:name=".NewCroppingTemp"
             android:exported="false" />
         <activity
@@ -39,11 +42,13 @@
         <activity
             android:name=".dragcircle.dragableline.SampleActivity"
             android:exported="true">
-            <!--            <intent-filter>-->
-            <!--                <action android:name="android.intent.action.MAIN" />-->
 
-            <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-            <!--            </intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".ReAutoCropActivity"
@@ -186,10 +191,8 @@
         <activity
             android:name=".GetStarted"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
