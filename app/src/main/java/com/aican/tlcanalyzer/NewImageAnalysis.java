@@ -559,6 +559,41 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 numberCount = progress;
                 numberCountText.setText("No. of Spots : " + numberCount);
+
+                if (work.equals(works[2])) {
+                    numberOfSpots = String.valueOf(numberCount);
+
+
+                    SplitData splitData = new SplitData(getIntent().getStringExtra("pid"),
+                            getIntent().getStringExtra("imageName"), projectImage, getIntent().getStringExtra("timeStamp"), newThresholdString, numberOfSpots, roiTableID,
+                            volumePlotTableID, intensityPlotTableID, plotTableID, projectDescription, hour, rmSpot, finalSpot);
+
+                    long i = databaseHelper.updateSplitData(splitData, tableName);
+
+//                    Toast.makeText(this, "" + getIntent().getStringExtra("id") + " " + i, Toast.LENGTH_SHORT).show();
+
+
+                }else if(work.equals(works[1])){
+                    numberOfSpots = String.valueOf(numberCount);
+
+                    ProjectOfflineData projectOfflineData =
+                            new ProjectOfflineData(id, projectName, projectDescription, timeStamp,
+                                    projectNumber, projectImage, imageSplitAvailable, splitId,
+                                    newThresholdString, numberOfSpots, tableName, roiTableID,
+                                    volumePlotTableID, intensityPlotTableID, plotTableID, rmSpot, finalSpot);
+
+                    float i = databaseHelper.updateData(projectOfflineData);
+                }else{
+                    numberOfSpots = String.valueOf(numberCount);
+
+                    ProjectOfflineData projectOfflineData =
+                            new ProjectOfflineData(id, projectName, projectDescription, timeStamp, projectNumber,
+                                    fileName, imageSplitAvailable, splitId, newThresholdString,
+                                    numberOfSpots, tableName, roiTableID, volumePlotTableID,
+                                    intensityPlotTableID, plotTableID, rmSpot, finalSpot);
+
+                    float i = databaseHelper.updateData(projectOfflineData);
+                }
             }
 
             @Override
@@ -625,6 +660,43 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                 System.out.println("Assigned Value: " + assignedValue);
                 newThresholdString = String.valueOf(newThreshold);
                 thresholdValue.setText("Threshold : " + progress);
+
+                if (work.equals(works[2])) {
+                    numberOfSpots = String.valueOf(numberCount);
+
+
+                    SplitData splitData = new SplitData(getIntent().getStringExtra("pid"),
+                            getIntent().getStringExtra("imageName"), projectImage, getIntent().getStringExtra("timeStamp"), newThresholdString, numberOfSpots, roiTableID,
+                            volumePlotTableID, intensityPlotTableID, plotTableID, projectDescription, hour, rmSpot, finalSpot);
+
+                    long i = databaseHelper.updateSplitData(splitData, tableName);
+
+//                    Toast.makeText(this, "" + getIntent().getStringExtra("id") + " " + i, Toast.LENGTH_SHORT).show();
+
+
+                }else if(work.equals(works[1])){
+                    numberOfSpots = String.valueOf(numberCount);
+
+                    ProjectOfflineData projectOfflineData =
+                            new ProjectOfflineData(id, projectName, projectDescription, timeStamp,
+                                    projectNumber, projectImage, imageSplitAvailable, splitId,
+                                    newThresholdString, numberOfSpots, tableName, roiTableID,
+                                    volumePlotTableID, intensityPlotTableID, plotTableID, rmSpot, finalSpot);
+
+                    float i = databaseHelper.updateData(projectOfflineData);
+                }else{
+                    numberOfSpots = String.valueOf(numberCount);
+
+                    ProjectOfflineData projectOfflineData =
+                            new ProjectOfflineData(id, projectName, projectDescription, timeStamp, projectNumber,
+                                    fileName, imageSplitAvailable, splitId, newThresholdString,
+                                    numberOfSpots, tableName, roiTableID, volumePlotTableID,
+                                    intensityPlotTableID, plotTableID, rmSpot, finalSpot);
+
+                    float i = databaseHelper.updateData(projectOfflineData);
+                }
+
+
             }
 
             @Override
