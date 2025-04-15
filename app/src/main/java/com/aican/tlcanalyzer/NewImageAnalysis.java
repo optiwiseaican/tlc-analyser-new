@@ -333,7 +333,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
             mType = getIntent().getStringExtra("mtype");
 //        Source.checkInternet(this);
             if (mType != null && mType.equals("mainImg")) {
-                binding.cropAgain.setVisibility(View.VISIBLE);
+//                binding.cropAgain.setVisibility(View.VISIBLE);
 
                 binding.cropAgain.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -352,7 +352,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
             }
 
             if (mType != null && mType.equals("parts")) {
-                binding.cropAgain.setVisibility(View.VISIBLE);
+//                binding.cropAgain.setVisibility(View.VISIBLE);
 
                 binding.cropAgain.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -948,7 +948,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
         if (work.equals(works[0]) || work.equals(works[1])) {
             binding.splitSettings.setVisibility(View.VISIBLE);
-            binding.cropAgain.setVisibility(View.VISIBLE);
+//            binding.cropAgain.setVisibility(View.VISIBLE);
 
             binding.cropAgain.setOnClickListener(new View.OnClickListener() {
                 @Override
