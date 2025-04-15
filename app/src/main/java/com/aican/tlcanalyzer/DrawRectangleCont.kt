@@ -451,10 +451,10 @@ class DrawRectangleCont : AppCompatActivity() {
 
     fun generateUniqueIndexName(manualContourArrayList: ArrayList<ManualContour>): String {
         var index = 1
-        var indexName = "m$index"
+        var indexName = Source.manual_contour_prefix + "$index"
         while (this.isIndexNameInUse(indexName, manualContourArrayList)) {
             index++
-            indexName = "m$index"
+            indexName = Source.manual_contour_prefix + "$index"
         }
         return indexName
     }
@@ -490,7 +490,7 @@ class DrawRectangleCont : AppCompatActivity() {
 
 //        val text = "Rectangle: ($p1, $p2)"
 //        val text = generateUniqueIndexName(manualContourArrayList)
-        val text = "m" + rectangles.size.toString()
+        val text = Source.manual_contour_prefix + rectangles.size.toString()
 //        Toast.makeText(this@DrawRectangleCont, "" + text, Toast.LENGTH_SHORT).show()
 //        Toast.makeText(this@DrawRectangleCont, "" + text, Toast.LENGTH_SHORT).show()
 
@@ -561,7 +561,7 @@ class DrawRectangleCont : AppCompatActivity() {
                 ) // Adjust these coordinates as needed
 //                val text = generateUniqueIndexName(manualContourArrayList)
 
-                val text = "m$i"
+                val text = Source.manual_contour_prefix + "$i"
                 Imgproc.putText(
                     imageWithLines,
                     text,
@@ -581,7 +581,7 @@ class DrawRectangleCont : AppCompatActivity() {
                     y2.toDouble()
                 ) // Adjust these coordinates as needed
 
-                val text = "m$i"
+                val text = Source.manual_contour_prefix + "$i"
 
 //                val text = "Rectangle: (0, ${y2})"
                 Imgproc.putText(

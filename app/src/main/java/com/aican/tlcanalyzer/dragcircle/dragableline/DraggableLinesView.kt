@@ -25,10 +25,29 @@ class DraggableLinesView(context: Context, attrs: AttributeSet?) : View(context,
     }
 
     private val rectanglePaints = listOf(
-        Paint().apply { color = Color.YELLOW; alpha = 100; style = Paint.Style.FILL },
-        Paint().apply { color = Color.GREEN; alpha = 100; style = Paint.Style.FILL },
-        Paint().apply { color = Color.CYAN; alpha = 100; style = Paint.Style.FILL }
-    ) // Different colors to distinguish overlapping rectangles
+        Paint().apply { color = Color.BLUE; alpha = 100; style = Paint.Style.FILL },       // Blue
+        Paint().apply { color = Color.GREEN; alpha = 100; style = Paint.Style.FILL },      // Green
+        Paint().apply {
+            color = Color.MAGENTA; alpha = 100; style = Paint.Style.FILL
+        },    // Magenta
+        Paint().apply { color = Color.RED; alpha = 100; style = Paint.Style.FILL },        // Red
+        Paint().apply { color = Color.CYAN; alpha = 100; style = Paint.Style.FILL },       // Cyan
+        Paint().apply {
+            color = Color.LTGRAY; alpha = 100; style = Paint.Style.FILL
+        },     // Light Gray
+        Paint().apply {
+            color = Color.DKGRAY; alpha = 100; style = Paint.Style.FILL
+        },     // Dark Gray
+        Paint().apply {
+            color = Color.rgb(255, 165, 0); alpha = 100; style = Paint.Style.FILL
+        }, // Orange
+        Paint().apply {
+            color = Color.rgb(128, 0, 128); alpha = 100; style = Paint.Style.FILL
+        }, // Purple
+        Paint().apply { color = Color.YELLOW; alpha = 100; style = Paint.Style.FILL },     // Yellow
+
+    )
+
 
     var imageBitmap: Bitmap? = null
     private var imageMatrix: Matrix = Matrix()  // Matrix for scaling the image
@@ -60,23 +79,38 @@ class DraggableLinesView(context: Context, attrs: AttributeSet?) : View(context,
             // Ensure rectangles are inside image boundaries
             if (imageBounds != null) {
                 val constrainedLeft = imageBounds.left.toFloat()
-                val extendedRight = imageBounds.right.toFloat() + (imageBounds.width() * percentageIncrease) // Extend by 5%
+                val extendedRight =
+                    imageBounds.right.toFloat() + (imageBounds.width() * percentageIncrease) // Extend by 5%
                 val constrainedTop = maxOf(imageBounds.top.toFloat(), top)
                 val constrainedBottom = minOf(imageBounds.bottom.toFloat(), bottom)
 
-                canvas.drawRect(constrainedLeft, constrainedTop, extendedRight, constrainedBottom, rectanglePaints[colorIndex])
+                canvas.drawRect(
+                    constrainedLeft,
+                    constrainedTop,
+                    extendedRight,
+                    constrainedBottom,
+                    rectanglePaints[colorIndex]
+                )
             }
         }
 
         // Draw horizontal lines and handles with percentage extension
         for (y in lines) {
             if (imageBounds != null) {
-                val constrainedY = y.coerceIn(imageBounds.top.toFloat(), imageBounds.bottom.toFloat())
+                val constrainedY =
+                    y.coerceIn(imageBounds.top.toFloat(), imageBounds.bottom.toFloat())
 
-                val extendedRight = imageBounds.right.toFloat() + (imageBounds.width() * percentageIncrease) // Extend by 5%
+                val extendedRight =
+                    imageBounds.right.toFloat() + (imageBounds.width() * percentageIncrease) // Extend by 5%
 
                 // Draw line with increased right side
-                canvas.drawLine(imageBounds.left.toFloat(), constrainedY, extendedRight, constrainedY, paint)
+                canvas.drawLine(
+                    imageBounds.left.toFloat(),
+                    constrainedY,
+                    extendedRight,
+                    constrainedY,
+                    paint
+                )
 
                 // Draw handle slightly inside the right boundary
                 canvas.drawCircle(extendedRight - 10f, constrainedY, 10f, handlePaint)
@@ -166,7 +200,8 @@ class DraggableLinesView(context: Context, attrs: AttributeSet?) : View(context,
             val fitCenterRect = getFitCenterRect(bitmap)  // Get image bounds within the View
 
             return if (viewY.toInt() in fitCenterRect.top..fitCenterRect.bottom) {
-                val relativeY = viewY - fitCenterRect.top  // Adjust Y relative to the displayed image
+                val relativeY =
+                    viewY - fitCenterRect.top  // Adjust Y relative to the displayed image
                 ((relativeY / fitCenterRect.height()) * bitmap.height).toInt()  // Scale to original image height
             } else {
                 -1 // Out of bounds, should not happen

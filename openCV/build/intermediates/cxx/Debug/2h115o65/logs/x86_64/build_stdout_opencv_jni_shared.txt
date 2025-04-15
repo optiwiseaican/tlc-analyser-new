@@ -1,2 +1,2 @@
-ninja: Entering directory `/Users/vanand/Desktop/tlc-analyser-new/openCV/.cxx/Debug/2h115o65/x86_64'
+ninja: Entering directory `C:\Users\karnv\OneDrive\Desktop\tlc-analyser-new\openCV\.cxx\Debug\2h115o65\x86_64'
 ninja: no work to do.

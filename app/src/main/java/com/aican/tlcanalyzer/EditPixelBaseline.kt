@@ -183,7 +183,7 @@ class EditPixelBaseline : AppCompatActivity() {
 
 
         binding.saveThis.setOnClickListener {
-            if (spotId.contains("m")) {
+            if (spotId.contains(Source.manual_contour_prefix)) {
                 val myDir: File = File(dir, contourJsonFileName)
                 if (myDir.exists()) {
                     val gson = Gson()
@@ -304,7 +304,7 @@ class EditPixelBaseline : AppCompatActivity() {
             var newRfTop = mRFTop * Source.percentRFTop
 
             val id: String = contourGraphSelModelArrayList.get(i).getId()
-            if (id.contains("m")) {
+            if (id.contains(Source.manual_contour_prefix)) {
                 newRfTop = mRFTop
                 newRfBottom = mRFBottom
             } else {
@@ -716,7 +716,7 @@ class EditPixelBaseline : AppCompatActivity() {
             var newRfTop = mRFTop * Source.percentRFTop
 
             val id = contourDataArray[i].id
-            if (id.contains("m")) {
+            if (id.contains(Source.manual_contour_prefix)) {
                 newRfTop = mRFTop
                 newRfBottom = mRFBottom
             } else {
@@ -779,7 +779,7 @@ class EditPixelBaseline : AppCompatActivity() {
 
             if (spotId == id) {
 
-                if (id.contains("m")) {
+                if (id.contains(Source.manual_contour_prefix)) {
 
                     shadedDataSets.add(baselineDataSet)
                 }

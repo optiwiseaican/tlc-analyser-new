@@ -48,6 +48,8 @@ public class NewAutoSplitImage extends AppCompatActivity implements View.OnTouch
         Log.e("pos2", String.valueOf(pos));
 
 
+
+
         parentLayout = findViewById(R.id.parentLayout);
         iv_capture = findViewById(R.id.iv_capture);
 

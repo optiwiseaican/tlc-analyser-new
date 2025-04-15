@@ -113,7 +113,6 @@ class ProjectView : AppCompatActivity(), refreshProjectArrayList, AuthDialog.Aut
 
 
 
-
         userDatabase.logUserAction(
             AuthDialog.activeUserName,
             AuthDialog.activeUserRole,
@@ -271,7 +270,7 @@ class ProjectView : AppCompatActivity(), refreshProjectArrayList, AuthDialog.Aut
         val CURRENT_DATE = System.currentTimeMillis()
 
         if (LAST_ACCESS_DATE.toLong() > CURRENT_DATE) {
-            Source.toast(this@ProjectView, "Invalid Date")
+//            Source.toast(this@ProjectView, "Invalid Date")
 
             binding.subscriptionLayout.visibility = View.VISIBLE
             binding.recyclerView.visibility = View.GONE
@@ -325,11 +324,11 @@ class ProjectView : AppCompatActivity(), refreshProjectArrayList, AuthDialog.Aut
 
 
                 if (nextDateString1 == currentFormattedDate) {
-                    Source.toast(this@ProjectView, "Active Plan")
+//                    Source.toast(this@ProjectView, "Active Plan")
 
                 } else {
 
-                    Source.toast(this@ProjectView, "Invalid Date")
+//                    Source.toast(this@ProjectView, "Invalid Date")
 
 
 
@@ -465,7 +464,7 @@ class ProjectView : AppCompatActivity(), refreshProjectArrayList, AuthDialog.Aut
                 val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
 
                 Subscription.TODAY_DATE_FROM_INTERNET = dateFormat.format(estimatedServerTimeMs)
-                Source.toast(this@ProjectView, dateFormat.format(estimatedServerTimeMs))
+//                Source.toast(this@ProjectView, dateFormat.format(estimatedServerTimeMs))
 
             }
 
@@ -668,6 +667,7 @@ class ProjectView : AppCompatActivity(), refreshProjectArrayList, AuthDialog.Aut
             intent.putExtra(resources.getString(R.string.isStartedForResultKey), false)
             intent.putExtra("p", "pixel")
             intent.putExtra("w", "new")
+            intent.putExtra("mtype", "single")
             intent.putExtra("projectName", projectNames)
             intent.putExtra("projectDescription", projectDescriptions)
             intent.putExtra("projectImage", "na")
@@ -682,7 +682,7 @@ class ProjectView : AppCompatActivity(), refreshProjectArrayList, AuthDialog.Aut
             startActivity(intent)
         }
         if (requestCode == 123 && resultCode == Activity.RESULT_OK) {
-            Source.toast(this@ProjectView, "Captured")
+//            Source.toast(this@ProjectView, "Captured")
         }
     }
 
@@ -1194,7 +1194,7 @@ class ProjectView : AppCompatActivity(), refreshProjectArrayList, AuthDialog.Aut
 
     fun readPermissionAndroid13() {
         var permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            Toast.makeText(this, "Yes", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, "Yes", Toast.LENGTH_SHORT).show()
             arrayOf(
                 android.Manifest.permission.READ_MEDIA_IMAGES,
                 android.Manifest.permission.READ_MEDIA_VIDEO,

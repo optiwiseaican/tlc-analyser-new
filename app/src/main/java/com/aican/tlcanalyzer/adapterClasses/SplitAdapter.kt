@@ -123,18 +123,21 @@ class SplitAdapter(
             } else {
                 holder.finalValue.text = "Final: " + data.finalSpot
             }
-
-
-        }
-
-        if (outFile.exists()) {
-            val myBitmap = BitmapFactory.decodeFile(outFile.absolutePath)
+            val myBitmap = BitmapFactory.decodeFile(contOutFile.absolutePath)
 
             holder.splitImage.setImageBitmap(myBitmap)
-        } else {
-//            Source.toast(context, "Not Exist")
-        }
 
+
+        } else {
+
+            if (outFile.exists()) {
+                val myBitmap = BitmapFactory.decodeFile(outFile.absolutePath)
+
+                holder.splitImage.setImageBitmap(myBitmap)
+            } else {
+//            Source.toast(context, "Not Exist")
+            }
+        }
 
 
         holder.itemView.setOnLongClickListener {
@@ -306,9 +309,99 @@ class SplitAdapter(
 
 
         // Show the PopupWindow on TextView click
+//        holder.spinnerText.setOnClickListener {
+//            popupWindow.showAsDropDown(holder.spinnerText, 0, 0)
+//        }
+
         holder.spinnerText.setOnClickListener {
-            popupWindow.showAsDropDown(holder.spinnerText, 0, 0)
+            // Create AlertDialog
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("Select Hour")
+
+            // Convert hours array to ListAdapter
+            builder.setItems(hours) { dialog, which ->
+                val selectedItem = hours[which]
+                holder.spinnerText.text = selectedItem
+
+                // Create updated SplitData object
+                val newData = SplitData(
+                    data.id,
+                    data.imageName,
+                    data.imagePath,
+                    data.timeStamp,
+                    data.thresholdVal,
+                    data.noOfSpots,
+                    data.roiTableID,
+                    data.volumePlotTableID,
+                    data.intensityPlotTableID,
+                    data.plotTableID,
+                    data.description,
+                    (which + 1).toString(),
+                    data.rmSpot,
+                    data.finalSpot
+                )
+
+                // Update in Database
+                databaseHelper.updateSplitData(newData, tableName)
+
+                // Update hour value
+                hour = (which + 1).toString()
+
+                // Notify adapter about data change
+                notifyItemChanged(position)
+
+                // Close dialog
+                dialog.dismiss()
+
+                val intent = Intent(context, NewImageAnalysis::class.java)
+                intent.putExtra("reason", "tempHourSelected")
+                intent.putExtra("positionOf", position.toString())
+                intent.putExtra("w", "split")
+                intent.putExtra("mtype", "parts")
+                intent.putExtra("hour", hour)
+                intent.putExtra("img_path", outFile.path)
+                intent.putExtra("projectName", projectName)
+                intent.putExtra("projectDescription", data.description)
+                intent.putExtra("projectImage", data.imagePath)
+                intent.putExtra("projectNumber", projectNumber)
+                intent.putExtra("splitProjectName", data.imageName)
+                intent.putExtra("splitId", splitId)
+                if (type == "multi") {
+                    intent.putExtra("type", "multi")
+                } else {
+                    intent.putExtra("type", "multi")
+                }
+                intent.putExtra("imageName", data.imageName)
+                intent.putExtra("timeStamp", data.timeStamp)
+                intent.putExtra("tableName", tableName)
+                intent.putExtra("roiTableID", data.roiTableID)
+                intent.putExtra("thresholdVal", data.thresholdVal)
+                intent.putExtra("numberOfSpots", data.noOfSpots)
+                intent.putExtra("id", id)
+                intent.putExtra("pid", data.id)
+                intent.putExtra("volumePlotTableID", data.volumePlotTableID)
+                intent.putExtra("intensityPlotTableID", data.intensityPlotTableID)
+                intent.putExtra("plotTableID", data.plotTableID)
+                intent.putExtra("rmSpot", data.rmSpot)
+                intent.putExtra("finalSpot", data.finalSpot)
+
+
+
+                context.startActivity(intent)
+                if (type == "multi") {
+                    (context as Activity).finish()
+                }
+            }
+
+            // Show dialog
+            val dialog = builder.create()
+            dialog.show()
+
+
+
+
         }
+
 
     }
 

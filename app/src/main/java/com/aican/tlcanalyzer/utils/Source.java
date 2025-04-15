@@ -40,7 +40,10 @@ import java.util.Arrays;
 
 public class Source {
 
+    public static boolean SHOW_VOLUME_DATA = false;
+    public static boolean SHOW_LABEL_DATA = false;
     public static int SCALING_FACTOR_INT_GRAPH = 2;
+    public static String manual_contour_prefix = "M";
 
     public static ArrayList<ManualContour> manualContourArrayList;
 

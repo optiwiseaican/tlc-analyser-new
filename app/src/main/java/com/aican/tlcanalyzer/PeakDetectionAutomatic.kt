@@ -562,7 +562,8 @@ class PeakDetectionAutomatic : AppCompatActivity(), OnClicksListeners {
         tableRow.addView(textViewCv)
         tableRow.addView(textViewArea)
         tableRow.addView(textViewPArea)
-        tableRow.addView(textViewVolume)
+        if (Source.SHOW_VOLUME_DATA)
+            tableRow.addView(textViewVolume)
         tableRow.addView(textViewRfTop)
         tableRow.addView(textViewRfBottom)
 
@@ -1092,7 +1093,7 @@ class PeakDetectionAutomatic : AppCompatActivity(), OnClicksListeners {
 
 //        contourDataArrayListNew = Source.contourDataArrayList;
         contourIntGraphAdapter =
-            ContourIntGraphAdapter(this, contourDataArrayListNew, 0, this, true, false, false)
+            ContourIntGraphAdapter(true, this, contourDataArrayListNew, 0, this, true, false, false)
         binding.contourListRecView.adapter = contourIntGraphAdapter
         contourIntGraphAdapter.notifyDataSetChanged()
     }
@@ -1179,7 +1180,7 @@ class PeakDetectionAutomatic : AppCompatActivity(), OnClicksListeners {
             var newRfTop = mRFTop * Source.percentRFTop
 
             val id = contourDataArray[i].id
-            if (id.contains("g") || id.contains("m")) {
+            if (id.contains("g") || id.contains(Source.manual_contour_prefix)) {
                 newRfTop = mRFTop
                 newRfBottom = mRFBottom
             } else {
@@ -1273,11 +1274,11 @@ class PeakDetectionAutomatic : AppCompatActivity(), OnClicksListeners {
 
         val smoothData = smoothData(doubleArray, 10)
 
-        Toast.makeText(
-            this@PeakDetectionAutomatic,
-            "smooth size : " + smoothData.size,
-            Toast.LENGTH_SHORT
-        ).show()
+//        Toast.makeText(
+//            this@PeakDetectionAutomatic,
+//            "smooth size : " + smoothData.size,
+//            Toast.LENGTH_SHORT
+//        ).show()
 
         rFvsAreaArrayList = ArrayList()
 

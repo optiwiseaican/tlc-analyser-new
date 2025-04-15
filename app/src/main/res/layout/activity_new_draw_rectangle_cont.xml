@@ -32,7 +32,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="10dp"
                 android:gravity="center_vertical"
-                android:text="Rectangle"
+                android:text="Region"
                 android:textColor="@color/blueColor"
                 android:textSize="20dp"
                 android:textStyle="bold" />
@@ -183,17 +183,6 @@
         android:scaleType="fitCenter"
         android:visibility="gone" />
 
-    <Button
-        android:id="@+id/addLineButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/button_bc"
-        android:drawableLeft="@drawable/add_white"
-        android:drawableTint="@color/white"
-        android:text="Add Line" />
 
     <!-- Add the final slicing button -->
 
@@ -201,8 +190,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
+        android:layout_marginTop="30dp"
         android:gravity="center"
         android:orientation="horizontal">
+
 
         <Button
             android:id="@+id/clearAll"
@@ -226,18 +217,36 @@
             android:drawableTint="@color/white"
             android:text="Undo" />
 
-
         <Button
-            android:id="@+id/saveRect"
+            android:id="@+id/addLineButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/button_bc"
+            android:drawableLeft="@drawable/add_white"
+            android:drawableTint="@color/white"
+            android:text="Add Region" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="20dp"
-            android:background="@drawable/button_bc"
-            android:drawableLeft="@drawable/files"
-            android:drawablePadding="20dp"
-            android:drawableTint="@color/white"
-            android:text="Save" />
+            android:gravity="end"
+            android:orientation="horizontal">
+
+
+            <Button
+                android:id="@+id/saveRect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/button_bc"
+                android:drawableLeft="@drawable/files"
+                android:drawablePadding="20dp"
+                android:drawableTint="@color/white"
+                android:text="   Save   " />
+        </LinearLayout>
 
 
     </LinearLayout>

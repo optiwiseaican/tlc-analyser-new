@@ -128,7 +128,7 @@ class PeakDetection : AppCompatActivity(), OnClicksListeners {
 
 //        contourDataArrayListNew = Source.contourDataArrayList;
         contourIntGraphAdapter =
-            ContourIntGraphAdapter(this, contourDataArrayListNew, 0, this, true, false, false)
+            ContourIntGraphAdapter(true,this, contourDataArrayListNew, 0, this, true, false, false)
         binding.contourListRecView.adapter = contourIntGraphAdapter
         contourIntGraphAdapter.notifyDataSetChanged()
     }

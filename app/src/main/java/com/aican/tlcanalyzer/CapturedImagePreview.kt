@@ -222,6 +222,7 @@ class CapturedImagePreview : AppCompatActivity() {
                     intwnt.putExtra("p", "pixel")
                     intwnt.putExtra("w", "new")
                     intwnt.putExtra("type", "new")
+                    intent.putExtra("mtype", "single")
                     intwnt.putExtra("rmSpot", "-1000")
                     intwnt.putExtra("finalSpot", "-1000")
                     intwnt.putExtra("projectName", intent.getStringExtra("projectName"))
@@ -307,7 +308,7 @@ class CapturedImagePreview : AppCompatActivity() {
             sizeOfMainImageList = SplitImage.sizeOfMainImagesList
             sizeOfSplitImageList = SplitImage.sizeOfSplitImageList
             // save image with single split and single main image
-            binding.btnSave.text = "No Split"
+            binding.btnSave.text = "Save without Split"
             binding.btnSave.setOnClickListener {
                 originalBitmap = binding.ivCrop.bitmap
                 splitBitmap = binding.ivCrop.crop()

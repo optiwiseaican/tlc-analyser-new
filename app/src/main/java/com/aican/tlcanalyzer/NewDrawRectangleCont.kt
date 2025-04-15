@@ -44,20 +44,26 @@ class NewDrawRectangleCont : AppCompatActivity() {
 
         binding.addLineButton.setOnClickListener {
             val viewHeight = draggableLinesView.height
+            val rectangleHeight = 50f  // Fixed height for the rectangle
 
+            // Determine the position of the new top line
             val newY = if (draggableLinesView.lines.isEmpty() || draggableLinesView.lines.size % 2 == 0) {
-                // First line or new rectangle: Add on the left side
-                100f
+                100f  // First rectangle starts at 100px
             } else {
-                // Second line of the rectangle: Add slightly to the right of the previous line
-                draggableLinesView.lines.last() + 20f
+                draggableLinesView.lines.last() + 70f  // Space below the last rectangle
             }
 
-            // Ensure it doesn't exceed the view height
-            if (newY < viewHeight - 50) {
-                draggableLinesView.addNewLine(newY)
+            val bottomY = newY + rectangleHeight  // Bottom line for the rectangle
+
+            // Ensure both lines fit inside the view height
+            if (bottomY <= viewHeight - 10) {
+                draggableLinesView.addNewLine(newY)     // Add top line
+                draggableLinesView.addNewLine(bottomY)  // Add bottom line
+            } else {
+                Toast.makeText(this, "No space for more rectangles", Toast.LENGTH_SHORT).show()
             }
         }
+
 
 
         binding.clearAll.setOnClickListener {

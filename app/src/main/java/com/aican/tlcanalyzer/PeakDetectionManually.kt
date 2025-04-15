@@ -437,7 +437,8 @@ class PeakDetectionManually : AppCompatActivity(), OnClicksListeners {
         tableRow.addView(textViewCv)
         tableRow.addView(textViewArea)
         tableRow.addView(textViewPArea)
-        tableRow.addView(textViewVolume)
+        if (Source.SHOW_VOLUME_DATA)
+            tableRow.addView(textViewVolume)
         tableRow.addView(textViewRfTop)
         tableRow.addView(textViewRfBottom)
 
@@ -629,7 +630,7 @@ class PeakDetectionManually : AppCompatActivity(), OnClicksListeners {
             var newRfTop = mRFTop * Source.percentRFTop
 
             val id: String = contourGraphSelModelArrayList.get(i).getId()
-            if (id.contains("m")) {
+            if (id.contains(Source.manual_contour_prefix)) {
                 newRfTop = mRFTop
                 newRfBottom = mRFBottom
             } else {
@@ -932,6 +933,7 @@ class PeakDetectionManually : AppCompatActivity(), OnClicksListeners {
 //        contourDataArrayListNew = Source.contourDataArrayList;
         contourIntGraphAdapter =
             ContourIntGraphAdapter(
+                true,
                 this, contourDataArrayListNew, 0,
                 this, true, false, false
             )
@@ -1011,7 +1013,7 @@ class PeakDetectionManually : AppCompatActivity(), OnClicksListeners {
             var newRfTop = mRFTop * Source.percentRFTop
 
             val id = contourDataArray[i].id
-            if (id.contains("m")) {
+            if (id.contains(Source.manual_contour_prefix)) {
                 newRfTop = mRFTop
                 newRfBottom = mRFBottom
             } else {
@@ -1072,7 +1074,7 @@ class PeakDetectionManually : AppCompatActivity(), OnClicksListeners {
 
             baselineDataSet.lineWidth = 1f // Set the line width for the baseline
 
-            if (id.contains("m")) {
+            if (id.contains(Source.manual_contour_prefix)) {
 
                 shadedDataSets.add(baselineDataSet)
             }

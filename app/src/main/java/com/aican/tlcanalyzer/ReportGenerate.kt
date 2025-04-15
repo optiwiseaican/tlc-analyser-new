@@ -119,7 +119,6 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
         legacyTableView = binding!!.legacyTableView
         legacyTableViewROI = binding!!.legacyTableViewRoi
         binding!!.originalImage.setImageBitmap(Source.originalBitmap)
-
         databaseHelper = DatabaseHelper(this@ReportGenerate)
 
         insertLabelData()
@@ -438,7 +437,11 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
 
                 )
 
-                val columnWidth = floatArrayOf(200f, 210f, 190f, 170f, 170f, 240f, 340f)
+                var columnWidth = floatArrayOf(200f, 210f, 190f, 170f, 170f)
+                if (Source.SHOW_VOLUME_DATA)
+                    columnWidth = floatArrayOf(200f, 210f, 190f, 170f, 170f, 240f, 340f)
+                if (Source.SHOW_LABEL_DATA)
+                    columnWidth = floatArrayOf(200f, 210f, 190f, 170f, 170f, 340f)
 
                 val table = Table(columnWidth)
                 table.addCell("Id")
@@ -446,8 +449,10 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
                 table.addCell("Cv")
                 table.addCell("Area")
                 table.addCell("% Area")
-                table.addCell("Volume")
-                table.addCell("Label")
+                if (Source.SHOW_VOLUME_DATA)
+                    table.addCell("Volume")
+                if (Source.SHOW_LABEL_DATA)
+                    table.addCell("Label")
 
                 var totalArea = 0f
 
@@ -468,10 +473,12 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
                                 (contoursAreaArrayList.get(i).area.toFloat() / totalArea) * Source.PARTS_INTENSITY
                             ) + " %"
                         )
-                        table.addCell(contourData.volume)
-                        table.addCell(
-                            labelDataArrayList.get(i).label
-                        )
+                        if (Source.SHOW_VOLUME_DATA)
+                            table.addCell(contourData.volume)
+                        if (Source.SHOW_LABEL_DATA)
+                            table.addCell(
+                                labelDataArrayList.get(i).label
+                            )
                     }
                 } else {
                     for (i in Source.contourDataArrayList.indices) {
@@ -487,10 +494,12 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
                         table.addCell(
                             "null"
                         )
-                        table.addCell(contourData.volume)
-                        table.addCell(
-                            labelDataArrayList.get(i).label
-                        )
+                        if (Source.SHOW_VOLUME_DATA)
+                            table.addCell(contourData.volume)
+                        if (Source.SHOW_LABEL_DATA)
+                            table.addCell(
+                                labelDataArrayList.get(i).label
+                            )
                     }
                 }
 
@@ -632,7 +641,11 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
                     )
                 )
 
-                val columnWidth = floatArrayOf(200f, 210f, 190f, 170f, 170f, 240f, 340f)
+                var columnWidth = floatArrayOf(200f, 210f, 190f, 170f, 170f)
+                if (Source.SHOW_VOLUME_DATA)
+                    columnWidth = floatArrayOf(200f, 210f, 190f, 170f, 170f, 240f, 340f)
+                if (Source.SHOW_LABEL_DATA)
+                    columnWidth = floatArrayOf(200f, 210f, 190f, 170f, 170f, 240f, 340f)
 
                 var totalArea = 0f
 
@@ -647,8 +660,10 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
                 table.addCell("Cv")
                 table.addCell("Area")
                 table.addCell("% Area")
-                table.addCell("Volume")
-                table.addCell("Label")
+                if (Source.SHOW_VOLUME_DATA)
+                    table.addCell("Volume")
+                if (Source.SHOW_LABEL_DATA)
+                    table.addCell("Label")
 
                 if (contoursAreaArrayList.size == Source.contourDataArrayList.size) {
                     for (i in contoursAreaArrayList.indices) {
@@ -667,10 +682,12 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
                                 (contoursAreaArrayList.get(i).area.toFloat() / totalArea) * 100
                             ) + " %"
                         )
-                        table.addCell(contourData.volume)
-                        table.addCell(
-                            labelDataArrayList.get(i).label
-                        )
+                        if (Source.SHOW_VOLUME_DATA)
+                            table.addCell(contourData.volume)
+                        if (Source.SHOW_LABEL_DATA)
+                            table.addCell(
+                                labelDataArrayList.get(i).label
+                            )
                     }
                 } else {
                     for (i in Source.contourDataArrayList.indices) {
@@ -686,10 +703,12 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
                         table.addCell(
                             "null"
                         )
-                        table.addCell(contourData.volume)
-                        table.addCell(
-                            labelDataArrayList.get(i).label
-                        )
+                        if (Source.SHOW_VOLUME_DATA)
+                            table.addCell(contourData.volume)
+                        if (Source.SHOW_LABEL_DATA)
+                            table.addCell(
+                                labelDataArrayList.get(i).label
+                            )
                     }
                 }
 
@@ -819,21 +838,43 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
 
 
     private fun plotTableROI() {
-        LegacyTableView.insertLegacyTitle("ID", "Rf", "Cv", "Area", "Volume")
+        var totalArea = 0f
+
+        // Determine which columns to include
+        val showVolume = Source.SHOW_VOLUME_DATA
+        val showLabel = Source.SHOW_LABEL_DATA
+
+        // Define table headers dynamically based on conditions
+        val headers = mutableListOf("ID", "Rf", "Cv", "Area")
+        if (showVolume) headers.add("Volume")
+        if (showLabel) headers.add("Label")
+
+        LegacyTableView.insertLegacyTitle(*headers.toTypedArray())
+
+        // Calculate total area for percentage area calculations
         for (i in Source.contourDataArrayListROI.indices) {
-            LegacyTableView.insertLegacyContent(
+            totalArea += Source.contourDataArrayListROI[i].area.toFloat()
+        }
+
+        for (i in Source.contourDataArrayListROI.indices) {
+            val rowData = mutableListOf(
                 Source.contourDataArrayListROI[i].id,
                 Source.contourDataArrayListROI[i].rf,
                 (1 / Source.contourDataArrayListROI[i].rf.toFloat()).toString(),
-                Source.formatToTwoDecimalPlaces(Source.contourDataArrayListROI[i].area),
-                Source.contourDataArrayListROI[i].volume
+                Source.formatToTwoDecimalPlaces(Source.contourDataArrayListROI[i].area)
             )
+
+            if (showVolume) rowData.add(Source.contourDataArrayListROI[i].volume)
+            if (showLabel) rowData.add(labelDataArrayList[i].label)
+
+            LegacyTableView.insertLegacyContent(*rowData.toTypedArray())
         }
+
+        // Apply table formatting and styles
         legacyTableView.setTheme(LegacyTableView.CUSTOM)
         legacyTableView.setContent(LegacyTableView.readLegacyContent())
         legacyTableView.setTitle(LegacyTableView.readLegacyTitle())
-//        legacyTableView.setBottomShadowVisible(true);
-        //        legacyTableView.setBottomShadowVisible(true);
+
         legacyTableView.setHighlight(LegacyTableView.ODD)
         legacyTableView.setBottomShadowVisible(false)
         legacyTableView.setFooterTextAlignment(LegacyTableView.CENTER)
@@ -856,75 +897,67 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
     }
 
     private fun plotTable() {
-        LegacyTableView.insertLegacyTitle("ID", "Rf", "Cv", "Area", "% Area", "Volume", "Label")
-
         var totalArea = 0f
 
+        // Determine which columns to include
+        val showVolume = Source.SHOW_VOLUME_DATA
+        val showLabel = Source.SHOW_LABEL_DATA
+
+        // Define table headers dynamically based on conditions
+        val headers = mutableListOf("ID", "Rf", "Cv", "Area", "% Area")
+        if (showVolume) headers.add("Volume")
+        if (showLabel) headers.add("Label")
+
+        LegacyTableView.insertLegacyTitle(*headers.toTypedArray())
+
+        // Ensure we have correct sizes for the contour data and area lists
         if (Source.contourDataArrayList.size == contoursAreaArrayList.size) {
             for (i in Source.contourDataArrayList.indices) {
-                totalArea += contoursAreaArrayList.get(i).area.toFloat()
+                totalArea += contoursAreaArrayList[i].area.toFloat()
             }
 
-
             for (i in Source.contourDataArrayList.indices) {
-                LegacyTableView.insertLegacyContent(
+                val rowData = mutableListOf(
                     Source.contourDataArrayList[i].id,
                     Source.contourDataArrayList[i].rf,
                     (1 / Source.contourDataArrayList[i].rf.toFloat()).toString(),
-                    Source.formatToTwoDecimalPlaces(contoursAreaArrayList[i].area.toString() + ""),
+                    Source.formatToTwoDecimalPlaces(contoursAreaArrayList[i].area.toString()),
                     String.format(
-                        "%.2f", contoursAreaArrayList.get(i).area.toFloat() / totalArea * 100
-                    ) + " %",
-
-                    Source.contourDataArrayList[i].volume,
-                    labelDataArrayList[i].label
+                        "%.2f",
+                        contoursAreaArrayList[i].area.toFloat() / totalArea * 100
+                    ) + " %"
                 )
+
+                if (showVolume) rowData.add(Source.contourDataArrayList[i].volume)
+                if (showLabel) rowData.add(labelDataArrayList[i].label)
+
+                LegacyTableView.insertLegacyContent(*rowData.toTypedArray())
             }
         } else {
             for (i in Source.contourDataArrayList.indices) {
-                totalArea += Source.contourDataArrayList.get(i).getArea().toFloat()
+                totalArea += Source.contourDataArrayList[i].getArea().toFloat()
             }
 
-
             for (i in Source.contourDataArrayList.indices) {
-                LegacyTableView.insertLegacyContent(
+                val rowData = mutableListOf(
                     Source.contourDataArrayList[i].id,
                     Source.contourDataArrayList[i].rf,
                     (1 / Source.contourDataArrayList[i].rf.toFloat()).toString(),
                     "null",
-                    "null",
-
-                    Source.contourDataArrayList[i].volume,
-                    labelDataArrayList.get(i).label
+                    "null"
                 )
+
+                if (showLabel) rowData.add(labelDataArrayList[i].label)
+
+                LegacyTableView.insertLegacyContent(*rowData.toTypedArray())
             }
         }
 
-//        for (i in Source.contourDataArrayList.indices) {
-//            totalArea += Source.contourDataArrayList.get(i).getArea().toFloat()
-//        }
-//
-//
-//        for (i in Source.contourDataArrayList.indices) {
-//            LegacyTableView.insertLegacyContent(
-//                Source.contourDataArrayList[i].id,
-//                Source.contourDataArrayList[i].rf,
-//                (1 / Source.contourDataArrayList[i].rf.toFloat()).toString(),
-//                Source.contourDataArrayList[i].area,
-//                String.format(
-//                    "%.2f",
-//                    Source.contourDataArrayList.get(i).getArea()
-//                        .toFloat() / totalArea * 100
-//                ) + " %",
-//
-//                Source.contourDataArrayList[i].volume
-//            )
-//        }
+        // Table formatting and styling
         legacyTableView.setTheme(LegacyTableView.CUSTOM)
         legacyTableView.setContent(LegacyTableView.readLegacyContent())
         legacyTableView.setTitle(LegacyTableView.readLegacyTitle())
-//        legacyTableView.setBottomShadowVisible(true);
-        //        legacyTableView.setBottomShadowVisible(true);
+
         legacyTableView.setHighlight(LegacyTableView.ODD)
         legacyTableView.setBottomShadowVisible(false)
         legacyTableView.setFooterTextAlignment(LegacyTableView.CENTER)
@@ -1066,6 +1099,7 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
 
 //        contourDataArrayListNew = Source.contourDataArrayList;
         contourIntGraphAdapter = ContourIntGraphAdapter(
+            true,
             this, contourDataArrayListNew, 0, this, false, false, false
         )
         binding.contourListRecView.adapter = contourIntGraphAdapter

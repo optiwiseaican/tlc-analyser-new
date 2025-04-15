@@ -83,7 +83,7 @@ class HrVsAreaPerGraph : AppCompatActivity() {
         ) {
             Toast.makeText(
                 this@HrVsAreaPerGraph,
-                "Please select the images before analysis",
+                "Please select the images before analysis: HRVsAreaAct",
                 Toast.LENGTH_SHORT
             ).show()
             finish()
@@ -317,8 +317,8 @@ class HrVsAreaPerGraph : AppCompatActivity() {
         }
 
 
-        val latestHourRM = hrVsAreaPerArrayListRM[hrVsAreaPerArrayListRM.size - 1].hr
-        val latestHourFinal = hrVsAreaPerArrayListFinal[hrVsAreaPerArrayListFinal.size - 1].hr
+//        val latestHourRM = hrVsAreaPerArrayListRM[hrVsAreaPerArrayListRM.size - 1].hr
+//        val latestHourFinal = hrVsAreaPerArrayListFinal[hrVsAreaPerArrayListFinal.size - 1].hr
 
 //        val degree = 2 // Adjust the degree as per your requirement
 
@@ -385,7 +385,7 @@ class HrVsAreaPerGraph : AppCompatActivity() {
 
 //        entriesFinal.add(Entry(1f, 10.88f))
 //        entriesFinal.add(Entry(2f, 20.56f))
-        val dataSetFinal = LineDataSet(entriesFinal, "Final")
+        val dataSetFinal = LineDataSet(entriesFinal, "Final Product")
         dataSetFinal.color = Color.RED
 
         val entriesRM = ArrayList<Entry>()
@@ -419,7 +419,7 @@ class HrVsAreaPerGraph : AppCompatActivity() {
 
 //        entriesRM.add(Entry(1f, 30f))
 //        entriesRM.add(Entry(2f, 15f))
-        val dataSetRM = LineDataSet(entriesRM, "RM")
+        val dataSetRM = LineDataSet(entriesRM, "Raw Material")
         dataSetRM.color = Color.BLUE
 
         val dataSets = ArrayList<ILineDataSet>()
@@ -444,7 +444,7 @@ class HrVsAreaPerGraph : AppCompatActivity() {
         newHrvsAreaFinal: ArrayList<HrVsAreaPer>
     ) {
 
-        LegacyTableView.insertLegacyTitle("HR", "RM Area", "Final Area")
+        LegacyTableView.insertLegacyTitle("HR", "Raw Material Area", "Final Product Area")
 
         var totalArea = 0.0
 
@@ -572,8 +572,8 @@ class HrVsAreaPerGraph : AppCompatActivity() {
 
         val dataSets = ArrayList<ILineDataSet>()
 
-        dataSets.add(createLineDataSet(hrVsAreaPerArrayListFinal, "Final", Color.RED))
-        dataSets.add(createLineDataSet(hrVsAreaPerArrayListRM, "RM", Color.GREEN))
+        dataSets.add(createLineDataSet(hrVsAreaPerArrayListFinal, "Final Product", Color.RED))
+        dataSets.add(createLineDataSet(hrVsAreaPerArrayListRM, "Raw Material", Color.GREEN))
 
         val lineData = LineData(dataSets)
         intensityChartPlot.data = lineData
@@ -621,7 +621,7 @@ class HrVsAreaPerGraph : AppCompatActivity() {
             )
         }
 
-        lineDataSetArrayList.add(LineDataSet(informationRM, "RM"))
+        lineDataSetArrayList.add(LineDataSet(informationRM, "Raw Material"))
 
         for (my in hrVsAreaPerArrayListFinal) {
             informationFinal.add(
@@ -632,7 +632,7 @@ class HrVsAreaPerGraph : AppCompatActivity() {
             )
         }
 
-        lineDataSetArrayList.add(LineDataSet(informationFinal, "Final"))
+        lineDataSetArrayList.add(LineDataSet(informationFinal, "Final Product"))
 
         for ((i, line) in lineDataSetArrayList.withIndex()) {
             if (i == 0) {

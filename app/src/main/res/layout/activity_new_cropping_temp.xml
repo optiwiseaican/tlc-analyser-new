@@ -128,7 +128,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
             android:background="@drawable/button_bc"
-            android:text="Final Crop" />
+            android:text="Save Splits" />
 
     </LinearLayout>
 

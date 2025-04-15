@@ -5,6 +5,9 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -127,6 +130,7 @@ class NewCroppingTemp : AppCompatActivity() {
 
             val tempFileName = "TEMP$projectImage"
             val originalFileName = "ORG_$projectImage"
+            val splitMarkingName = "MARK_$projectImage"
 
             // here main image is saving
             saveImageToDownloads(loadedBitmap!!, projectName!!, this)
@@ -154,7 +158,7 @@ class NewCroppingTemp : AppCompatActivity() {
                     AuthDialog.activeUserName, AuthDialog.activeUserRole,
                     "Created Split Project", intent.getStringExtra("projectName")!!, id!!, "Split"
                 )
-                sliceImage()
+                sliceImage(splitMarkingName)
             }
         } else {
             val idm = "SPLIT_ID" + System.currentTimeMillis()
@@ -164,6 +168,7 @@ class NewCroppingTemp : AppCompatActivity() {
 
             val tempFileName = "TEMP${projectImage}_$sizeOfMainImageList"
             val originalFileName = "ORG_${projectImage}_$sizeOfMainImageList"
+            val splitMarkingName = "MARK_${projectImage}_$sizeOfMainImageList"
 
             saveImageToDownloads(loadedBitmap!!, projectName!!, this)
 
@@ -188,13 +193,13 @@ class NewCroppingTemp : AppCompatActivity() {
             databaseHelper!!.createAllDataTable(plotTableID)
             databaseHelper!!.createSpotLabelTable("LABEL_$plotTableID")
             if (success) {
-                sliceImage(sizeOfSplitImageList)
+                sliceImage(splitMarkingName)
                 SplitImage.addingMainImage = false
             }
         }
     }
 
-    private fun sliceImage(splitImageCounts: Int = 0) {
+    private fun sliceImage(splitMarkingName: String, splitImageCounts: Int = 0) {
         val slicedImagesBitmap = ArrayList<Bitmap>()
 
         if (loadedBitmap == null) {
@@ -212,6 +217,23 @@ class NewCroppingTemp : AppCompatActivity() {
 
         verticalLinesXCoordinates.sort()
 
+        // Create a mutable copy of the bitmap to draw on
+        val markedBitmap = loadedBitmap!!.copy(Bitmap.Config.ARGB_8888, true)
+        val canvas = Canvas(markedBitmap)
+        val paint = Paint().apply {
+            color = Color.RED
+            strokeWidth = 5f
+            style = Paint.Style.STROKE
+        }
+
+        // Draw vertical lines on the image
+        for (x in verticalLinesXCoordinates) {
+            canvas.drawLine(x.toFloat(), 0f, x.toFloat(), imageHeight.toFloat(), paint)
+        }
+
+        // Save the marked image before slicing
+        saveImageViewToFile(markedBitmap, splitMarkingName, this)
+
         for (i in 1 until verticalLinesXCoordinates.size) {
             val startX = verticalLinesXCoordinates[i - 1]
             val endX = verticalLinesXCoordinates[i]
@@ -223,7 +245,7 @@ class NewCroppingTemp : AppCompatActivity() {
                 Bitmap.createBitmap(loadedBitmap!!, startX, 0, sliceWidth, imageHeight)
             slicedImagesBitmap.add(slicedBitmap)
 
-            val fileName = "MI${sizeOfMainImageList + 1} -> Image ${splitImageCounts + i}"
+            val fileName = "${sizeOfMainImageList + 1}_${splitImageCounts + i}"
             val filePath = "SPLIT_NAME" + System.currentTimeMillis() + ".jpg"
             saveImageViewToFile(slicedBitmap, filePath, this)
 

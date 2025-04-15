@@ -58,7 +58,7 @@ class NewEditRectangleContour : AppCompatActivity() {
 
         if (imageBitmap == null) {
             Log.e("ItsNullvalue", "Null Uri")
-            Toast.makeText(this, "Bitmap Null, Spot the contour once", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, "Bitmap Null, Spot the contour once", Toast.LENGTH_SHORT).show()
             finish()
         }
 

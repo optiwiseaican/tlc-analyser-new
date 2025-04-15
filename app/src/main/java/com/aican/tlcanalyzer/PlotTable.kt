@@ -47,29 +47,51 @@ class PlotTable : AppCompatActivity() {
 
 
     private fun plotTable() {
+        if (Source.SHOW_VOLUME_DATA) {
+            LegacyTableView.insertLegacyTitle("ID", "Rf", "Cv", "Area", "% area", "Volume")
+            var totalArea = 0.0
 
-        LegacyTableView.insertLegacyTitle("ID", "Rf", "Cv", "Area", "% area", "Volume")
+            for (i in contourDataArrayList.indices) {
 
-        var totalArea = 0.0
+                totalArea += contourDataArrayList[i].area.toFloat()
 
-        for (i in contourDataArrayList.indices) {
+            }
 
-            totalArea += contourDataArrayList[i].area.toFloat()
+            for (i in contourDataArrayList.indices) {
+                LegacyTableView.insertLegacyContent(
+                    contourDataArrayList.get(i).getId(),
+                    contourDataArrayList.get(i).getRf(),
+                    (1 / Source.contourDataArrayList[i].rf.toFloat()).toString(),
+                    Source.formatToTwoDecimalPlaces(contourDataArrayList.get(i).getArea()),
+                    String.format(
+                        "%.2f", ((contourDataArrayList[i].area.toFloat() / totalArea) * 100)
+                    ) + " %",
+                    contourDataArrayList.get(i).getVolume()
+                )
+            }
+        }else{
+            LegacyTableView.insertLegacyTitle("ID", "Rf", "Cv", "Area", "% area",)
+            var totalArea = 0.0
 
+            for (i in contourDataArrayList.indices) {
+
+                totalArea += contourDataArrayList[i].area.toFloat()
+
+            }
+
+            for (i in contourDataArrayList.indices) {
+                LegacyTableView.insertLegacyContent(
+                    contourDataArrayList.get(i).getId(),
+                    contourDataArrayList.get(i).getRf(),
+                    (1 / Source.contourDataArrayList[i].rf.toFloat()).toString(),
+                    Source.formatToTwoDecimalPlaces(contourDataArrayList.get(i).getArea()),
+                    String.format(
+                        "%.2f", ((contourDataArrayList[i].area.toFloat() / totalArea) * 100)
+                    ) + " %",
+                )
+            }
         }
 
-        for (i in contourDataArrayList.indices) {
-            LegacyTableView.insertLegacyContent(
-                contourDataArrayList.get(i).getId(),
-                contourDataArrayList.get(i).getRf(),
-                (1 / Source.contourDataArrayList[i].rf.toFloat()).toString(),
-                Source.formatToTwoDecimalPlaces(contourDataArrayList.get(i).getArea()),
-                String.format(
-                    "%.2f", ((contourDataArrayList[i].area.toFloat() / totalArea) * 100)
-                ) + " %",
-                contourDataArrayList.get(i).getVolume()
-            )
-        }
         legacyTableView.setTheme(LegacyTableView.CUSTOM)
         legacyTableView.setContent(LegacyTableView.readLegacyContent())
         legacyTableView.setTitle(LegacyTableView.readLegacyTitle())

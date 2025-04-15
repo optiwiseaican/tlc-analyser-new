@@ -304,11 +304,11 @@ public class ImageAnalysisClass {
 
     public String generateUniqueIndexName(ArrayList<ManualContour> manualContourArrayList) {
         int index = 1;
-        String indexName = "m" + index;
+        String indexName = Source.manual_contour_prefix + index;
 
         while (this.isIndexNameInUse(indexName, manualContourArrayList)) {
             index++;
-            indexName = "m" + index;
+            indexName = Source.manual_contour_prefix + index;
         }
 
         return indexName;
@@ -509,6 +509,7 @@ public class ImageAnalysisClass {
                 intensityValues.add(0.0); // Or set it to a suitable default value
             }
         }
+        Log.e("AVGIntensity", intensityValues + "");
 
         return intensityValues;
     }

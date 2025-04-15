@@ -24,13 +24,13 @@ public class SplitContourData {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-//        sb.append("SplitContourData{name='").append(name).append("', isSelected=").append(isSelected)
-//                .append(", contourImageName='").append(contourImageName).append("', mainImageName='").append(mainImageName).append("'}");
-//
-//        sb.append("\nVolume Data: ").append(volumeDATAList);
-//        sb.append("\nRF vs Area List: ").append(rFvsAreaArrayList);
-//        sb.append("\nContour Set List: ").append(contourSetArrayList);
-//        sb.append("\nContour Data List: ").append(contourData);
+        sb.append("SplitContourData{name='").append(name).append("', isSelected=").append(isSelected)
+                .append(", contourImageName='").append(contourImageName).append("', mainImageName='").append(mainImageName).append("'}");
+
+        sb.append("\nVolume Data: ").append(volumeDATAList);
+        sb.append("\nRF vs Area List: ").append(rFvsAreaArrayList);
+        sb.append("\nContour Set List: ").append(contourSetArrayList);
+        sb.append("\nContour Data List: ").append(contourData);
         sb.append("\nintensityPlotTableID: ").append(intensityPlotTableID);
 
         return sb.toString();

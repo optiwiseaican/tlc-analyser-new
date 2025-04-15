@@ -57,7 +57,7 @@
     <string name="home"><u>Home</u></string>
     <string name="tip_just_tap_on_image_from_where_you_want_to_crop">Tip : Just tap on image to add split lines.</string>
     <string name="edit_user_details">Edit user details</string>
-    <string name="hr_notes">Note : Please select all the rm\'s and final\'s and mark hours, before ploting this graph</string>
+    <string name="hr_notes">Note : Please select all the raw material\'s and final\'s and mark hours, before ploting this graph</string>
     <string name="more"><u>More</u></string>
     <string name="account_info"><u>Account Info</u></string>
     <string name="title_activity_split_settings">SplitSettings</string>

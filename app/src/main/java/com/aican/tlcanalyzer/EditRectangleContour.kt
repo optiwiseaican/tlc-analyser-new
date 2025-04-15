@@ -192,7 +192,7 @@ class EditRectangleContour : AppCompatActivity() {
 
     private fun saveRectangle() {
         savedRect?.let { rect ->
-            if (spotId.contains("m")) {
+            if (spotId.contains(Source.manual_contour_prefix)) {
                 val myDir: File = File(dir, contourJsonFileName)
                 if (myDir.exists()) {
                     val gson = Gson()

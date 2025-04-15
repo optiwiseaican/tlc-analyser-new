@@ -1,11 +1,17 @@
 package com.aican.tlcanalyzer
 
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
+import android.view.Gravity
 import android.view.View
+import android.widget.TableLayout
+import android.widget.TableRow
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.aican.tlcanalyzer.adapterClasses.AnalMultiIntAdapter
@@ -14,10 +20,12 @@ import com.aican.tlcanalyzer.dataClasses.ContourData
 import com.aican.tlcanalyzer.dataClasses.RFvsArea
 import com.aican.tlcanalyzer.dataClasses.SplitContourData
 import com.aican.tlcanalyzer.databinding.ActivityAnalyseMultipleIntensityBinding
+import com.aican.tlcanalyzer.interfaces.OnCheckBoxChangeListener
 import com.aican.tlcanalyzer.interfaces.OnClicksListeners
 import com.aican.tlcanalyzer.utils.RandomColors
 import com.aican.tlcanalyzer.utils.Source
 import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -25,7 +33,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import java.util.Random
 
 
-class AnalyseMultipleIntensity : AppCompatActivity(), OnClicksListeners {
+class AnalyseMultipleIntensity : AppCompatActivity(), OnClicksListeners, OnCheckBoxChangeListener {
 
     lateinit var binding: ActivityAnalyseMultipleIntensityBinding
     lateinit var intensityChartPlot: LineChart
@@ -37,6 +45,8 @@ class AnalyseMultipleIntensity : AppCompatActivity(), OnClicksListeners {
     lateinit var splitContourDatas: ArrayList<SplitContourData>
     private val splitContourDataList2 = ArrayList<SplitContourData>()
     lateinit var splitContourDataList: ArrayList<SplitContourData>
+    lateinit var tableLayout: TableLayout
+    private var tableRowHeader: TableRow? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,11 +67,41 @@ class AnalyseMultipleIntensity : AppCompatActivity(), OnClicksListeners {
 
         binding.sync.visibility = View.VISIBLE
         binding.syncProgress.visibility = View.GONE
-
+        tableLayout = binding.table
         splitContourData = ArrayList(splitContourDataList)
         splitContourDatas = ArrayList()
 
         Log.e("ThisIsNotError", splitContourDataList.size.toString())
+//
+//        val displayMetrics = resources.displayMetrics
+//        val screenWidth = displayMetrics.widthPixels
+//        val chartWidth = screenWidth - (20 * displayMetrics.density).toInt()
+//        val chartHeight = (chartWidth * 3) / 2  // Height for 2:3 aspect
+//
+//        val params = binding.chart.layoutParams
+//        params.width = chartWidth
+//        params.height = chartHeight
+//        binding.chart.layoutParams = params
+
+        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            binding.chart.post {
+                val displayMetrics = resources.displayMetrics
+
+                val visibleHeight = binding.root.height
+                val reservedSpace = (64 * displayMetrics.density).toInt()
+                val usableHeight = visibleHeight - reservedSpace
+
+                val chartHeight = usableHeight
+                val chartWidth = (chartHeight * 3) / 2
+
+                val params = binding.chart.layoutParams
+                params.height = chartHeight
+                params.width = chartWidth
+                binding.chart.layoutParams = params
+            }
+        }
+
+
 
 
 
@@ -111,10 +151,278 @@ class AnalyseMultipleIntensity : AppCompatActivity(), OnClicksListeners {
         binding.generatePDFReport.setOnClickListener {
 
         }
+        plotTable(splitContourDataList2)
+        binding.showTable.text = "Hide Table"
+        var show_table = true
+        binding.showTable.setOnClickListener {
+            if (show_table) {
+                binding.showTable.text = "Show Table"
+                show_table = false
+                binding.table.visibility = View.GONE
+            } else {
+                binding.showTable.text = "Hide Table"
+                show_table = true
+                binding.table.visibility = View.VISIBLE
+
+            }
+        }
 
     }
 
+    fun plotTable(splitContourData: ArrayList<SplitContourData>) {
+        createTableHeader()
+        Log.d("OrderCheck", "Before plotTable: ${splitContourData.map { it.name }}")
+
+        for (spliData in splitContourData) { // Ensure correct order
+            var totalArea = 0f
+
+            if (spliData.isSelected) {
+                for (contour in spliData.contourData) {
+                    totalArea += contour.area.toFloat()
+                }
+
+                for (i in spliData.contourData.indices) {
+                    createTableRow(
+                        spliData.name,
+                        spliData.contourData[i].getId(),
+                        spliData.contourData[i].getRf(),
+                        String.format("%.2f", (1.0 / spliData.contourData[i].getRf().toFloat())),
+                        Source.formatToTwoDecimalPlaces(spliData.contourData[i].area.toString()),
+                        String.format(
+                            "%.2f",
+                            (spliData.contourData[i].area.toFloat() / totalArea) * 100
+                        ) + " %",
+                        spliData.contourData[i].getVolume(),
+                        spliData.labelDataArrayList[i].getLabel(),
+                        i
+                    )
+                }
+            }
+        }
+    }
+
+    //"ID", "Rf", "Cv", "Area", "% area", "Volume"
+    private fun createTableRow(
+        imageName: String,
+        ID: String, Rf: String, Cv: String, Area: String, pArea: String,
+        volume: String, label: String, index: Int
+    ) {
+        val tableRow = TableRow(this)
+        val lp = TableRow.LayoutParams(
+            TableRow.LayoutParams.MATCH_PARENT,
+            TableRow.LayoutParams.WRAP_CONTENT
+        )
+        tableRow.layoutParams = lp
+
+        val textViewImageName = TextView(this)
+        val textViewID = TextView(this)
+        val textViewRf = TextView(this)
+        val textViewCv = TextView(this)
+        val textViewArea = TextView(this)
+        val textViewPArea = TextView(this)
+        val textViewVolume = TextView(this)
+        val textViewLabel = TextView(this)
+
+        textViewImageName.layoutParams = TableRow.LayoutParams(
+            TableRow.LayoutParams.MATCH_PARENT,
+            TableRow.LayoutParams.MATCH_PARENT,
+            0f
+        )
+        textViewID.layoutParams = TableRow.LayoutParams(
+            TableRow.LayoutParams.MATCH_PARENT,
+            TableRow.LayoutParams.MATCH_PARENT,
+            0f
+        )
+        textViewRf.layoutParams = TableRow.LayoutParams(
+            TableRow.LayoutParams.MATCH_PARENT,
+            TableRow.LayoutParams.MATCH_PARENT,
+            0.3f
+        )
+        textViewCv.layoutParams = TableRow.LayoutParams(
+            TableRow.LayoutParams.MATCH_PARENT,
+            TableRow.LayoutParams.MATCH_PARENT,
+            1.5f
+        )
+        textViewArea.layoutParams = TableRow.LayoutParams(
+            TableRow.LayoutParams.MATCH_PARENT,
+            TableRow.LayoutParams.MATCH_PARENT,
+            0f
+        )
+        textViewPArea.layoutParams = TableRow.LayoutParams(
+            TableRow.LayoutParams.MATCH_PARENT,
+            TableRow.LayoutParams.MATCH_PARENT,
+            0.3f
+        )
+        if (Source.SHOW_VOLUME_DATA) textViewVolume.layoutParams = TableRow.LayoutParams(
+            TableRow.LayoutParams.MATCH_PARENT,
+            TableRow.LayoutParams.MATCH_PARENT,
+            0.3f
+        )
+        if (Source.SHOW_LABEL_DATA)
+            textViewLabel.layoutParams = TableRow.LayoutParams(
+                TableRow.LayoutParams.MATCH_PARENT,
+                TableRow.LayoutParams.MATCH_PARENT,
+                0.3f
+            )
+
+        textViewImageName.gravity = Gravity.CENTER
+        textViewID.gravity = Gravity.CENTER
+        textViewRf.gravity = Gravity.CENTER
+        textViewCv.gravity = Gravity.CENTER
+        textViewArea.gravity = Gravity.CENTER
+        textViewPArea.gravity = Gravity.CENTER
+        textViewVolume.gravity = Gravity.CENTER
+        textViewLabel.gravity = Gravity.CENTER
+
+        textViewImageName.maxLines = 3
+        textViewCv.maxLines = 3
+        textViewRf.maxLines = 2
+        textViewPArea.maxLines = 2
+        textViewArea.maxLines = 2
+        textViewVolume.maxLines = 2
+        textViewLabel.maxLines = 2
+
+        textViewImageName.setPadding(5, 15, 5, 15)
+        textViewID.setPadding(5, 15, 5, 15)
+        textViewRf.setPadding(5, 15, 5, 15)
+        textViewCv.setPadding(5, 15, 5, 15)
+        textViewArea.setPadding(5, 15, 5, 15)
+        textViewPArea.setPadding(5, 15, 5, 15)
+        textViewVolume.setPadding(5, 15, 5, 15)
+        textViewLabel.setPadding(5, 15, 5, 15)
+
+        textViewImageName.text = imageName
+        textViewID.text = ID
+        textViewRf.text = Rf
+        textViewCv.text = Cv
+        textViewArea.text = Area
+        textViewPArea.text = pArea
+        textViewVolume.text = volume
+        textViewLabel.text = label
+
+        textViewImageName.setTextColor(getColor(R.color.black))
+        textViewID.setTextColor(getColor(R.color.black))
+        textViewRf.setTextColor(getColor(R.color.black))
+        textViewCv.setTextColor(getColor(R.color.black))
+        textViewArea.setTextColor(getColor(R.color.black))
+        textViewPArea.setTextColor(getColor(R.color.black))
+        textViewVolume.setTextColor(getColor(R.color.black))
+        textViewLabel.setTextColor(getColor(R.color.black))
+
+        textViewImageName.setBackgroundResource(R.drawable.cell_shape_white)
+        textViewID.setBackgroundResource(R.drawable.cell_shape_white)
+        textViewRf.setBackgroundResource(R.drawable.cell_shape_grey)
+        textViewCv.setBackgroundResource(R.drawable.cell_shape_white)
+        textViewArea.setBackgroundResource(R.drawable.cell_shape_grey)
+        textViewPArea.setBackgroundResource(R.drawable.cell_shape_white)
+        textViewVolume.setBackgroundResource(R.drawable.cell_shape_grey)
+        textViewLabel.setBackgroundResource(R.drawable.cell_shape_grey)
+
+
+        if (index == -1) {
+            tableRowHeader = tableRow
+            textViewImageName.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.font_size_medium).toInt()
+                    .toFloat()
+            )
+            textViewID.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.font_size_medium).toInt()
+                    .toFloat()
+            )
+            textViewRf.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.font_size_medium).toInt()
+                    .toFloat()
+            )
+            textViewCv.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.font_size_medium).toInt()
+                    .toFloat()
+            )
+            textViewArea.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.font_size_medium).toInt()
+                    .toFloat()
+            )
+            textViewPArea.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.font_size_medium).toInt()
+                    .toFloat()
+            )
+            textViewVolume.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.font_size_medium).toInt()
+                    .toFloat()
+            )
+            textViewLabel.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.font_size_medium).toInt()
+                    .toFloat()
+            )
+
+            //            textViewRf.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_sort_by_alpha_black, 0);
+//            textViewCv.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_sort_by_alpha_black, 0);
+//            textViewArea.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_sort_by_alpha_black, 0);
+//            textViewPArea.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_sort_by_alpha_black, 0);
+//            textViewVolume.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, R.drawable.ic_sort_by_alpha_black, 0);
+            textViewImageName.setBackgroundResource(R.drawable.cell_shape_blue)
+            textViewID.setBackgroundResource(R.drawable.cell_shape_blue)
+            textViewRf.setBackgroundResource(R.drawable.cell_shape_blue)
+            textViewCv.setBackgroundResource(R.drawable.cell_shape_blue)
+            textViewArea.setBackgroundResource(R.drawable.cell_shape_blue)
+            textViewPArea.setBackgroundResource(R.drawable.cell_shape_blue)
+            textViewVolume.setBackgroundResource(R.drawable.cell_shape_blue)
+            textViewLabel.setBackgroundResource(R.drawable.cell_shape_blue)
+        } else {
+            textViewImageName.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.font_size_small).toInt()
+                    .toFloat()
+            )
+            textViewID.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.font_size_small).toInt()
+                    .toFloat()
+            )
+            textViewRf.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.font_size_small).toInt()
+                    .toFloat()
+            )
+            textViewCv.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.font_size_small).toInt()
+                    .toFloat()
+            )
+            textViewArea.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.font_size_small).toInt()
+                    .toFloat()
+            )
+            textViewPArea.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.font_size_small).toInt()
+                    .toFloat()
+            )
+            textViewVolume.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.font_size_small).toInt()
+                    .toFloat()
+            )
+            textViewLabel.setTextSize(
+                TypedValue.COMPLEX_UNIT_PX, resources.getDimension(R.dimen.font_size_small).toInt()
+                    .toFloat()
+            )
+        }
+
+        tableRow.addView(textViewImageName)
+        tableRow.addView(textViewID)
+        tableRow.addView(textViewRf)
+        tableRow.addView(textViewCv)
+        tableRow.addView(textViewArea)
+        tableRow.addView(textViewPArea)
+        if (Source.SHOW_VOLUME_DATA) tableRow.addView(textViewVolume)
+        if (Source.SHOW_LABEL_DATA) tableRow.addView(textViewLabel)
+
+
+        tableLayout.addView(tableRow)
+//        tableLayout.addView(tableRow, index + 1)
+    }
+
+    private fun createTableHeader() {
+        tableLayout.removeAllViews()
+        createTableRow("Img Name", "ID", "Rf", "Cv", "Area", "% area", "Volume", "Label", -1)
+    }
+
     private fun showAllCon() {
+        Log.d("OrderCheck", "Before showAllCon: ${splitContourData.map { it.name }}")
 
         val colorGenerator = RandomColors()
         val randomDarkColor = colorGenerator.getRandomDarkColor()
@@ -136,11 +444,11 @@ class AnalyseMultipleIntensity : AppCompatActivity(), OnClicksListeners {
                 updatedContourDataList.add(contourData)
             }
 
-            Toast.makeText(
-                this@AnalyseMultipleIntensity,
-                "S" + updatedContourDataList.size,
-                Toast.LENGTH_SHORT
-            ).show()
+//            Toast.makeText(
+//                this@AnalyseMultipleIntensity,
+//                "S" + updatedContourDataList.size,
+//                Toast.LENGTH_SHORT
+//            ).show()
 
             val updatedSplitContourData = SplitContourData(
                 split.id,
@@ -162,7 +470,10 @@ class AnalyseMultipleIntensity : AppCompatActivity(), OnClicksListeners {
 
                 analMultiArrayList.add(
                     AnalMultiIntModel(
+                        true,
                         split.name,
+                        split.mainImageName,
+                        split.contourImageName,
                         updatedContourDataList
                     )
                 )
@@ -173,7 +484,8 @@ class AnalyseMultipleIntensity : AppCompatActivity(), OnClicksListeners {
 
         splitContourDatas.addAll(splitContourDataList2)
 
-        adapter = AnalMultiIntAdapter(this@AnalyseMultipleIntensity, analMultiArrayList, this)
+        adapter =
+            AnalMultiIntAdapter(id, this@AnalyseMultipleIntensity, analMultiArrayList, this, this)
         binding.contourListRecView.adapter = adapter
         adapter.notifyDataSetChanged()
     }
@@ -334,6 +646,10 @@ class AnalyseMultipleIntensity : AppCompatActivity(), OnClicksListeners {
         intensityChartPlot.data = lineData
 //        intensityChartPlot.getLegend().setEnabled(false)
 
+        val xAxis = intensityChartPlot.xAxis
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+
+
         intensityChartPlot.invalidate()
 
         binding.syncProgress.visibility = View.GONE
@@ -352,7 +668,7 @@ class AnalyseMultipleIntensity : AppCompatActivity(), OnClicksListeners {
             }
 
             2 -> {
-                return Color.BLUE
+                return Color.BLUE///////////////////////////
             }
 
             3 -> {
@@ -409,6 +725,23 @@ class AnalyseMultipleIntensity : AppCompatActivity(), OnClicksListeners {
 
     override fun newOnClick(position: Int) {
 
+    }
+
+    override fun onCheckBoxChange(
+        position: Int,
+        data: AnalMultiIntModel
+    ) {
+        if (position >= 0 && position < splitContourDataList2.size) {
+            // Find the index of the matching item
+            val index =
+                splitContourDataList2.indexOfFirst { it.contourImageName == data.contourImageName }
+
+            if (index != -1) { // Ensure the item was found
+                splitContourDataList2[index].isSelected = data.isSelected
+                plotROIGraphs(splitContourDataList2)
+                plotTable(splitContourDataList2)
+            }
+        }
     }
 
 

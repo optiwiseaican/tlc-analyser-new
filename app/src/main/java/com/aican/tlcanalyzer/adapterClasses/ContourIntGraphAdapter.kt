@@ -19,6 +19,7 @@ import com.aican.tlcanalyzer.utils.Source
 
 
 class ContourIntGraphAdapter(
+    val isSelected: Boolean,
     val context: Context,
     val arrayList: ArrayList<ContourData>,
     val parentPosition: Int,
@@ -31,6 +32,7 @@ class ContourIntGraphAdapter(
     lateinit var editCallBack: EditCallBack
 
     constructor(
+        isSelected: Boolean,
         context: Context,
         arrayList: ArrayList<ContourData>,
         parentPosition: Int,
@@ -39,9 +41,17 @@ class ContourIntGraphAdapter(
         showDelete: Boolean,
         showEdit: Boolean,
         editCallBack: EditCallBack,
-    ) : this(context, arrayList, parentPosition, onClickListener, click, showDelete, showEdit) {
+    ) : this(
+        isSelected,
+        context,
+        arrayList,
+        parentPosition,
+        onClickListener,
+        click,
+        showDelete,
+        showEdit
+    ) {
         this.editCallBack = editCallBack
-
     }
 
 
@@ -147,50 +157,52 @@ class ContourIntGraphAdapter(
 
         holder.contText.setOnClickListener {
 
-            if (click) {
+            if (isSelected) {
+                if (click) {
 
-                if (data.isSelected) {
-                    data.isSelected = false
-                    val newColor = defaultColor
-                    val existingBackground = holder.contText.background as GradientDrawable
-                    existingBackground.setColor(newColor)
-                    holder.contText.invalidate()
+                    if (data.isSelected) {
+                        data.isSelected = false
+                        val newColor = defaultColor
+                        val existingBackground = holder.contText.background as GradientDrawable
+                        existingBackground.setColor(newColor)
+                        holder.contText.invalidate()
 
-                    holder.contText.setTextColor(context.getColor(R.color.aican_blue))
-
-
-                    onClickListener.onClick(
-                        position,
-                        parentPosition,
-                        data.id,
-                        data.rfTop,
-                        data.rfBottom,
-                        data.rf,
-                        data.isSelected
-                    )
+                        holder.contText.setTextColor(context.getColor(R.color.aican_blue))
 
 
-                } else {
-                    data.isSelected = true
+                        onClickListener.onClick(
+                            position,
+                            parentPosition,
+                            data.id,
+                            data.rfTop,
+                            data.rfBottom,
+                            data.rf,
+                            data.isSelected
+                        )
 
-                    val newColor = data.buttonColor
-                    val existingBackground = holder.contText.background as GradientDrawable
-                    existingBackground.setColor(newColor)
-                    holder.contText.invalidate()
 
-                    holder.contText.setTextColor(context.getColor(R.color.white))
+                    } else {
+                        data.isSelected = true
 
-                    onClickListener.onClick(
-                        position,
-                        parentPosition,
-                        data.id,
-                        data.rfTop,
-                        data.rfBottom,
-                        data.rf,
-                        data.isSelected
-                    )
+                        val newColor = data.buttonColor
+                        val existingBackground = holder.contText.background as GradientDrawable
+                        existingBackground.setColor(newColor)
+                        holder.contText.invalidate()
+
+                        holder.contText.setTextColor(context.getColor(R.color.white))
+
+                        onClickListener.onClick(
+                            position,
+                            parentPosition,
+                            data.id,
+                            data.rfTop,
+                            data.rfBottom,
+                            data.rf,
+                            data.isSelected
+                        )
+                    }
+
                 }
-
             }
         }
 

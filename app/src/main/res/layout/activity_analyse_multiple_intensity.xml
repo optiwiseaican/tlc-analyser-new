@@ -132,6 +132,29 @@
             </LinearLayout>
 
 
+            <Button
+                android:id="@+id/showTable"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/button_bc"
+                android:drawableTint="@color/white"
+                android:text="Show Table"
+                android:textAllCaps="false"
+                android:textSize="10dp" />
+
+
+            <TableLayout
+                android:id="@+id/table"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:stretchColumns="*" />
+
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/contourListRecView"
                 android:layout_width="match_parent"

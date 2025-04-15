@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.aican.tlcanalyzer.database.DatabaseHelper
 import com.aican.tlcanalyzer.database.UsersDatabase
@@ -43,7 +44,7 @@ class ReAutoCropActivity : AppCompatActivity() {
         imageName = intent.getStringExtra("imageName").toString()
 
 //        binding.projectName.text = imageName.toString()
-
+        binding.back.setOnClickListener(View.OnClickListener { finish() })
         val dir = File(
             ContextWrapper(this).externalMediaDirs[0],
             resources.getString(R.string.app_name) + id

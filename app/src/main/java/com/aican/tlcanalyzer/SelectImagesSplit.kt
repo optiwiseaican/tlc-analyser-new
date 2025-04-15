@@ -4,6 +4,7 @@ import android.content.ContextWrapper
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.aican.tlcanalyzer.adapterClasses.SplitAdapter
 import com.aican.tlcanalyzer.dataClasses.SplitData
@@ -38,7 +39,7 @@ class SelectImagesSplit : AppCompatActivity() {
         binding = ActivitySelectImagesSplitBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportActionBar?.hide()
-
+        binding.back.setOnClickListener(View.OnClickListener { finish() })
         databaseHelper = DatabaseHelper(this)
 //        img_uri = Uri.parse(intent.getStringExtra("img_path"))
         projectDescription = intent.getStringExtra("projectDescription").toString()

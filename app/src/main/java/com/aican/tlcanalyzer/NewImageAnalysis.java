@@ -234,6 +234,8 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
     ImageAnalysisClass imageAnalysisClass;
 
+    boolean isMainImageOfSplit = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -288,6 +290,18 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         intensityPlotTableID = getIntent().getStringExtra("intensityPlotTableID");
         plotTableID = getIntent().getStringExtra("plotTableID");
         hr = getIntent().getStringExtra("hour");
+
+        String mTypeImage = getIntent().getStringExtra("mtype");
+        if (mTypeImage == null) {
+            mTypeImage = ""; // Default value if null
+        }
+
+        boolean isMainImageOfSplit = "mainImg".equals(mTypeImage);
+
+        if (!isMainImageOfSplit) {
+            binding.capturedImage.setRotation(90);
+        }
+
 
         binding.cropAgain.setVisibility(View.GONE);
 
@@ -1285,7 +1299,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 //                    i.putExtra("id", id);
 //                    i.putExtra("imageFileName", contourImageFileName);
 //                    startActivity(i);
-                    setupDrawSpotListener(2);
+                    setupDrawSpotListener(2, true);
                 } else {
                     if (Source.contourDataArrayList == null) {
                         Source.contourDataArrayList = new ArrayList<>();
@@ -1308,7 +1322,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                             }
 
 //
-                            setupDrawSpotListener(2);
+                            setupDrawSpotListener(2, true);
                         } else {
 
                             File outFile = new File(dir, contourImageFileName);
@@ -1316,7 +1330,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                                 Source.contourUri = Uri.fromFile(new File(outFile.getAbsolutePath()));
                             }
 
-                            setupDrawSpotListener(2);
+                            setupDrawSpotListener(2, true);
 
                         }
                     } else {
@@ -2441,7 +2455,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         binding.anaL.bandDetection.addBand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setupDrawSpotListener(0);
+                setupDrawSpotListener(0, true);
 
             }
         });
@@ -2449,6 +2463,11 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
     }
 
     // oncreate end
+
+    // plotIntensity
+    private void generateIntensityData(){
+        performAnalysis(0);
+    }
 
 
     // check if spots are detected or not, if not then disable the analysis type buttons
@@ -2842,7 +2861,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
             ));
         }
 
-        contourIntGraphAdapter = new ContourIntGraphAdapter(this, contourDataArrayListNew, 0,
+        contourIntGraphAdapter = new ContourIntGraphAdapter(true, this, contourDataArrayListNew, 0,
                 this, true, false, false);
         binding.anaL.bandDetection.contourListRecView.setAdapter(contourIntGraphAdapter);
         contourIntGraphAdapter.notifyDataSetChanged();
@@ -5106,143 +5125,163 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         }
     }
 
-    private void setupDrawSpotListener(int visibility) {
+    private void setupDrawSpotListener(int visibility, boolean openTypeDirect) {
 
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.crop_options, null);
+        if (openTypeDirect) {
+            Source.shape = 0;
+            Source.CROP_CODE = 2;
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(NewImageAnalysis.this).setView(dialogView);
+            Source.WIDTH_OF_IMAGE = Source.contourBitmap.getWidth();
+            Source.HEIGHT_OF_IMAGE = Source.contourBitmap.getHeight();
+            Source.workingWithRectangleContour = true;
 
-        final AlertDialog alertDialog = builder.create();
-        if (alertDialog.getWindow() != null) {
-            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        }
+            if (manualContourArrayList != null) {
+                Source.manualContourArrayList = manualContourArrayList;
+            } else {
+                Source.manualContourArrayList = new ArrayList<>();
+            }
 
-        Button rectangleCont = dialogView.findViewById(R.id.rectangleCont);
-        Button circleCont = dialogView.findViewById(R.id.circleCont);
-        Button saveIt = dialogView.findViewById(R.id.saveIt);
-        CheckBox circleCheckBox = dialogView.findViewById(R.id.circleCheckBox);
-        CheckBox rectangleCheckBox = dialogView.findViewById(R.id.rectangleCheckBox);
+//                    Intent i = new Intent(NewImageAnalysis.this, DrawRectangleCont.class);
+            Intent i = new Intent(NewImageAnalysis.this, NewDrawRectangleCont.class);
+            startActivity(i);
 
-        if (visibility == 0) {
-            circleCheckBox.setVisibility(View.GONE);
-        }
-        if (visibility == 1) {
-            rectangleCheckBox.setVisibility(View.GONE);
+        } else {
 
-        }
-        if (visibility == 2) {
-            circleCheckBox.setVisibility(View.VISIBLE);
-            rectangleCheckBox.setVisibility(View.VISIBLE);
+            LayoutInflater inflater = getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.crop_options, null);
 
-        }
+            AlertDialog.Builder builder = new AlertDialog.Builder(NewImageAnalysis.this).setView(dialogView);
 
+            final AlertDialog alertDialog = builder.create();
+            if (alertDialog.getWindow() != null) {
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            }
 
-        rectangleCheckBox.setChecked(true);
-        circleCheckBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (circleCheckBox.isChecked()) {
-                    rectangleCheckBox.setChecked(false);
-                    circleCheckBox.setChecked(true);
+            Button rectangleCont = dialogView.findViewById(R.id.rectangleCont);
+            Button circleCont = dialogView.findViewById(R.id.circleCont);
+            Button saveIt = dialogView.findViewById(R.id.saveIt);
+            CheckBox circleCheckBox = dialogView.findViewById(R.id.circleCheckBox);
+            CheckBox rectangleCheckBox = dialogView.findViewById(R.id.rectangleCheckBox);
 
-                } else {
-                    circleCheckBox.setChecked(false);
-                    rectangleCheckBox.setChecked(true);
-
-                }
+            if (visibility == 0) {
+                circleCheckBox.setVisibility(View.GONE);
+            }
+            if (visibility == 1) {
+                rectangleCheckBox.setVisibility(View.GONE);
 
             }
-        });
-
-        rectangleCheckBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (rectangleCheckBox.isChecked()) {
-                    rectangleCheckBox.setChecked(true);
-                    circleCheckBox.setChecked(false);
-
-                } else {
-                    circleCheckBox.setChecked(true);
-                    rectangleCheckBox.setChecked(false);
-
-                }
+            if (visibility == 2) {
+                circleCheckBox.setVisibility(View.VISIBLE);
+                rectangleCheckBox.setVisibility(View.VISIBLE);
 
             }
-        });
 
 
-        saveIt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (rectangleCheckBox.isChecked()) {
+            rectangleCheckBox.setChecked(true);
+            circleCheckBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (circleCheckBox.isChecked()) {
+                        rectangleCheckBox.setChecked(false);
+                        circleCheckBox.setChecked(true);
+
+                    } else {
+                        circleCheckBox.setChecked(false);
+                        rectangleCheckBox.setChecked(true);
+
+                    }
+
+                }
+            });
+
+            rectangleCheckBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (rectangleCheckBox.isChecked()) {
+                        rectangleCheckBox.setChecked(true);
+                        circleCheckBox.setChecked(false);
+
+                    } else {
+                        circleCheckBox.setChecked(true);
+                        rectangleCheckBox.setChecked(false);
+
+                    }
+
+                }
+            });
+
+
+            saveIt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (rectangleCheckBox.isChecked()) {
+                        Source.shape = 0;
+                        alertDialog.dismiss();
+                        Source.CROP_CODE = 2;
+
+                        Source.WIDTH_OF_IMAGE = Source.contourBitmap.getWidth();
+                        Source.HEIGHT_OF_IMAGE = Source.contourBitmap.getHeight();
+                        Source.workingWithRectangleContour = true;
+
+                        if (manualContourArrayList != null) {
+                            Source.manualContourArrayList = manualContourArrayList;
+                        } else {
+                            Source.manualContourArrayList = new ArrayList<>();
+                        }
+
+//                    Intent i = new Intent(NewImageAnalysis.this, DrawRectangleCont.class);
+                        Intent i = new Intent(NewImageAnalysis.this, NewDrawRectangleCont.class);
+                        startActivity(i);
+
+
+                    }
+                    if (circleCheckBox.isChecked()) {
+                        Source.shape = 1;
+                        alertDialog.dismiss();
+                        Source.CROP_CODE = 2;
+                        CropImage.activity(Source.contourUri)
+                                .setGuidelines(CropImageView.Guidelines.ON)
+                                .setCropShape(CropImageView.CropShape.OVAL)
+                                .setInitialRotation(90)
+//                            .setRotationDegrees(90)
+                                .start(NewImageAnalysis.this);
+                    }
+                }
+            });
+
+
+            rectangleCont.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     Source.shape = 0;
                     alertDialog.dismiss();
                     Source.CROP_CODE = 2;
+                    CropImage.activity(Source.contourUri)
+                            .setGuidelines(CropImageView.Guidelines.ON)
+                            .setCropShape(CropImageView.CropShape.RECTANGLE)
+//                        .setMinCropWindowSize(10,10)
 
-                    Source.WIDTH_OF_IMAGE = Source.contourBitmap.getWidth();
-                    Source.HEIGHT_OF_IMAGE = Source.contourBitmap.getHeight();
-                    Source.workingWithRectangleContour = true;
-
-                    if (manualContourArrayList != null) {
-                        Source.manualContourArrayList = manualContourArrayList;
-                    } else {
-                        Source.manualContourArrayList = new ArrayList<>();
-                    }
-
-//                    Intent i = new Intent(NewImageAnalysis.this, DrawRectangleCont.class);
-                    Intent i = new Intent(NewImageAnalysis.this, NewDrawRectangleCont.class);
-                    startActivity(i);
-
-
+//                        .setSnapRadius(0)
+                            .start(NewImageAnalysis.this);
                 }
-                if (circleCheckBox.isChecked()) {
+            });
+
+            circleCont.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
                     Source.shape = 1;
                     alertDialog.dismiss();
                     Source.CROP_CODE = 2;
                     CropImage.activity(Source.contourUri)
                             .setGuidelines(CropImageView.Guidelines.ON)
                             .setCropShape(CropImageView.CropShape.OVAL)
-                            .setInitialRotation(90)
-//                            .setRotationDegrees(90)
+
                             .start(NewImageAnalysis.this);
                 }
-            }
-        });
+            });
 
-
-        rectangleCont.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Source.shape = 0;
-                alertDialog.dismiss();
-                Source.CROP_CODE = 2;
-                CropImage.activity(Source.contourUri)
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .setCropShape(CropImageView.CropShape.RECTANGLE)
-//                        .setMinCropWindowSize(10,10)
-
-//                        .setSnapRadius(0)
-                        .start(NewImageAnalysis.this);
-            }
-        });
-
-        circleCont.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Source.shape = 1;
-                alertDialog.dismiss();
-                Source.CROP_CODE = 2;
-                CropImage.activity(Source.contourUri)
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .setCropShape(CropImageView.CropShape.OVAL)
-
-                        .start(NewImageAnalysis.this);
-            }
-        });
-
-        alertDialog.show();
-
+            alertDialog.show();
+        }
     }
 
     @Override
@@ -5812,6 +5851,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
     public void onResume() {
         super.onResume();
         disableSpecificButtons();
+        generateIntensityData();
         imageToMat();
         Source.imageMat = imageMat;
 
@@ -6247,7 +6287,20 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
 
                 Canvas canvas = new Canvas(bit);
-                canvas.drawText((indexName), (float) x, (float) y, paint);
+//                canvas.drawText((indexName), (float) x, (float) y, paint);
+// Draw text at the bottom-center of the rectangle
+                // Corrected text position at the bottom-center of the rectangle
+                float textX = x + (w / 2f);  // Center horizontally
+                float textY = y + h - 5;     // Bottom of rectangle with slight padding
+
+// Ensure text does not go out of bounds
+                if (textY > Source.contourBitmap.getHeight() - 5) {
+                    textY = Source.contourBitmap.getHeight() - 5;
+                }
+
+                canvas.drawText(indexName, textX, textY, paint);
+
+                System.out.println("Index Name Position: " + textX + ", " + textY);
 
                 DecimalFormat df = new DecimalFormat("0.00E0");
 
@@ -6393,7 +6446,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
 //            LoadingDialog.showLoading(this, false, false, "Deleting");
 
-            if (Source.removingContourID.contains("m")) {
+            if (Source.removingContourID.contains(Source.manual_contour_prefix)) {
                 removeManualContour(Source.spotPositionFromAdapter, Source.removingContourID
                         , Source.spotPositionFromAdapter);
             } else {

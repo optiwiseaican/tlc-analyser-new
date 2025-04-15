@@ -57,66 +57,98 @@ class SplitMainImageAdtr(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = arrayList[position]
         val outFile = File(dir, data.imagePath)
+        val markImageFile = File(dir, "MARK_" + data.imagePath)
+        println("MARK Image File name: " + markImageFile.path)
         val contOutFile = File(dir, "CONT" + data.id + ".png")
         val posId = position
         holder.mainImageName.text = data.imageName
 
         holder.spottedView.setBackgroundColor(context.resources.getColor(R.color.ai_red))
 
-        if (contOutFile.exists()) {
+        if (markImageFile.exists()) {
 //            Toast.makeText(context, "Yes exist", Toast.LENGTH_SHORT).show()
             holder.spottedView.setBackgroundColor(context.resources.getColor(R.color.green))
         }
-        if (outFile.exists()) {
+        if (markImageFile.exists()) {
+            val myBitmap = BitmapFactory.decodeFile(markImageFile.absolutePath)
+            holder.mainImage.setImageBitmap(myBitmap)
+
+        } else {
             val myBitmap = BitmapFactory.decodeFile(outFile.absolutePath)
 
             holder.mainImage.setImageBitmap(myBitmap)
-        } else {
 //            Source.toast(context, "Not Exist")
         }
         var hour = data.hour
 
+//        holder.itemView.setOnClickListener {
+//
+//            AuthDialog.projectType = "Split"
+//            AuthDialog.projectName = projectName + " -> " + data.imageName
+//            AuthDialog.projectID = id
+//
+////            val intent = Intent(context, ImageAnalysis::class.java)
+//            val intent = Intent(context, NewImageAnalysis::class.java)
+//            intent.putExtra("positionOf", position.toString())
+//            intent.putExtra("w", "split")
+//            intent.putExtra("mtype", "mainImg")
+//            intent.putExtra("hour", hour)
+//            intent.putExtra("img_path", outFile.path)
+//            intent.putExtra("projectName", projectName)
+//            intent.putExtra("splitProjectName", data.imageName)
+//            intent.putExtra("projectDescription", data.description)
+//            intent.putExtra("projectImage", data.imagePath)
+//            intent.putExtra("projectNumber", projectNumber)
+//            intent.putExtra("splitId", splitId)
+//            if (type == "multi") {
+//                intent.putExtra("type", "multi")
+//            } else {
+//                intent.putExtra("type", "multi")
+//            }
+//            intent.putExtra("imageName", data.imageName)
+//            intent.putExtra("timeStamp", projectTimeStamp)
+//            intent.putExtra("tableName", tableName)
+//            intent.putExtra("roiTableID", data.roiTableID)
+//            intent.putExtra("thresholdVal", data.thresholdVal)
+//            intent.putExtra("numberOfSpots", data.noOfSpots)
+//            intent.putExtra("id", id)
+//            intent.putExtra("pid", data.id)
+//            intent.putExtra("volumePlotTableID", data.volumePlotTableID)
+//            intent.putExtra("intensityPlotTableID", data.intensityPlotTableID)
+//            intent.putExtra("plotTableID", data.plotTableID)
+//            intent.putExtra("rmSpot", data.rmSpot)
+//            intent.putExtra("finalSpot", data.finalSpot)
+//            context.startActivity(intent)
+//
+//
+//        }
+
         holder.itemView.setOnClickListener {
+            val dialog =
+                AlertDialog.Builder(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+            val inflater = LayoutInflater.from(context)
+            val dialogView = inflater.inflate(R.layout.dialog_fullscreen_image, null)
+            val fullScreenImageView = dialogView.findViewById<ImageView>(R.id.fullscreenImageView)
+            val closeDialog = dialogView.findViewById<ImageView>(R.id.closeDialog)
+            val imageNameText = dialogView.findViewById<TextView>(R.id.imageNameText)
 
-            AuthDialog.projectType = "Split"
-            AuthDialog.projectName = projectName + " -> " + data.imageName
-            AuthDialog.projectID = id
-
-//            val intent = Intent(context, ImageAnalysis::class.java)
-            val intent = Intent(context, NewImageAnalysis::class.java)
-            intent.putExtra("positionOf", position.toString())
-            intent.putExtra("w", "split")
-            intent.putExtra("mtype", "mainImg")
-            intent.putExtra("hour", hour)
-            intent.putExtra("img_path", outFile.path)
-            intent.putExtra("projectName", projectName)
-            intent.putExtra("splitProjectName", data.imageName)
-            intent.putExtra("projectDescription", data.description)
-            intent.putExtra("projectImage", data.imagePath)
-            intent.putExtra("projectNumber", projectNumber)
-            intent.putExtra("splitId", splitId)
-            if (type == "multi") {
-                intent.putExtra("type", "multi")
+            imageNameText.setText(data.imageName)
+            // Load the image into the ImageView
+            if (markImageFile.exists()) {
+                val bitmap = BitmapFactory.decodeFile(markImageFile.absolutePath)
+                fullScreenImageView.setImageBitmap(bitmap)
             } else {
-                intent.putExtra("type", "multi")
+                fullScreenImageView.setImageResource(R.drawable.no_internet) // Add a default placeholder
             }
-            intent.putExtra("imageName", data.imageName)
-            intent.putExtra("timeStamp", projectTimeStamp)
-            intent.putExtra("tableName", tableName)
-            intent.putExtra("roiTableID", data.roiTableID)
-            intent.putExtra("thresholdVal", data.thresholdVal)
-            intent.putExtra("numberOfSpots", data.noOfSpots)
-            intent.putExtra("id", id)
-            intent.putExtra("pid", data.id)
-            intent.putExtra("volumePlotTableID", data.volumePlotTableID)
-            intent.putExtra("intensityPlotTableID", data.intensityPlotTableID)
-            intent.putExtra("plotTableID", data.plotTableID)
-            intent.putExtra("rmSpot", data.rmSpot)
-            intent.putExtra("finalSpot", data.finalSpot)
-            context.startActivity(intent)
 
+            val alertDialog = dialog.setView(dialogView).create()
 
+            // Close the dialog when the close button is clicked
+            closeDialog.setOnClickListener { alertDialog.dismiss() }
+
+            alertDialog.show()
         }
+
 
         holder.sideMenu.setOnClickListener {
             val popup = PopupMenu(context, holder.sideMenu)

@@ -90,7 +90,7 @@ public class PixelGraph extends AppCompatActivity implements OnClicksListeners, 
     ArrayList<AreaWithContourID> contoursAreaArrayList;
     private TableLayout tableLayout;
 
-    private static TableRow tableRowHeader;
+    private TableRow tableRowHeader;
     String plotTableID;
 
     ArrayList<LabelData> labelDataArrayList;
@@ -290,8 +290,10 @@ public class PixelGraph extends AppCompatActivity implements OnClicksListeners, 
         textViewCv.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT, 1.5f));
         textViewArea.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT, 0));
         textViewPArea.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT, 0.3f));
-        textViewVolume.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT, 0.3f));
-        textViewLabel.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT, 0.3f));
+        if (Source.SHOW_VOLUME_DATA)
+            textViewVolume.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT, 0.3f));
+        if (Source.SHOW_LABEL_DATA)
+            textViewLabel.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT, 0.3f));
 
         textViewID.setGravity(Gravity.CENTER);
         textViewRf.setGravity(Gravity.CENTER);
@@ -388,8 +390,10 @@ public class PixelGraph extends AppCompatActivity implements OnClicksListeners, 
         tableRow.addView(textViewCv);
         tableRow.addView(textViewArea);
         tableRow.addView(textViewPArea);
-        tableRow.addView(textViewVolume);
-        tableRow.addView(textViewLabel);
+        if (Source.SHOW_VOLUME_DATA)
+            tableRow.addView(textViewVolume);
+        if (Source.SHOW_LABEL_DATA)
+            tableRow.addView(textViewLabel);
 
 
         tableLayout.addView(tableRow, index + 1);
@@ -469,7 +473,7 @@ public class PixelGraph extends AppCompatActivity implements OnClicksListeners, 
 
 //        contourDataArrayListNew = Source.contourDataArrayList;
 
-        contourIntGraphAdapter = new ContourIntGraphAdapter(this, contourDataArrayListNew,
+        contourIntGraphAdapter = new ContourIntGraphAdapter(true, this, contourDataArrayListNew,
                 0, this, true, true,
                 true, this);
 
@@ -714,7 +718,7 @@ public class PixelGraph extends AppCompatActivity implements OnClicksListeners, 
             float newRfTop = mRFTop * Source.percentRFTop;
 
             String id = contourDataArray.get(i).getId();
-            if (id.contains("m")) {
+            if (id.contains(Source.manual_contour_prefix)) {
                 newRfTop = mRFTop;
                 newRfBottom = mRFBottom;
 
@@ -754,7 +758,7 @@ public class PixelGraph extends AppCompatActivity implements OnClicksListeners, 
                     shadedRegion.add(n);
 //                    Log.e("Shaded Region", n.toString());
                 }
-                if (id.contains("m")) {
+                if (id.contains(Source.manual_contour_prefix)) {
                     if (x == newRfBottom) {
                         int1 = y;
                     }
@@ -1040,7 +1044,7 @@ public class PixelGraph extends AppCompatActivity implements OnClicksListeners, 
 
         exportDataToTextFile(myArray);
 
-//        Log.e("MyIntensityPoints",myArray);
+//        Log.e( yIntensityPoints",myArray);
 
     }
 
@@ -1054,10 +1058,10 @@ public class PixelGraph extends AppCompatActivity implements OnClicksListeners, 
             writer.append(data);
             writer.flush();
             writer.close();
-            Toast.makeText(this, "Data exported to data.txt", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Data exported to data.txt", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(this, "Failed to export data", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Failed to export data", Toast.LENGTH_SHORT).show();
         }
     }
 
