@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginTop="15dp"
-        android:text="Region of Interest"
+        android:text="Intensity"
         android:textColor="@color/aican_blue"
         android:textSize="24dp"
         android:textStyle="bold" />
@@ -125,14 +125,15 @@
             android:background="@drawable/button_bc"
             android:text="Change ROI"
             android:textAllCaps="false"
+            android:visibility="gone"
             android:textSize="14dp" />
 
         <Button
             android:id="@+id/intensityPlotting"
-            android:layout_width="160dp"
+            android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_gravity="start"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/button_bc"

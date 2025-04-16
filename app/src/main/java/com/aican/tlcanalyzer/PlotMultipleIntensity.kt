@@ -632,7 +632,7 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners, OnPlotClic
         // Build the PDF file using passed directory
         val file = File(
             pdfDir,
-            "Multi_Anal_Report_${projectName}_${id}_$currentDateandTime.pdf"
+            "Multi_Analysis_Report_${projectName}_${id}_$currentDateandTime.pdf"
         )
         val outputStream: OutputStream = FileOutputStream(file)
         val writer = PdfWriter(file)

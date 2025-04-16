@@ -221,7 +221,7 @@ class MultiAnalysisReportPdfLists : AppCompatActivity(), OnPDFSelectListener {
         val allPdfs = findPDF(fileDestination) ?: ArrayList()
 
         // Filter only those with "Multi_Anal_Report_" in filename
-        pdfList.addAll(allPdfs.filter { it.name.contains("Multi_Anal_Report_", ignoreCase = true) })
+        pdfList.addAll(allPdfs.filter { it.name.contains("Multi_Analysis_Report_", ignoreCase = true) })
 
         pdfAdapter = PdfAdapter(this, pdfList, this)
         recyclerView.adapter = pdfAdapter
