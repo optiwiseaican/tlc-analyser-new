@@ -375,7 +375,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
             }
 
-            binding.anaL.addDone.setVisibility(View.VISIBLE);
+            binding.anaL.addDone.setVisibility(View.GONE);
 
             String finalType = type;
             binding.anaL.addDone.setOnClickListener(new View.OnClickListener() {
