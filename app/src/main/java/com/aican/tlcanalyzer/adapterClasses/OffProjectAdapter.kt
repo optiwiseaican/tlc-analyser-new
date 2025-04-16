@@ -64,11 +64,12 @@ class OffProjectAdapter(
         holder.timeStamp.text = data.timeStamp
         holder.projectId.text = "Project ID = ${data.id}"
 
-        val dir =
-            File(
-                ContextWrapper(context).externalMediaDirs[0],
-                context.resources.getString(R.string.app_name) + data.id
-            )
+
+        var dir = Source.getSplitFolderFile(
+            context,
+           data.projectName,
+           data.id
+        )
 
         val outFile = File(dir, data.projectImage)
 

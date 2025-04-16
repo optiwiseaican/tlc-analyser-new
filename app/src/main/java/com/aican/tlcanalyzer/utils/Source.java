@@ -3,6 +3,7 @@ package com.aican.tlcanalyzer.utils;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -33,12 +34,42 @@ import com.aican.tlcanalyzer.dataClasses.userIDPASS.UserData;
 
 import org.opencv.core.Mat;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Source {
+
+    public static File getJsonDirectory(Context context, File baseDir, String fileName) {
+//        File baseDir = getSplitFolderFile(context, projectName, id);
+        File jsonDir = new File(baseDir, "JSON");
+        if (!jsonDir.exists()) {
+            jsonDir.mkdirs();
+        }
+        File withFile = new File(jsonDir, fileName);
+//        File withFile = new File(baseDir, fileName);
+        return withFile;
+    }
+
+    public static String getTempFileName(String originalName) {
+        return "TEMP" + originalName;
+    }
+
+    public static File getTempDir(File parentDir) {
+        File tempDir = new File(parentDir, "TEMP");
+        if (!tempDir.exists()) {
+            tempDir.mkdirs();
+        }
+        return tempDir;
+    }
+
+    public static File getSplitFolderFile(Context context, String projectName, String projectId) {
+        return new File(new ContextWrapper(context).getExternalMediaDirs()[0],
+                "T_" + projectName + "_" + projectId);
+
+    }
 
     public static boolean SHOW_VOLUME_DATA = false;
     public static boolean SHOW_LABEL_DATA = false;

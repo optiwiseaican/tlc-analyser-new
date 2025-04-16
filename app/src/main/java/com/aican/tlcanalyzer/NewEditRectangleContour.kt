@@ -53,6 +53,13 @@ class NewEditRectangleContour : AppCompatActivity() {
             ContextWrapper(this).externalMediaDirs[0],
             resources.getString(R.string.app_name) + intent.getStringExtra("pId")
         )
+
+        dir = Source.getSplitFolderFile(
+            this,
+            intent.getStringExtra("projectName"),
+            intent.getStringExtra("pId")
+        )
+
         rectOfRectangle = Source.editRectangleContourRect
         imageBitmap = Source.originalBitmap
 
@@ -87,7 +94,7 @@ class NewEditRectangleContour : AppCompatActivity() {
     private fun saveRectangleData(rect: Rect) {
       val  savedRect = rect  // Save the updated rectangle reference
 
-        if (spotId.contains("m")) {
+        if (spotId.contains(Source.manual_contour_prefix)) {
             val myDir = File(dir, contourJsonFileName)
             if (myDir.exists()) {
                 val gson = Gson()

@@ -20,6 +20,7 @@
         <item
             android:id="@+id/all_files"
             android:icon="@drawable/files"
+            android:visible="false"
             android:title="All Exported Files" />
         <item
             android:id="@+id/log_out"

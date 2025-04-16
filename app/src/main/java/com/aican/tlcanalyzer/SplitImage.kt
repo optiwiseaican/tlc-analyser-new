@@ -116,24 +116,28 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
 //            databaseHelper.addColumnsToTable(tableName, arrayOfNewColumns)
 //        }
 
-        val dir = File(
-            ContextWrapper(this).externalMediaDirs[0], getString(R.string.app_name) + id
+//        val dir = File(
+//            ContextWrapper(this).externalMediaDirs[0], getString(R.string.app_name) + id
+//        )
+
+        var dir = Source.getSplitFolderFile(
+            this,
+            intent.getStringExtra("projectName"),
+            intent.getStringExtra("id")
         )
 
         val file = File(dir, projectImage)
         if (!file.exists()) {
             val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, img_uri)
 
-            saveImageViewToFile(bitmap, projectImage)
+            saveImageViewToFile(dir, bitmap, projectImage)
         } else {
 
         }
 //        Source.checkInternet(this@SplitImage)
 
         if (work.equals(works[1])) {
-            val dir = File(
-                ContextWrapper(this).externalMediaDirs[0], getString(R.string.app_name) + id
-            )
+
 
             val outFile = File(dir, projectImage)
 
@@ -151,9 +155,7 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
                 CropImage.activity(img_uri).start(this@SplitImage)
             }
             if (work == works[1]) {
-                var dir = File(
-                    ContextWrapper(this).externalMediaDirs[0], getString(R.string.app_name) + id
-                )
+
 
                 val outFile = File(dir, projectImage)
 
@@ -177,7 +179,7 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
 
 
 
-        setArrayList()
+        setArrayList(dir)
 //        Source.toast(this, tableName)
 
 
@@ -278,7 +280,7 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
         }
 
 
-        setMainImageArrayList()
+        setMainImageArrayList(dir)
 
         binding.addMainImage.setOnClickListener {
 
@@ -324,7 +326,7 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
 
     }
 
-    private fun setMainImageArrayList() {
+    private fun setMainImageArrayList(dir: File) {
         mainImageArrayList = ArrayList()
         val cursor: Cursor = databaseHelper.getSplitTableData(mainImageTableID)
         if (cursor.moveToFirst()) {
@@ -352,6 +354,7 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
         sizeOfMainImagesList = mainImageArrayList.size
 
         var splitMainAdapter = SplitMainImageAdtr(
+            dir,
             this,
             mainImageArrayList,
             databaseHelper,
@@ -370,7 +373,7 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
 
     }
 
-    private fun setArrayList() {
+    private fun setArrayList(dir: File) {
         arrayList = ArrayList()
         duplicateArrayList = ArrayList()
 
@@ -484,6 +487,7 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
         Source.splitDataArrayList = arrayList
 
         adapter = SplitAdapter(
+            dir,
             this,
             arrayList,
             databaseHelper,
@@ -524,16 +528,13 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
         }
     }
 
-    fun saveImageViewToFile(originalBitmapImage: Bitmap, fileName: String): String? {
+    fun saveImageViewToFile(dir: File, originalBitmapImage: Bitmap, fileName: String): String? {
 
         var outStream: FileOutputStream? = null
 
         try {
             val sdCard = Environment.getExternalStorageDirectory()
-            val dir = File(
-                ContextWrapper(this).externalMediaDirs[0],
-                resources.getString(R.string.app_name) + id
-            )
+
             dir.mkdirs()
             val outFile = File(dir, fileName)
             outStream = FileOutputStream(outFile)
@@ -555,6 +556,11 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
         val dialogView = layoutInflater.inflate(R.layout.split_img_name, null)
         val builder = AlertDialog.Builder(this).setView(dialogView)
 
+        var dir = Source.getSplitFolderFile(
+            this,
+            intent.getStringExtra("projectName"),
+            intent.getStringExtra("id")
+        )
 
         val alertDialog = builder.create()
 
@@ -586,7 +592,7 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
             val plotTableID = "TAB_" + System.currentTimeMillis()
 
 
-            saveImageViewToFile(bitmap, filePath)
+            saveImageViewToFile(dir, bitmap, filePath)
 
             databaseHelper.insertSplitImage(
                 tableName,
@@ -607,7 +613,7 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
 
             )
 
-            setArrayList()
+            setArrayList(dir)
             alertDialog.dismiss()
         }
 
@@ -620,6 +626,11 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
         super.onResume()
 //        this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         INTENSITY_PART_KEY = "INTENSITY_PART_KEY_" + id
+        var dir = Source.getSplitFolderFile(
+            this,
+            intent.getStringExtra("projectName"),
+            intent.getStringExtra("id")
+        )
 
         if (SharedPrefData.getSavedData(
                 this@SplitImage,
@@ -643,8 +654,10 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
         if (NewImageAnalysis.refreshMainSplitImage == 1) {
 //            ImageAnalysis.refreshMainSplitImage = 0
             NewImageAnalysis.refreshMainSplitImage = 0
-            var dir = File(
-                ContextWrapper(this).externalMediaDirs[0], getString(R.string.app_name) + id
+            var dir = Source.getSplitFolderFile(
+                this,
+                intent.getStringExtra("projectName"),
+                intent.getStringExtra("id")
             )
 
             val outFile = File(dir, projectImage)
@@ -658,8 +671,8 @@ class SplitImage : AppCompatActivity(), AuthDialog.AuthCallback {
 
         AuthDialog.projectType = "Split"
 
-        setArrayList()
-        setMainImageArrayList()
+        setArrayList(dir)
+        setMainImageArrayList(dir)
 
 
         if (completedSplit && completed) {

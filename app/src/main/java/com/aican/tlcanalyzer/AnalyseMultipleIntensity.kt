@@ -12,7 +12,6 @@ import android.view.View
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.aican.tlcanalyzer.adapterClasses.AnalMultiIntAdapter
 import com.aican.tlcanalyzer.dataClasses.AnalMultiIntModel
@@ -30,6 +29,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import java.io.File
 import java.util.Random
 
 
@@ -138,8 +138,13 @@ class AnalyseMultipleIntensity : AppCompatActivity(), OnClicksListeners, OnCheck
         binding.zoomOut.setOnClickListener(View.OnClickListener { binding.chart.zoomOut() })
 
 
+       var dir = Source.getSplitFolderFile(
+            this,
+            intent.getStringExtra("projectName"),
+            intent.getStringExtra("id")
+        )
 
-        showAllCon()
+        showAllCon(dir)
 
         Log.e("ThisIsNotErrors", splitContourDatas.size.toString())
 
@@ -421,7 +426,7 @@ class AnalyseMultipleIntensity : AppCompatActivity(), OnClicksListeners, OnCheck
         createTableRow("Img Name", "ID", "Rf", "Cv", "Area", "% area", "Volume", "Label", -1)
     }
 
-    private fun showAllCon() {
+    private fun showAllCon(dir: File) {
         Log.d("OrderCheck", "Before showAllCon: ${splitContourData.map { it.name }}")
 
         val colorGenerator = RandomColors()
@@ -485,7 +490,7 @@ class AnalyseMultipleIntensity : AppCompatActivity(), OnClicksListeners, OnCheck
         splitContourDatas.addAll(splitContourDataList2)
 
         adapter =
-            AnalMultiIntAdapter(id, this@AnalyseMultipleIntensity, analMultiArrayList, this, this)
+            AnalMultiIntAdapter(dir,id, this@AnalyseMultipleIntensity, analMultiArrayList, this, this)
         binding.contourListRecView.adapter = adapter
         adapter.notifyDataSetChanged()
     }

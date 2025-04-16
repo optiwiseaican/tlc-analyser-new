@@ -123,6 +123,12 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners, OnPlotClic
             exportDir.mkdirs()
         }
 
+        binding.allGeneratedPdfs.setOnClickListener {
+            val inte = Intent(this@PlotMultipleIntensity, MultiAnalysisReportPdfLists::class.java)
+            inte.putExtra("projectName", projectName)
+            inte.putExtra("id", id)
+            startActivity(inte)
+        }
 
         // if splitContourDataList is empty
         if (splitContourDataList.isEmpty()) {
@@ -170,7 +176,13 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners, OnPlotClic
             }
         }
 
-        setRecView()
+        var dir = Source.getSplitFolderFile(
+            this,
+            intent.getStringExtra("projectName"),
+            intent.getStringExtra("id")
+        )
+
+        setRecView(dir)
 
         splitContourData = ArrayList(splitContourDataList)
         splitContourDatas = ArrayList()
@@ -191,7 +203,7 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners, OnPlotClic
 
                 plotROIGraphs2(splitContourDatas)
 
-                generateReport()
+                generateReport(dir, dir)
 
                 println("Graph Data After PDF : " + splitContourDatas.joinToString())
 
@@ -608,20 +620,20 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners, OnPlotClic
         return max
     }
 
-    fun generateReport() {
-        val dir =
-            File(
-                ContextWrapper(this).externalMediaDirs[0],
-                resources.getString(R.string.app_name) + id
-            )
+    fun generateReport(dir: File, pdfDir: File) {
         val sdf = SimpleDateFormat("yyyy-MM-dd_HH-mm", Locale.getDefault())
         val currentDateandTime = sdf.format(Date())
-        val file = File(
-            getExternalFilesDir(null).toString() + File.separator +
-                    "All PDF Files/REPORT_" + projectName + "_" + id + "_" + currentDateandTime +
-                    ".pdf"
-        )
 
+        // Ensure the directory exists
+        if (!pdfDir.exists()) {
+            pdfDir.mkdirs()
+        }
+
+        // Build the PDF file using passed directory
+        val file = File(
+            pdfDir,
+            "Multi_Anal_Report_${projectName}_${id}_$currentDateandTime.pdf"
+        )
         val outputStream: OutputStream = FileOutputStream(file)
         val writer = PdfWriter(file)
         val pdfDocument = PdfDocument(writer)
@@ -1354,8 +1366,8 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners, OnPlotClic
     }
 
 
-    private fun setRecView() {
-        adapter = MultiSplitAdapter(id, this, splitContourDataList, this, this)
+    private fun setRecView(dir: File) {
+        adapter = MultiSplitAdapter(dir, id, this, splitContourDataList, this, this)
         binding.recView.adapter = adapter
         adapter.notifyDataSetChanged()
     }
@@ -1656,7 +1668,14 @@ class PlotMultipleIntensity : AppCompatActivity(), OnClicksListeners, OnPlotClic
         binding.intensityChartPlot1.visibility = View.INVISIBLE
         binding.intensityChart.visibility = View.INVISIBLE
         binding.volumeChart.visibility = View.INVISIBLE
-        setRecView()
+
+        var dir = Source.getSplitFolderFile(
+            this,
+            intent.getStringExtra("projectName"),
+            intent.getStringExtra("id")
+        )
+
+        setRecView(dir)
     }
 
     private fun setColor(i: Int): Int {

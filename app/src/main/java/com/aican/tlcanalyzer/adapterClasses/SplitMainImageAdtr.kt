@@ -21,6 +21,7 @@ import com.aican.tlcanalyzer.dialog.AuthDialog
 import java.io.File
 
 class SplitMainImageAdtr(
+    val dir: File,
     val context: Context,
     val arrayList: ArrayList<SplitData>,
     val databaseHelper: DatabaseHelper,
@@ -47,12 +48,6 @@ class SplitMainImageAdtr(
         val view: View = mInflater.inflate(R.layout.custom_multiple_main_images, parent, false)
         return ViewHolder(view)
     }
-
-    private var dir =
-        File(
-            ContextWrapper(context).externalMediaDirs[0],
-            context.resources.getString(R.string.app_name) + id
-        )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = arrayList[position]
@@ -138,7 +133,10 @@ class SplitMainImageAdtr(
                 val bitmap = BitmapFactory.decodeFile(markImageFile.absolutePath)
                 fullScreenImageView.setImageBitmap(bitmap)
             } else {
-                fullScreenImageView.setImageResource(R.drawable.no_internet) // Add a default placeholder
+                val myBitmap = BitmapFactory.decodeFile(outFile.absolutePath)
+                fullScreenImageView.setImageBitmap(myBitmap)
+
+//                fullScreenImageView.setImageResource(R.drawable.no_internet) // Add a default placeholder
             }
 
             val alertDialog = dialog.setView(dialogView).create()

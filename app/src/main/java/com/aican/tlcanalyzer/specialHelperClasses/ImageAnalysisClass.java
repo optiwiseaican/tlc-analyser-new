@@ -314,44 +314,38 @@ public class ImageAnalysisClass {
         return indexName;
     }
 
-    public String saveImageViewToFile(Bitmap originalBitmapImage, String fileName, String id, String[] works, String work) {
-
-//        if (originalBitmapImage.getWidth() != originalBitmapImage.getHeight()) {
-//            originalBitmapImage = convertToSquareWithTransparentBackground(originalBitmapImage);
-//        }
-
-
-        FileOutputStream outStream = null;
-
-        // Write to SD Card
-        try {
-            File sdCard = Environment.getExternalStorageDirectory();
-            File dir;
-            if (work.equals(works[2])) {
-                dir = new File(new ContextWrapper(context).getExternalMediaDirs()[0], context.getResources().getString(R.string.app_name)
-//                                + getIntent().getStringExtra("pid")
-                        + id);
-            } else {
-                dir = new File(new ContextWrapper(context).getExternalMediaDirs()[0], context.getResources().getString(R.string.app_name) + id);
+    public String saveImageViewToFile(File dir, Bitmap originalBitmapImage, String fileName, String id, String[] works, String work) {
+        // Ensure the directory exists
+        if (!dir.exists()) {
+            boolean created = dir.mkdirs();
+            if (!created) {
+                Log.e("TAG", "Failed to create directory: " + dir.getAbsolutePath());
+                return null;
             }
-            dir.mkdirs();
-            File outFile = new File(dir, fileName);
-            outStream = new FileOutputStream(outFile);
+        }
+
+        File outFile = new File(dir, fileName);
+
+        // Save the bitmap as a JPEG file
+        try (FileOutputStream outStream = new FileOutputStream(outFile)) {
             originalBitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
             outStream.flush();
-            outStream.close();
-            Log.d("TAG", "onPictureTaken - wrote to " + outFile.getAbsolutePath());
+            Log.d("TAG", "Image saved to: " + outFile.getAbsolutePath());
         } catch (FileNotFoundException e) {
+            Log.e("TAG", "File not found: " + e.getMessage());
             e.printStackTrace();
+            return null;
         } catch (IOException e) {
+            Log.e("TAG", "I/O error: " + e.getMessage());
             e.printStackTrace();
+            return null;
         }
 
         return fileName;
     }
 
 
-    public String saveImageViewToFile(Bitmap originalBitmapImage, String fileName, String id) {
+    public String saveImageViewToFile(File dir, Bitmap originalBitmapImage, String fileName, String id) {
 //        if (originalBitmapImage.getWidth() != originalBitmapImage.getHeight()) {
 //            originalBitmapImage = convertToSquareWithTransparentBackground(originalBitmapImage);
 //        }
@@ -361,7 +355,6 @@ public class ImageAnalysisClass {
 
         try {
             File sdCard = Environment.getExternalStorageDirectory();
-            File dir = new File(new ContextWrapper(context).getExternalMediaDirs()[0], context.getResources().getString(R.string.app_name) + id);
             dir.mkdirs();
 
             File outFile = new File(dir, fileName);

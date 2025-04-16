@@ -22,6 +22,7 @@ import java.io.File
 
 
 class AnalMultiIntAdapter(
+    val dir: File,
     val id: String,
     val context: Context,
     val arrayList: ArrayList<AnalMultiIntModel>,
@@ -43,11 +44,6 @@ class AnalMultiIntAdapter(
         return arrayList.size
     }
 
-    private var dir =
-        File(
-            ContextWrapper(context).externalMediaDirs[0],
-            context.resources.getString(R.string.app_name) + id
-        )
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

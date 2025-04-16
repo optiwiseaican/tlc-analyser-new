@@ -119,8 +119,7 @@ public class CameraActivity extends AppCompatActivity {
 
         getSupportActionBar().hide();
 
-        dir = new File(new ContextWrapper(this).getExternalMediaDirs()[0], getResources().getString(R.string.app_name) + getIntent().getStringExtra("id"));
-
+        dir = Source.getSplitFolderFile(this, getIntent().getStringExtra("projectName"), getIntent().getStringExtra("id"));
 
         dialog = new ProgressDialog(CameraActivity.this);
         // Check camera permissions if all permission granted
@@ -550,8 +549,7 @@ public class CameraActivity extends AppCompatActivity {
                     }
 
 
-                }
-                else {
+                } else {
                     if (picUri != null) {
 //                    Bitmap photo = (Bitmap) data.getExtras().get("data");
                         Bitmap bitmap = null;

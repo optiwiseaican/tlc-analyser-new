@@ -26,6 +26,7 @@ import com.aican.tlcanalyzer.dialog.AuthDialog
 import java.io.File
 
 class SplitAdapter(
+    val dir: File,
     val context: Context,
     val arrayList: ArrayList<SplitData>,
     val databaseHelper: DatabaseHelper,
@@ -84,11 +85,7 @@ class SplitAdapter(
         return ViewHolder(view)
     }
 
-    private var dir =
-        File(
-            ContextWrapper(context).externalMediaDirs[0],
-            context.resources.getString(R.string.app_name) + id
-        )
+
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = arrayList[position]

@@ -20,6 +20,7 @@ import com.aican.tlcanalyzer.interfaces.OnPlotClickListeners
 import java.io.File
 
 class MultiSplitAdapter(
+    val dir: File,
     val id: String,
     val context: Context, val arrayList: ArrayList<SplitContourData>,
     val onClicksListeners: OnClicksListeners,
@@ -33,12 +34,6 @@ class MultiSplitAdapter(
         val view: View = mInflater.inflate(R.layout.custom_multi_split, parent, false)
         return ViewHolder(view)
     }
-
-    private var dir =
-        File(
-            ContextWrapper(context).externalMediaDirs[0],
-            context.resources.getString(R.string.app_name) + id
-        )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val data = arrayList[position]

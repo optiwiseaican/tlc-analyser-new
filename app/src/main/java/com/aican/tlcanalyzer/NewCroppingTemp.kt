@@ -29,7 +29,7 @@ import java.util.Locale
 
 class NewCroppingTemp : AppCompatActivity() {
 
-    private var dir: File? = null
+    lateinit var dir: File
     private var loadedBitmap: Bitmap? = null
     private var databaseHelper: DatabaseHelper? = null
     private var usersDatabase: UsersDatabase? = null
@@ -59,8 +59,11 @@ class NewCroppingTemp : AppCompatActivity() {
 
         tableName = intent.getStringExtra("tableName")
 
-        dir = File(ContextWrapper(this).externalMediaDirs[0], getString(R.string.app_name) + id)
-
+        dir = Source.getSplitFolderFile(
+            this,
+            intent.getStringExtra("projectName"),
+            intent.getStringExtra("id")
+        )
         loadImage()
 
         binding.addLineButton.setOnClickListener {
@@ -126,7 +129,7 @@ class NewCroppingTemp : AppCompatActivity() {
                 (Subscription.NO_OF_PROJECTS_MADE + 1).toString()
             )
 
-            saveImageViewToFile(loadedBitmap!!, projectImage!!, this)
+            saveImageViewToFile(dir, loadedBitmap!!, projectImage!!, this)
 
             val tempFileName = "TEMP$projectImage"
             val originalFileName = "ORG_$projectImage"
@@ -135,8 +138,8 @@ class NewCroppingTemp : AppCompatActivity() {
             // here main image is saving
             saveImageToDownloads(loadedBitmap!!, projectName!!, this)
 
-            saveImageViewToFile(loadedBitmap!!, tempFileName, this)
-            saveImageViewToFile(CapturedImagePreview.originalBitmap!!, originalFileName, this)
+            saveImageViewToFile(dir, loadedBitmap!!, tempFileName, this, true)
+            saveImageViewToFile(dir, CapturedImagePreview.originalBitmap!!, originalFileName, this)
 
             val mainImageTableID = "MAIN_IMG_$id"
             databaseHelper!!.createSplitMainImageTable(mainImageTableID)
@@ -158,22 +161,22 @@ class NewCroppingTemp : AppCompatActivity() {
                     AuthDialog.activeUserName, AuthDialog.activeUserRole,
                     "Created Split Project", intent.getStringExtra("projectName")!!, id!!, "Split"
                 )
-                sliceImage(splitMarkingName)
+                sliceImage(dir, splitMarkingName)
             }
         } else {
             val idm = "SPLIT_ID" + System.currentTimeMillis()
             val timestamp =
                 SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
-            saveImageViewToFile(loadedBitmap!!, "${projectImage}_$sizeOfMainImageList", this)
+            saveImageViewToFile(dir, loadedBitmap!!, "${sizeOfMainImageList}_$projectImage", this)
 
-            val tempFileName = "TEMP${projectImage}_$sizeOfMainImageList"
-            val originalFileName = "ORG_${projectImage}_$sizeOfMainImageList"
-            val splitMarkingName = "MARK_${projectImage}_$sizeOfMainImageList"
+            val tempFileName = "TEMP${sizeOfMainImageList}_$projectImage"
+            val originalFileName = "ORG_${sizeOfMainImageList}_$projectImage"
+            val splitMarkingName = "MARK_${sizeOfMainImageList}_$projectImage"
 
             saveImageToDownloads(loadedBitmap!!, projectName!!, this)
 
-            saveImageViewToFile(loadedBitmap!!, tempFileName, this)
-            saveImageViewToFile(CapturedImagePreview.originalBitmap!!, originalFileName, this)
+            saveImageViewToFile(dir, loadedBitmap!!, tempFileName, this, true)
+            saveImageViewToFile(dir, CapturedImagePreview.originalBitmap!!, originalFileName, this)
 
 
             val volumePlotTableID = "VOL_" + System.currentTimeMillis()
@@ -181,7 +184,7 @@ class NewCroppingTemp : AppCompatActivity() {
             val plotTableID = "TAB_" + System.currentTimeMillis()
             val success = databaseHelper!!.insertSplitMainImage(
                 "MAIN_IMG_$id", idm,
-                "Main Image ${sizeOfMainImageList + 1}", "${projectImage}_$sizeOfMainImageList",
+                "Main Image ${sizeOfMainImageList + 1}", "${sizeOfMainImageList}_$projectImage",
                 timestamp, "100", "2",
                 intent.getStringExtra("roiTableID"), volumePlotTableID,
                 intensityPlotTableID,
@@ -193,13 +196,13 @@ class NewCroppingTemp : AppCompatActivity() {
             databaseHelper!!.createAllDataTable(plotTableID)
             databaseHelper!!.createSpotLabelTable("LABEL_$plotTableID")
             if (success) {
-                sliceImage(splitMarkingName)
+                sliceImage(dir, splitMarkingName)
                 SplitImage.addingMainImage = false
             }
         }
     }
 
-    private fun sliceImage(splitMarkingName: String, splitImageCounts: Int = 0) {
+    private fun sliceImage(dir: File, splitMarkingName: String, splitImageCounts: Int = 0) {
         val slicedImagesBitmap = ArrayList<Bitmap>()
 
         if (loadedBitmap == null) {
@@ -232,7 +235,7 @@ class NewCroppingTemp : AppCompatActivity() {
         }
 
         // Save the marked image before slicing
-        saveImageViewToFile(markedBitmap, splitMarkingName, this)
+        saveImageViewToFile(dir, markedBitmap, splitMarkingName, this)
 
         for (i in 1 until verticalLinesXCoordinates.size) {
             val startX = verticalLinesXCoordinates[i - 1]
@@ -247,7 +250,7 @@ class NewCroppingTemp : AppCompatActivity() {
 
             val fileName = "${sizeOfMainImageList + 1}_${splitImageCounts + i}"
             val filePath = "SPLIT_NAME" + System.currentTimeMillis() + ".jpg"
-            saveImageViewToFile(slicedBitmap, filePath, this)
+            saveImageViewToFile(dir, slicedBitmap, filePath, this)
 
 
             val roiTableIDF = "ROI_ID" + System.currentTimeMillis()
@@ -260,7 +263,7 @@ class NewCroppingTemp : AppCompatActivity() {
             val tempFileName = "TEMP$filePath"
             val mainImageBitmap = slicedBitmap
 
-            saveImageViewToFile(mainImageBitmap, tempFileName, this)
+            saveImageViewToFile(dir, mainImageBitmap, tempFileName, this, true)
 
 
             val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
@@ -314,13 +317,28 @@ class NewCroppingTemp : AppCompatActivity() {
         finish()
     }
 
-    private fun saveImageViewToFile(bitmap: Bitmap, fileName: String, context: Context) {
-        val dir = File(
-            ContextWrapper(context).externalMediaDirs[0],
-            context.getString(R.string.app_name) + id
-        )
-        dir.mkdirs()
-        val outFile = File(dir, fileName)
+    private fun saveImageViewToFile(
+        dir: File,
+        bitmap: Bitmap,
+        fileName: String,
+        context: Context,
+        temp: Boolean = false
+    ) {
+        // Ensure the base directory exists
+        if (!dir.exists()) {
+            dir.mkdirs()
+        }
+
+        // Determine final output path
+        val outFile: File = if (temp) {
+            val tempDir = File(dir, "TEMP")
+            if (!tempDir.exists()) {
+                tempDir.mkdirs()
+            }
+            File(tempDir, fileName)
+        } else {
+            File(dir, fileName)
+        }
 
         try {
             FileOutputStream(outFile).use { outStream ->
@@ -329,6 +347,7 @@ class NewCroppingTemp : AppCompatActivity() {
             Log.d("TAG", "Image saved: ${outFile.absolutePath}")
         } catch (e: IOException) {
             e.printStackTrace()
+            Log.e("TAG", "Failed to save image: ${e.message}")
         }
     }
 

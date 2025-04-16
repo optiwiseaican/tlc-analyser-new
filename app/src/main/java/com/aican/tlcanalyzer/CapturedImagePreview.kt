@@ -1,7 +1,6 @@
 package com.aican.tlcanalyzer
 
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.ColorMatrix
@@ -83,9 +82,10 @@ class CapturedImagePreview : AppCompatActivity() {
         }
 
 
-        val dir = File(
-            ContextWrapper(this).externalMediaDirs[0],
-            resources.getString(R.string.app_name) + intent.getStringExtra("id").toString()
+        var dir = Source.getSplitFolderFile(
+            this,
+            intent.getStringExtra("projectName"),
+            intent.getStringExtra("id")
         )
 
         if (!SplitImage.addingMainImage) {
@@ -153,11 +153,22 @@ class CapturedImagePreview : AppCompatActivity() {
 
                     //original image
                     saveImageViewToFile(
+                        dir,
                         originalImageBit, "ORG_" +
                                 intent.getStringExtra("projectImage").toString()
                     )
+                    //temp image
+                    saveImageViewToFile(
+                        dir,
+                        originalImageBit, "TEMP" +
+                                intent.getStringExtra("projectImage").toString(), true
+                    )
 
-                    saveImageViewToFile(sBit, intent.getStringExtra("projectImage").toString())
+                    saveImageViewToFile(
+                        dir,
+                        originalImageBit,
+                        intent.getStringExtra("projectImage").toString()
+                    )
 
 
                     uriPath = Uri.fromFile(outFile)
@@ -317,7 +328,7 @@ class CapturedImagePreview : AppCompatActivity() {
 
 
                 if (splitBitmap != null) {
-                    saveNoSplit(splitBitmap!!)
+                    saveNoSplit(dir, splitBitmap!!)
                 } else {
                     Toast.makeText(this, "Image not found or loaded", Toast.LENGTH_SHORT).show()
                 }
@@ -345,8 +356,9 @@ class CapturedImagePreview : AppCompatActivity() {
 
     }
 
-    private fun saveNoSplit(imageBitmap: Bitmap) {
+    private fun saveNoSplit(dir: File, imageBitmap: Bitmap) {
         saveMainImageViewToFile(
+            dir,
             imageBitmap!!,
             "${projectImage}_$sizeOfMainImageList",
             this@CapturedImagePreview
@@ -355,10 +367,11 @@ class CapturedImagePreview : AppCompatActivity() {
         val tempFileName = "TEMP${projectImage}_$sizeOfMainImageList"
         val originalFileName = "ORG_${projectImage}_$sizeOfMainImageList"
 
-        saveMainImageViewToFile(imageBitmap!!, projectName!!, this@CapturedImagePreview)
+        saveMainImageViewToFile(dir, imageBitmap!!, projectName!!, this@CapturedImagePreview)
 
-        saveMainImageViewToFile(imageBitmap!!, tempFileName, this@CapturedImagePreview)
+        saveMainImageViewToFile(dir, imageBitmap!!, tempFileName, this@CapturedImagePreview, true)
         saveMainImageViewToFile(
+            dir,
             CapturedImagePreview.originalBitmap!!,
             originalFileName,
             this@CapturedImagePreview
@@ -392,7 +405,7 @@ class CapturedImagePreview : AppCompatActivity() {
 
             val fileName = "MI${sizeOfMainImageList + 1} -> Image ${sizeOfSplitImageList + 1}"
             val filePath = "SPLIT_NAME" + System.currentTimeMillis() + ".jpg"
-            saveMainImageViewToFile(imageBitmap, filePath, this@CapturedImagePreview)
+            saveMainImageViewToFile(dir, imageBitmap, filePath, this@CapturedImagePreview)
 
             val roiTableIDF = "ROI_ID" + System.currentTimeMillis()
             val fileId = "SPLIT_ID" + System.currentTimeMillis()
@@ -404,7 +417,7 @@ class CapturedImagePreview : AppCompatActivity() {
             val tempFileName = "TEMP$filePath"
             val mainImageBitmap = imageBitmap
 
-            saveMainImageViewToFile(mainImageBitmap, tempFileName, this)
+            saveMainImageViewToFile(dir, mainImageBitmap, tempFileName, this, true)
 
 
             val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
@@ -463,13 +476,28 @@ class CapturedImagePreview : AppCompatActivity() {
         }
     }
 
-    private fun saveMainImageViewToFile(bitmap: Bitmap, fileName: String, context: Context) {
-        val dir = File(
-            ContextWrapper(context).externalMediaDirs[0],
-            context.getString(R.string.app_name) + id
-        )
-        dir.mkdirs()
-        val outFile = File(dir, fileName)
+    private fun saveMainImageViewToFile(
+        dir: File,
+        bitmap: Bitmap,
+        fileName: String,
+        context: Context,
+        temp: Boolean = false
+    ) {
+        // Ensure the base directory exists
+        if (!dir.exists()) {
+            dir.mkdirs()
+        }
+
+        // If temp flag is true, store in TEMP subdirectory
+        val outFile: File = if (temp) {
+            val tempDir = File(dir, "TEMP")
+            if (!tempDir.exists()) {
+                tempDir.mkdirs()
+            }
+            File(tempDir, fileName)
+        } else {
+            File(dir, fileName)
+        }
 
         try {
             FileOutputStream(outFile).use { outStream ->
@@ -478,6 +506,7 @@ class CapturedImagePreview : AppCompatActivity() {
             Log.d("TAG", "Image saved: ${outFile.absolutePath}")
         } catch (e: IOException) {
             e.printStackTrace()
+            Log.e("TAG", "Failed to save image: ${e.message}")
         }
     }
 
@@ -552,36 +581,45 @@ class CapturedImagePreview : AppCompatActivity() {
         return outFile.absolutePath
     }
 
-    private fun saveImageViewToFile(originalBitmapImage: Bitmap, fileName: String?): String? {
+    private fun saveImageViewToFile(
+        dir: File,
+        originalBitmapImage: Bitmap,
+        fileName: String,
+        temp: Boolean = false
+    ): String? {
+        if (fileName.isEmpty()) return null
 
-//        if (originalBitmapImage.getWidth() != originalBitmapImage.getHeight()) {
-//            originalBitmapImage = convertToSquareWithTransparentBackground(originalBitmapImage);
-//        }
-        var outStream: FileOutputStream? = null
-
-        // Write to SD Card
-        try {
-            val sdCard = Environment.getExternalStorageDirectory()
-            val dir = File(
-                ContextWrapper(this).externalMediaDirs[0],
-                resources.getString(R.string.app_name) + intent.getStringExtra("id")
-            )
-
+        // Ensure base directory exists
+        if (!dir.exists()) {
             dir.mkdirs()
-            val outFile = File(dir, fileName)
-            outStream = FileOutputStream(outFile)
-            originalBitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, outStream)
-            outStream.flush()
-            outStream.close()
-            Log.d("TAG", "onPictureTaken - wrote to " + outFile.absolutePath)
-        } catch (e: FileNotFoundException) {
-            e.printStackTrace()
-        } catch (e: IOException) {
-            e.printStackTrace()
         }
-        return fileName
-    }
 
+        // Prepare output file
+        val outFile: File = if (temp) {
+            val tempDir = File(dir, "TEMP")
+            if (!tempDir.exists()) {
+                tempDir.mkdirs()
+            }
+            File(tempDir, fileName)
+        } else {
+            File(dir, fileName)
+        }
+
+        return try {
+            FileOutputStream(outFile).use { outStream ->
+                originalBitmapImage.compress(Bitmap.CompressFormat.JPEG, 100, outStream)
+                outStream.flush()
+            }
+            Log.d("TAG", "Image saved to: ${outFile.absolutePath}")
+            fileName
+        } catch (e: FileNotFoundException) {
+            Log.e("TAG", "File not found: ${e.message}")
+            null
+        } catch (e: IOException) {
+            Log.e("TAG", "I/O error: ${e.message}")
+            null
+        }
+    }
 
     override fun onResume() {
         super.onResume()

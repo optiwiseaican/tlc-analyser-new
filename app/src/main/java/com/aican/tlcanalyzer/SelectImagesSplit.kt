@@ -10,6 +10,7 @@ import com.aican.tlcanalyzer.adapterClasses.SplitAdapter
 import com.aican.tlcanalyzer.dataClasses.SplitData
 import com.aican.tlcanalyzer.database.DatabaseHelper
 import com.aican.tlcanalyzer.databinding.ActivitySelectImagesSplitBinding
+import com.aican.tlcanalyzer.utils.Source
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -137,9 +138,14 @@ class SelectImagesSplit : AppCompatActivity() {
             arrayList.removeAt(0)
         }
 
-
+        var dir = Source.getSplitFolderFile(
+            this,
+            intent.getStringExtra("projectName"),
+            intent.getStringExtra("id")
+        )
 
         adapter = SplitAdapter(
+            dir,
             this,
             arrayList,
             databaseHelper,

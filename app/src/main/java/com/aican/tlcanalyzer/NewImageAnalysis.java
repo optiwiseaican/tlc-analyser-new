@@ -533,7 +533,12 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         spotContours.setEnabled(false);
         getPixels.setEnabled(false);
 
-        dir = new File(new ContextWrapper(this).getExternalMediaDirs()[0], getResources().getString(R.string.app_name) + id);
+//        dir = new File(new ContextWrapper(this).getExternalMediaDirs()[0], getResources().getString(R.string.app_name) + id);
+        dir = Source.getSplitFolderFile(
+                this,
+                getIntent().getStringExtra("projectName"),
+                getIntent().getStringExtra("id")
+        );
         setThreshold.setMax(255);
 
         if (work.equals(works[0])) {
@@ -1003,42 +1008,52 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
 
         if (work.equals(works[0])) {
+
+            System.out.println("I m printing this if");
             try {
                 bitImageArray[0] = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.parse(path));
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             String fileName2 = "";
             if (bitImageArray[0] != null) {
-                fileName2 = imageAnalysisClass.saveImageViewToFile(bitImageArray[0], fileName, id);
+                fileName2 = imageAnalysisClass.saveImageViewToFile(dir, bitImageArray[0], fileName, id);
             }
 
-            String tempFileName = "TEMP" + fileName2;
+            // Save TEMP version
+//            String tempFileName = Source.getTempFileName(fileName2);
+//            File tempDir = Source.getTempDir(dir);
+//            imageAnalysisClass.saveImageViewToFile(tempDir, bitImageArray[0], tempFileName, id, works, work);
 
             mainImageBitmap = bitImageArray[0];
 
-            imageAnalysisClass.saveImageViewToFile(mainImageBitmap, tempFileName, id, works, work);
-
-//
-//            thresholdVal = String.valueOf(threshVal);
             numberOfSpots = String.valueOf(numberCount);
 
-            ProjectOfflineData projectOfflineData = new ProjectOfflineData(id, projectName, projectDescription, timeStamp,
+            ProjectOfflineData projectOfflineData = new ProjectOfflineData(
+                    id, projectName, projectDescription, timeStamp,
                     projectNumber, fileName2, imageSplitAvailable, splitId,
                     newThresholdString, numberOfSpots, tableName, roiTableID,
-                    volumePlotTableID, intensityPlotTableID, plotTableID, rmSpot, finalSpot);
+                    volumePlotTableID, intensityPlotTableID, plotTableID, rmSpot, finalSpot
+            );
 
             float i = databaseHelper.updateData(projectOfflineData);
-//            Toast.makeText(this, "" + getIntent().getStringExtra("id"), Toast.LENGTH_SHORT).show();
-        } else {
-            try {
-                mainImageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.fromFile(new File(dir, "TEMP" + projectImage)));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+        }
 
+        else {
+//            try {
+//                System.out.println("I m printing this else");
+//
+//                File tempDir = Source.getTempDir(dir);
+//                String tempFileName = Source.getTempFileName(projectImage);
+//                File tempFile = new File(tempDir, tempFileName);
+//
+//                mainImageBitmap = MediaStore.Images.Media.getBitmap(
+//                        this.getContentResolver(), Uri.fromFile(tempFile)
+//                );
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
         }
 
 
@@ -1061,7 +1076,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
                 String fileName2 = "";
                 if (bitImageArray[0] != null) {
-                    fileName2 = imageAnalysisClass.saveImageViewToFile(bitImageArray[0], fileName, id);
+                    fileName2 = imageAnalysisClass.saveImageViewToFile(dir, bitImageArray[0], fileName, id);
                 }
 
 //
@@ -1091,7 +1106,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                 }
                 String fileName2 = "";
                 if (bitImageArray[0] != null) {
-                    fileName2 = imageAnalysisClass.saveImageViewToFile(bitImageArray[0], fileName, id);
+                    fileName2 = imageAnalysisClass.saveImageViewToFile(dir, bitImageArray[0], fileName, id);
                 }
 
 //            thresholdVal = String.valueOf(threshVal);
@@ -1314,7 +1329,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                     if (Source.roiBitmap != null) {
 
                         if (Source.volumeDATA.isEmpty()) {
-                            imageAnalysisClass.saveImageViewToFile(Source.roiBitmap, contourImageFileName, id, works, work);
+                            imageAnalysisClass.saveImageViewToFile(dir, Source.roiBitmap, contourImageFileName, id, works, work);
 
                             File outFile = new File(dir, contourImageFileName);
                             if (outFile.exists()) {
@@ -1556,14 +1571,20 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                             fileName34 = "CD_" + getIntent().getStringExtra("pid").toString() + ".json";
                         }
 
-                        File myDir = new File(dir, fileName34);
+//                        File jsonDir = new File(dir, "JSON");
+//                        if (!jsonDir.exists()) {
+//                            jsonDir.mkdirs();
+//                        }
+                        File myDir = Source.getJsonDirectory(NewImageAnalysis.this, dir, fileName34);
+
+//                        File myDir = new File(dir, fileName34);
 
                         if (myDir.exists()) {
                             Gson gson = new Gson();
 
                             BufferedReader bufferedReader = null;
                             try {
-                                bufferedReader = new BufferedReader(new FileReader(new File(dir, fileName34)));
+                                bufferedReader = new BufferedReader(new FileReader(myDir));
 
 
                                 Type mapType = new TypeToken<Map<String, List<Map<String, Object>>>>() {
@@ -1576,7 +1597,8 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
                                 // Write the updated dataMap back to the JSON file
                                 try {
-                                    Writer output = new BufferedWriter(new FileWriter(new File(dir, fileName34)));
+                                    Writer output = new BufferedWriter(new FileWriter(Source.getJsonDirectory(NewImageAnalysis.this, dir, fileName34)
+                                    ));
                                     output.write(gson.toJson(dataMap));
                                     output.close();
                                 } catch (IOException e) {
@@ -1708,10 +1730,10 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
 
                 if (work.equals(works[0])) {
-                    imageAnalysisClass.saveImageViewToFile(mainImageBitmap, fileName, id, works, work);
+                    imageAnalysisClass.saveImageViewToFile(dir, mainImageBitmap, fileName, id, works, work);
 
                 } else {
-                    imageAnalysisClass.saveImageViewToFile(mainImageBitmap, projectImage, id, works, work);
+                    imageAnalysisClass.saveImageViewToFile(dir, mainImageBitmap, projectImage, id, works, work);
                 }
 
                 captured_image.setImageBitmap(mainImageBitmap);
@@ -2465,7 +2487,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
     // oncreate end
 
     // plotIntensity
-    private void generateIntensityData(){
+    private void generateIntensityData() {
         performAnalysis(0);
     }
 
@@ -3117,7 +3139,8 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
         contourJsonFileName = fileName34;
 
-        File myDir = new File(dir, fileName34);
+        File myDir = Source.getJsonDirectory(NewImageAnalysis.this, dir, fileName34);
+//        File myDir = new File(dir, fileName34);
         if (myDir.exists()) {
 
             String keyContours = "contoursData";
@@ -3135,7 +3158,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
             Gson gson = new Gson();
 
             try {
-                BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(dir, fileName34)));
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(Source.getJsonDirectory(NewImageAnalysis.this, dir, fileName34)));
                 Type mapType = new TypeToken<Map<String, List<Map<String, Object>>>>() {
                 }.getType();
                 Map<String, List<Map<String, Object>>> dataMap = gson.fromJson(bufferedReader, mapType);
@@ -3527,7 +3550,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 //            Toast.makeText(this, "Spotted", Toast.LENGTH_SHORT).show();
                 Source.contourBitmap = bitmap;
                 manuContBitmap = bitmap;
-                imageAnalysisClass.saveImageViewToFile(bitmap, contourImageFileName, id, works, work);
+                imageAnalysisClass.saveImageViewToFile(dir, bitmap, contourImageFileName, id, works, work);
 
                 File outFile = new File(dir, contourImageFileName);
                 if (outFile.exists()) {
@@ -3653,7 +3676,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 //            Toast.makeText(this, "Spotted", Toast.LENGTH_SHORT).show();
                 Source.contourBitmap = bitmap;
                 manuContBitmap = bitmap;
-                imageAnalysisClass.saveImageViewToFile(bitmap, contourImageFileName, id, works, work);
+                imageAnalysisClass.saveImageViewToFile(dir, bitmap, contourImageFileName, id, works, work);
 
                 File outFile = new File(dir, contourImageFileName);
                 if (outFile.exists()) {
@@ -3817,7 +3840,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 //            Toast.makeText(this, "Spotted", Toast.LENGTH_SHORT).show();
                 Source.contourBitmap = bitmap;
                 manuContBitmap = bitmap;
-                imageAnalysisClass.saveImageViewToFile(bitmap, contourImageFileName, id, works, work);
+                imageAnalysisClass.saveImageViewToFile(dir, bitmap, contourImageFileName, id, works, work);
 
                 File outFile = new File(dir, contourImageFileName);
                 if (outFile.exists()) {
@@ -3854,7 +3877,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         Gson gson = new Gson();
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(dir, fileName34)));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(Source.getJsonDirectory(NewImageAnalysis.this, dir, fileName34)));
 
             Type mapType = new TypeToken<Map<String, List<Map<String, Object>>>>() {
             }.getType();
@@ -3876,7 +3899,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                 dataMap.put(keyManualContours, updatedManualContours);
 
                 // Write the updated data back to the JSON file
-                try (FileWriter writer = new FileWriter(new File(dir, fileName34))) {
+                try (FileWriter writer = new FileWriter(Source.getJsonDirectory(NewImageAnalysis.this, dir, fileName34))) {
                     gson.toJson(dataMap, writer);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -3897,7 +3920,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         Gson gson = new Gson();
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(dir, fileName34)));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(Source.getJsonDirectory(NewImageAnalysis.this, dir, fileName34)));
 
             Type mapType = new TypeToken<Map<String, List<Map<String, Object>>>>() {
             }.getType();
@@ -3919,7 +3942,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                 dataMap.put(keyContours, updatedContours);
 
                 // Write the updated data back to the JSON file
-                try (FileWriter writer = new FileWriter(new File(dir, fileName34))) {
+                try (FileWriter writer = new FileWriter(Source.getJsonDirectory(NewImageAnalysis.this, dir, fileName34))) {
                     gson.toJson(dataMap, writer);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -3961,7 +3984,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         ArrayList<String> idOfManualCont = new ArrayList<>();
         ArrayList<String> idOfNormalCont = new ArrayList<>();
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(dir, fileName34)));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(Source.getJsonDirectory(NewImageAnalysis.this, dir, fileName34)));
 
             Type mapType = new TypeToken<Map<String, List<Map<String, Object>>>>() {
             }.getType();
@@ -4443,7 +4466,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 //            Toast.makeText(this, "Spotted", Toast.LENGTH_SHORT).show();
             Source.contourBitmap = bitmap;
             manuContBitmap = bitmap;
-            imageAnalysisClass.saveImageViewToFile(bitmap, contourImageFileName, id, works, work);
+            imageAnalysisClass.saveImageViewToFile(dir, bitmap, contourImageFileName, id, works, work);
 
             File outFile = new File(dir, contourImageFileName);
             if (outFile.exists()) {
@@ -4572,7 +4595,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 ////            Toast.makeText(this, "Spotted", Toast.LENGTH_SHORT).show();
             Source.contourBitmap = bitmap;
             manuContBitmap = bitmap;
-            imageAnalysisClass.saveImageViewToFile(bitmap, contourImageFileName, id, works, work);
+            imageAnalysisClass.saveImageViewToFile(dir, bitmap, contourImageFileName, id, works, work);
 
             File outFile = new File(dir, contourImageFileName);
             if (outFile.exists()) {
@@ -4722,7 +4745,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 //            Toast.makeText(this, "Spotted", Toast.LENGTH_SHORT).show();
             Source.contourBitmap = bitmap;
             manuContBitmap = bitmap;
-            imageAnalysisClass.saveImageViewToFile(bitmap, contourImageFileName, id, works, work);
+            imageAnalysisClass.saveImageViewToFile(dir, bitmap, contourImageFileName, id, works, work);
 
             File outFile = new File(dir, contourImageFileName);
             if (outFile.exists()) {
@@ -4797,7 +4820,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
             fileName34 = "CD_" + getIntent().getStringExtra("pid") + ".json";
         }
 
-        if (!new File(dir, fileName34).exists()) {
+        if (!Source.getJsonDirectory(NewImageAnalysis.this, dir, fileName34).exists()) {
             Gson gson = new Gson();
 
 
@@ -4826,7 +4849,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
             try {
                 Writer output = null;
-                File file = new File(dir, fileName34);
+                File file = Source.getJsonDirectory(NewImageAnalysis.this, dir, fileName34);
                 output = new BufferedWriter(new FileWriter(file));
                 output.write(jsonObject.toString());
                 output.close();
@@ -4843,7 +4866,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         Gson gson = new Gson();
 
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(new File(dir, fileName34)));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(Source.getJsonDirectory(NewImageAnalysis.this, dir, fileName34)));
 
             Type mapType = new TypeToken<Map<String, List<Map<String, Object>>>>() {
             }.getType();
@@ -4864,7 +4887,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
             dataMap.get(keyManualContours).add(manualContour);
 
             // Write the updated dataMap back to the JSON file
-            Writer output = new BufferedWriter(new FileWriter(new File(dir, fileName34)));
+            Writer output = new BufferedWriter(new FileWriter(Source.getJsonDirectory(NewImageAnalysis.this, dir, fileName34)));
             output.write(gson.toJson(dataMap));
             output.close();
 
@@ -5075,7 +5098,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
                     String imageFileName = contourImageFileName;
 
-                    imageAnalysisClass.saveImageViewToFile(bit, imageFileName, id, works, work);
+                    imageAnalysisClass.saveImageViewToFile(dir, bit, imageFileName, id, works, work);
 
                     File outFile = new File(dir, imageFileName);
                     if (outFile.exists()) {
@@ -5102,7 +5125,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                         if (result != null) {
                             Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), result.getUri());
 
-                            imageAnalysisClass.saveImageViewToFile(bitmap, projectImage, id, works, work);
+                            imageAnalysisClass.saveImageViewToFile(dir, bitmap, projectImage, id, works, work);
 
                             captured_image.setImageURI(result != null ? result.getUri() : null);
                             Source.changeRoi = false;
@@ -5581,7 +5604,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
                 try {
                     Writer output = null;
-                    File file = new File(dir, fileName34);
+                    File file = Source.getJsonDirectory(NewImageAnalysis.this, dir, fileName34);
                     output = new BufferedWriter(new FileWriter(file));
                     output.write(jsonObject.toString());
                     output.close();
@@ -5687,7 +5710,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 //        Toast.makeText(this, "Spotted", Toast.LENGTH_SHORT).show();
         Source.contourBitmap = bitmap;
         manuContBitmap = bitmap;
-        imageAnalysisClass.saveImageViewToFile(bitmap, contourImageFileName, id, works, work);
+        imageAnalysisClass.saveImageViewToFile(dir, bitmap, contourImageFileName, id, works, work);
 
         File outFile = new File(dir, contourImageFileName);
         if (outFile.exists()) {
@@ -5968,14 +5991,14 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                                 fileName34 = "CD_" + getIntent().getStringExtra("pid").toString() + ".json";
                             }
 
-                            File myDir = new File(dir, fileName34);
+                            File myDir = Source.getJsonDirectory(NewImageAnalysis.this, dir, fileName34);
 
                             if (myDir.exists()) {
                                 Gson gson = new Gson();
 
                                 BufferedReader bufferedReader = null;
                                 try {
-                                    bufferedReader = new BufferedReader(new FileReader(new File(dir, fileName34)));
+                                    bufferedReader = new BufferedReader(new FileReader(Source.getJsonDirectory(NewImageAnalysis.this, dir, fileName34)));
 
 
                                     Type mapType = new TypeToken<Map<String, List<Map<String, Object>>>>() {
@@ -5988,7 +6011,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
                                     // Write the updated dataMap back to the JSON file
                                     try {
-                                        Writer output = new BufferedWriter(new FileWriter(new File(dir, fileName34)));
+                                        Writer output = new BufferedWriter(new FileWriter(Source.getJsonDirectory(NewImageAnalysis.this, dir, fileName34)));
                                         output.write(gson.toJson(dataMap));
                                         output.close();
                                     } catch (IOException e) {
@@ -6098,14 +6121,14 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
                                 fileName34 = "CD_" + getIntent().getStringExtra("pid").toString() + ".json";
                             }
 
-                            File myDir = new File(dir, fileName34);
+                            File myDir = Source.getJsonDirectory(NewImageAnalysis.this, dir, fileName34);
 
                             if (myDir.exists()) {
                                 Gson gson = new Gson();
 
                                 BufferedReader bufferedReader = null;
                                 try {
-                                    bufferedReader = new BufferedReader(new FileReader(new File(dir, fileName34)));
+                                    bufferedReader = new BufferedReader(new FileReader(Source.getJsonDirectory(NewImageAnalysis.this, dir, fileName34)));
 
 
                                     Type mapType = new TypeToken<Map<String, List<Map<String, Object>>>>() {
@@ -6118,7 +6141,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
                                     // Write the updated dataMap back to the JSON file
                                     try {
-                                        Writer output = new BufferedWriter(new FileWriter(new File(dir, fileName34)));
+                                        Writer output = new BufferedWriter(new FileWriter(Source.getJsonDirectory(NewImageAnalysis.this, dir, fileName34)));
                                         output.write(gson.toJson(dataMap));
                                         output.close();
                                     } catch (IOException e) {
@@ -6393,7 +6416,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
 
                 String imageFileName = contourImageFileName;
 
-                imageAnalysisClass.saveImageViewToFile(bit, imageFileName, id, works, work);
+                imageAnalysisClass.saveImageViewToFile(dir, bit, imageFileName, id, works, work);
 
                 File outFile = new File(dir, imageFileName);
                 if (outFile.exists()) {
@@ -6668,6 +6691,7 @@ public class NewImageAnalysis extends AppCompatActivity implements RemoveContour
         intent.putExtra("plotTableName", plotTableID);
         intent.putExtra("contourJsonFileName", contourJsonFileName);
         intent.putExtra("pId", this.id);
+        intent.putExtra("projectName", this.projectName);
         intent.putExtra("spotId", mId);
         startActivity(intent);
 

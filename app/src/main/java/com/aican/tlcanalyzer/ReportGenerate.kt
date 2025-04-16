@@ -130,8 +130,16 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
         setAllDatas()
         settingVolumeData()
 
+        dir = Source.getSplitFolderFile(
+            this,
+            intent.getStringExtra("projectName"),
+            intent.getStringExtra("id")
+        )
+
+
+
         checkBoxClickListeners()
-        val exportDir = File(getExternalFilesDir(null).toString() + "/" + "All PDF Files")
+        val exportDir = File(getExternalFilesDir(null).toString() + "/" + s())
         if (!exportDir.exists()) {
             exportDir.mkdirs()
         }
@@ -177,7 +185,7 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
                             )
 
 
-                            generatePDF()
+                            generatePDF(dir)
                         }
 
                         // Handle the generated PDF file
@@ -197,9 +205,11 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
             }
         }
         val contourImage = intent.getStringExtra("contourImage").toString()
-        dir = File(
-            ContextWrapper(this).externalMediaDirs[0], resources.getString(R.string.app_name) + id
-        )
+//        dir = File(
+//            ContextWrapper(this).externalMediaDirs[0], resources.getString(R.string.app_name) + id
+//        )
+
+
         val outFile = File(dir, contourImage)
         if (outFile.exists()) {
             val myBitmap = BitmapFactory.decodeFile(outFile.absolutePath)
@@ -222,6 +232,8 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
         plotTable()
 
     }
+
+    private fun s() = "All PDF Files"
 
     private fun insertLabelData() {
         labelDataArrayList = java.util.ArrayList()
@@ -313,11 +325,18 @@ class ReportGenerate : AppCompatActivity(), OnClicksListeners {
         // intensity plot end
     }
 
-    private fun generatePDF(): Uri {
+    private fun generatePDF(pdfDir: File): Uri {
         val sdf = SimpleDateFormat("yyyy-MM-dd_HH-mm", Locale.getDefault())
         val currentDateandTime = sdf.format(Date())
+
+        // Ensure the directory exists
+        if (!pdfDir.exists()) {
+            pdfDir.mkdirs()
+        }
+
         val file = File(
-            getExternalFilesDir(null).toString() + File.separator + "All PDF Files/REPORT_" + projectName + "_" + id + "_" + currentDateandTime + ".pdf"
+            pdfDir,
+            "REPORT_${projectName}_${id}_$currentDateandTime.pdf"
         )
 
         Log.e("FileNameErrors", file.path)

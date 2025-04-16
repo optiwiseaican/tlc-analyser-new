@@ -2,7 +2,7 @@
   {
     "level_": 0,
     "message_": "Start JSON generation. Platform version: 21 min SDK version: x86",
-    "file_": "C:\\Users\\Lenovo\\Desktop\\tlc-analyser-new\\openCV\\libcxx_helper\\CMakeLists.txt",
+    "file_": "C:\\Users\\karnv\\OneDrive\\Desktop\\tlc-analyser-new\\openCV\\libcxx_helper\\CMakeLists.txt",
     "tag_": "debug|x86",
     "diagnosticCode_": 0,
     "memoizedIsInitialized": 1,
@@ -11,12 +11,12 @@
       "fieldsDescending": {}
     },
     "memoizedSize": -1,
-    "memoizedHashCode": 1510977446
+    "memoizedHashCode": -62524528
   },
   {
     "level_": 0,
-    "message_": "rebuilding JSON C:\\Users\\Lenovo\\Desktop\\tlc-analyser-new\\openCV\\.cxx\\Debug\\2h115o65\\x86\\android_gradle_build.json due to:",
-    "file_": "C:\\Users\\Lenovo\\Desktop\\tlc-analyser-new\\openCV\\libcxx_helper\\CMakeLists.txt",
+    "message_": "JSON \u0027C:\\Users\\karnv\\OneDrive\\Desktop\\tlc-analyser-new\\openCV\\.cxx\\Debug\\2h115o65\\x86\\android_gradle_build.json\u0027 was up-to-date",
+    "file_": "C:\\Users\\karnv\\OneDrive\\Desktop\\tlc-analyser-new\\openCV\\libcxx_helper\\CMakeLists.txt",
     "tag_": "debug|x86",
     "diagnosticCode_": 0,
     "memoizedIsInitialized": 1,
@@ -25,138 +25,12 @@
       "fieldsDescending": {}
     },
     "memoizedSize": -1,
-    "memoizedHashCode": -884281072
-  },
-  {
-    "level_": 0,
-    "message_": "- no fingerprint file, will remove stale configuration folder",
-    "file_": "C:\\Users\\Lenovo\\Desktop\\tlc-analyser-new\\openCV\\libcxx_helper\\CMakeLists.txt",
-    "tag_": "debug|x86",
-    "diagnosticCode_": 0,
-    "memoizedIsInitialized": 1,
-    "unknownFields": {
-      "fields": {},
-      "fieldsDescending": {}
-    },
-    "memoizedSize": -1,
-    "memoizedHashCode": 1774805047
-  },
-  {
-    "level_": 0,
-    "message_": "removing stale contents from \u0027C:\\Users\\Lenovo\\Desktop\\tlc-analyser-new\\openCV\\.cxx\\Debug\\2h115o65\\x86\u0027",
-    "file_": "C:\\Users\\Lenovo\\Desktop\\tlc-analyser-new\\openCV\\libcxx_helper\\CMakeLists.txt",
-    "tag_": "debug|x86",
-    "diagnosticCode_": 0,
-    "memoizedIsInitialized": 1,
-    "unknownFields": {
-      "fields": {},
-      "fieldsDescending": {}
-    },
-    "memoizedSize": -1,
-    "memoizedHashCode": 1406859692
-  },
-  {
-    "level_": 0,
-    "message_": "created folder \u0027C:\\Users\\Lenovo\\Desktop\\tlc-analyser-new\\openCV\\.cxx\\Debug\\2h115o65\\x86\u0027",
-    "file_": "C:\\Users\\Lenovo\\Desktop\\tlc-analyser-new\\openCV\\libcxx_helper\\CMakeLists.txt",
-    "tag_": "debug|x86",
-    "diagnosticCode_": 0,
-    "memoizedIsInitialized": 1,
-    "unknownFields": {
-      "fields": {},
-      "fieldsDescending": {}
-    },
-    "memoizedSize": -1,
-    "memoizedHashCode": 1602184376
-  },
-  {
-    "level_": 0,
-    "message_": "executing cmake @echo off\n\"C:\\\\Users\\\\Lenovo\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\cmake\\\\3.22.1\\\\bin\\\\cmake.exe\" ^\n  \"-HC:\\\\Users\\\\Lenovo\\\\Desktop\\\\tlc-analyser-new\\\\openCV\\\\libcxx_helper\" ^\n  \"-DCMAKE_SYSTEM_NAME\u003dAndroid\" ^\n  \"-DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON\" ^\n  \"-DCMAKE_SYSTEM_VERSION\u003d21\" ^\n  \"-DANDROID_PLATFORM\u003dandroid-21\" ^\n  \"-DANDROID_ABI\u003dx86\" ^\n  \"-DCMAKE_ANDROID_ARCH_ABI\u003dx86\" ^\n  \"-DANDROID_NDK\u003dC:\\\\Users\\\\Lenovo\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\ndk\\\\23.1.7779620\" ^\n  \"-DCMAKE_ANDROID_NDK\u003dC:\\\\Users\\\\Lenovo\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\ndk\\\\23.1.7779620\" ^\n  \"-DCMAKE_TOOLCHAIN_FILE\u003dC:\\\\Users\\\\Lenovo\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\ndk\\\\23.1.7779620\\\\build\\\\cmake\\\\android.toolchain.cmake\" ^\n  \"-DCMAKE_MAKE_PROGRAM\u003dC:\\\\Users\\\\Lenovo\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\cmake\\\\3.22.1\\\\bin\\\\ninja.exe\" ^\n  \"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003dC:\\\\Users\\\\Lenovo\\\\Desktop\\\\tlc-analyser-new\\\\openCV\\\\build\\\\intermediates\\\\cxx\\\\Debug\\\\2h115o65\\\\obj\\\\x86\" ^\n  \"-DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003dC:\\\\Users\\\\Lenovo\\\\Desktop\\\\tlc-analyser-new\\\\openCV\\\\build\\\\intermediates\\\\cxx\\\\Debug\\\\2h115o65\\\\obj\\\\x86\" ^\n  \"-DCMAKE_BUILD_TYPE\u003dDebug\" ^\n  \"-BC:\\\\Users\\\\Lenovo\\\\Desktop\\\\tlc-analyser-new\\\\openCV\\\\.cxx\\\\Debug\\\\2h115o65\\\\x86\" ^\n  -GNinja ^\n  \"-DANDROID_STL\u003dc++_shared\"\n",
-    "file_": "C:\\Users\\Lenovo\\Desktop\\tlc-analyser-new\\openCV\\libcxx_helper\\CMakeLists.txt",
-    "tag_": "debug|x86",
-    "diagnosticCode_": 0,
-    "memoizedIsInitialized": 1,
-    "unknownFields": {
-      "fields": {},
-      "fieldsDescending": {}
-    },
-    "memoizedSize": -1,
-    "memoizedHashCode": 1358580316
-  },
-  {
-    "level_": 0,
-    "message_": "@echo off\n\"C:\\\\Users\\\\Lenovo\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\cmake\\\\3.22.1\\\\bin\\\\cmake.exe\" ^\n  \"-HC:\\\\Users\\\\Lenovo\\\\Desktop\\\\tlc-analyser-new\\\\openCV\\\\libcxx_helper\" ^\n  \"-DCMAKE_SYSTEM_NAME\u003dAndroid\" ^\n  \"-DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON\" ^\n  \"-DCMAKE_SYSTEM_VERSION\u003d21\" ^\n  \"-DANDROID_PLATFORM\u003dandroid-21\" ^\n  \"-DANDROID_ABI\u003dx86\" ^\n  \"-DCMAKE_ANDROID_ARCH_ABI\u003dx86\" ^\n  \"-DANDROID_NDK\u003dC:\\\\Users\\\\Lenovo\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\ndk\\\\23.1.7779620\" ^\n  \"-DCMAKE_ANDROID_NDK\u003dC:\\\\Users\\\\Lenovo\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\ndk\\\\23.1.7779620\" ^\n  \"-DCMAKE_TOOLCHAIN_FILE\u003dC:\\\\Users\\\\Lenovo\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\ndk\\\\23.1.7779620\\\\build\\\\cmake\\\\android.toolchain.cmake\" ^\n  \"-DCMAKE_MAKE_PROGRAM\u003dC:\\\\Users\\\\Lenovo\\\\AppData\\\\Local\\\\Android\\\\Sdk\\\\cmake\\\\3.22.1\\\\bin\\\\ninja.exe\" ^\n  \"-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003dC:\\\\Users\\\\Lenovo\\\\Desktop\\\\tlc-analyser-new\\\\openCV\\\\build\\\\intermediates\\\\cxx\\\\Debug\\\\2h115o65\\\\obj\\\\x86\" ^\n  \"-DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003dC:\\\\Users\\\\Lenovo\\\\Desktop\\\\tlc-analyser-new\\\\openCV\\\\build\\\\intermediates\\\\cxx\\\\Debug\\\\2h115o65\\\\obj\\\\x86\" ^\n  \"-DCMAKE_BUILD_TYPE\u003dDebug\" ^\n  \"-BC:\\\\Users\\\\Lenovo\\\\Desktop\\\\tlc-analyser-new\\\\openCV\\\\.cxx\\\\Debug\\\\2h115o65\\\\x86\" ^\n  -GNinja ^\n  \"-DANDROID_STL\u003dc++_shared\"\n",
-    "file_": "C:\\Users\\Lenovo\\Desktop\\tlc-analyser-new\\openCV\\libcxx_helper\\CMakeLists.txt",
-    "tag_": "debug|x86",
-    "diagnosticCode_": 0,
-    "memoizedIsInitialized": 1,
-    "unknownFields": {
-      "fields": {},
-      "fieldsDescending": {}
-    },
-    "memoizedSize": -1,
-    "memoizedHashCode": -1139702595
-  },
-  {
-    "level_": 0,
-    "message_": "Exiting generation of C:\\Users\\Lenovo\\Desktop\\tlc-analyser-new\\openCV\\.cxx\\Debug\\2h115o65\\x86\\compile_commands.json.bin normally",
-    "file_": "C:\\Users\\Lenovo\\Desktop\\tlc-analyser-new\\openCV\\libcxx_helper\\CMakeLists.txt",
-    "tag_": "debug|x86",
-    "diagnosticCode_": 0,
-    "memoizedIsInitialized": 1,
-    "unknownFields": {
-      "fields": {},
-      "fieldsDescending": {}
-    },
-    "memoizedSize": -1,
-    "memoizedHashCode": 165613966
-  },
-  {
-    "level_": 0,
-    "message_": "done executing cmake",
-    "file_": "C:\\Users\\Lenovo\\Desktop\\tlc-analyser-new\\openCV\\libcxx_helper\\CMakeLists.txt",
-    "tag_": "debug|x86",
-    "diagnosticCode_": 0,
-    "memoizedIsInitialized": 1,
-    "unknownFields": {
-      "fields": {},
-      "fieldsDescending": {}
-    },
-    "memoizedSize": -1,
-    "memoizedHashCode": -635206473
-  },
-  {
-    "level_": 0,
-    "message_": "deleted unexpected build output C:\\Users\\Lenovo\\Desktop\\tlc-analyser-new\\openCV\\build\\intermediates\\cxx\\Debug\\2h115o65\\obj\\x86\\libc++_shared.so in incremental regenerate",
-    "file_": "C:\\Users\\Lenovo\\Desktop\\tlc-analyser-new\\openCV\\libcxx_helper\\CMakeLists.txt",
-    "tag_": "debug|x86",
-    "diagnosticCode_": 0,
-    "memoizedIsInitialized": 1,
-    "unknownFields": {
-      "fields": {},
-      "fieldsDescending": {}
-    },
-    "memoizedSize": -1,
-    "memoizedHashCode": -1671985631
-  },
-  {
-    "level_": 0,
-    "message_": "hard linked C:\\Users\\Lenovo\\Desktop\\tlc-analyser-new\\openCV\\.cxx\\Debug\\2h115o65\\x86\\compile_commands.json to C:\\Users\\Lenovo\\Desktop\\tlc-analyser-new\\openCV\\.cxx\\tools\\debug\\x86\\compile_commands.json",
-    "file_": "C:\\Users\\Lenovo\\Desktop\\tlc-analyser-new\\openCV\\libcxx_helper\\CMakeLists.txt",
-    "tag_": "debug|x86",
-    "diagnosticCode_": 0,
-    "memoizedIsInitialized": 1,
-    "unknownFields": {
-      "fields": {},
-      "fieldsDescending": {}
-    },
-    "memoizedSize": -1,
-    "memoizedHashCode": 50601935
+    "memoizedHashCode": -1420787058
   },
   {
     "level_": 0,
     "message_": "JSON generation completed without problems",
-    "file_": "C:\\Users\\Lenovo\\Desktop\\tlc-analyser-new\\openCV\\libcxx_helper\\CMakeLists.txt",
+    "file_": "C:\\Users\\karnv\\OneDrive\\Desktop\\tlc-analyser-new\\openCV\\libcxx_helper\\CMakeLists.txt",
     "tag_": "debug|x86",
     "diagnosticCode_": 0,
     "memoizedIsInitialized": 1,
@@ -165,6 +39,6 @@
       "fieldsDescending": {}
     },
     "memoizedSize": -1,
-    "memoizedHashCode": 1302866611
+    "memoizedHashCode": -270635363
   }
 ]

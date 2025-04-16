@@ -35,7 +35,19 @@
             android:textColor="@color/blueColor"
             android:textSize="20dp"
             android:textStyle="bold" />
-
+        <Button
+            android:id="@+id/allGeneratedPdfs"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/button_bc"
+            app:backgroundTint="@color/ai_red"
+            android:drawableLeft="@drawable/baseline_snippet_folder_24"
+            android:drawableTint="@color/white"
+            android:fontFamily="@font/lato"
+            android:text="Generated Reports"
+            android:textAllCaps="false"
+            android:textSize="12dp" />
         <Button
             android:id="@+id/checkAnalysis"
             android:layout_width="wrap_content"
